@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/button_round_1"
+    tools:context=".SettingActivity">
+
+    <TextView
+        android:id="@+id/txtserverdipakai"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="5dp"
+        android:background="@drawable/button_round_10"
+        android:textSize="18sp"
+        android:text="Server"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:hint="Masukkan Domain Server Anda"
+        android:layout_marginTop="30dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="5dp"
+        android:background="@drawable/button_round_10"
+        android:id="@+id/txtisiserver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnsimpan"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_round_2"
+        android:text="Simpan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

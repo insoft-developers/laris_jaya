@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    tools:context=".CustomerActivity"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+
+        android:paddingVertical="2dp"
+        android:paddingHorizontal="2dp"
+        android:orientation="vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/etcari"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_search"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="5dp"
+            android:paddingVertical="15dp"
+            android:fontFamily="@font/almendra"
+            android:hint="Cari Nama Pelanggan"
+            android:background="@drawable/button_round_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/white"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="2dp"
+            android:id="@+id/rvcustomer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

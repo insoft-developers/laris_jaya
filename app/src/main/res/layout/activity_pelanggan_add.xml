@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.PelangganAddActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_margin="15dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_weight="0.3"
+                    android:id="@+id/et_nama"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Nama Pelanggan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/et_alamat"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Alamat Pelanggan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Nomor Whatsapp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="40dp"
+                android:id="@+id/btn_simpan"
+                android:textColor="@color/white"
+                android:background="@drawable/button_round_7"
+                android:text="Simpan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+</RelativeLayout>

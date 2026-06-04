@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SalesTodayFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:background="@color/white"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="2dp"
+        android:layout_marginBottom="40dp"
+        android:id="@+id/rvsalestoday"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:background="@drawable/button_round_1"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:textSize="13sp"
+
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Rp. 1.200.000"
+            android:id="@+id/summarypenjualan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

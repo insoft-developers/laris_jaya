@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.BarangAddActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_margin="15dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_weight="0.3"
+                    android:id="@+id/et_barcode"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <ImageButton
+                    android:id="@+id/btnbarcode"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="17dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_weight="1.7"
+                    android:src="@drawable/ic_barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"/>
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/et_nama_barang"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Nama Barang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spn_kategori"
+                android:layout_marginTop="15dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="10dp"
+                android:background="@drawable/button_round_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/et_harga_beli"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Harga Beli"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/spn_satuan"
+                    android:layout_marginTop="15dp"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="10dp"
+                    android:background="@drawable/button_round_4"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_konversi"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Konversi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_jual"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Harga Jual"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_jual_karton"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="H. Jual Karton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_member"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Harga Member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_member_karton"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="H. Member Karton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_freelance"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="Harga Freelance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:id="@+id/et_harga_freelance_karton"
+                    android:layout_marginTop="15dp"
+                    android:padding="15dp"
+                    android:background="@drawable/button_round_4"
+                    android:hint="H. Frelance Karton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="40dp"
+                android:id="@+id/btn_simpan_barang"
+                android:textColor="@color/white"
+                android:background="@drawable/button_round_7"
+                android:text="Simpan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+</RelativeLayout>

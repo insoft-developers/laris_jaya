@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/button_round_11"
+    tools:context=".AdminActivity">
+
+    <LinearLayout
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:fontFamily="@font/almendra"
+            android:id="@+id/btn_penjualan"
+            android:text="Penjualan"
+            android:visibility="gone"
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:fontFamily="@font/almendra"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_barang"
+            android:text="Master Barang"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:fontFamily="@font/almendra"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_pelangggan"
+            android:text="Master Pelanggan"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:fontFamily="@font/almendra"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_laporan"
+            android:text="Laporan"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <Button
+            android:fontFamily="@font/almendra"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_sync"
+            android:text="Sync Data Master"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
