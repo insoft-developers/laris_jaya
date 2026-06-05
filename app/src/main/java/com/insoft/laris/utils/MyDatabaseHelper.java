@@ -84,6 +84,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         String query_counter = "CREATE TABLE " + TABLE_COUNTER + "(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_id TEXT, " +
                 "last_nota INTEGER)";
         db.execSQL(query_counter);
 
@@ -630,25 +631,36 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + MASTER_BARANG + " WHERE " + COLUMN_KD_BARANG + " = ?", new String[]{kd_barang});
     }
 
-    public String generateNota() {
+    public String generateNota(String userId) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Ambil 3 digit terakhir user
+        String prefix = userId.substring(userId.length() - 3);
+
         int nextNumber = 1;
 
-        // cek apakah sudah ada data
-        Cursor cursor = db.rawQuery("SELECT last_nota FROM "+ TABLE_COUNTER +" ORDER BY id DESC LIMIT 1", null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int lastNota = cursor.getInt(0);
-            nextNumber = lastNota + 1;
-        }
-        if (cursor != null) cursor.close();
+        // Counter per user
+        Cursor cursor = db.rawQuery(
+                "SELECT last_nota FROM " + TABLE_COUNTER +
+                        " WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+                new String[]{userId});
 
-        // simpan/update counter terbaru
+        if (cursor != null && cursor.moveToFirst()) {
+            nextNumber = cursor.getInt(0) + 1;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
         ContentValues cv = new ContentValues();
+        cv.put("user_id", userId);
         cv.put("last_nota", nextNumber);
+
         db.insert(TABLE_COUNTER, null, cv);
 
-        // format nomor nota, contoh: INV00016
-        return String.format("INP%05d", nextNumber);
+        // 3 digit user + 6 digit running number = 9 digit
+        return String.format("%s%06d", prefix, nextNumber);
     }
 
 

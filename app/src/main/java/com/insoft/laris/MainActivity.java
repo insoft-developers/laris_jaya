@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
         loading.setVisibility(View.VISIBLE);
         int total_penjualan = Integer.parseInt(totalHidden.getText().toString());
 
-        String nota = db.generateNota();
+        String nota = db.generateNota(userkode);
         db.tambah_penjualan(
                 nota,
                 cust_code,

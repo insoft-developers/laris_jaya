@@ -26,10 +26,9 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:fontFamily="@font/almendra"
             android:layout_marginTop="20dp"
             android:id="@+id/btn_barang"
-            android:text="Master Barang"
+            android:text="Data Barang"
 
             android:paddingVertical="20dp"
             android:textColor="@color/white"
@@ -38,10 +37,9 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:fontFamily="@font/almendra"
             android:layout_marginTop="20dp"
             android:id="@+id/btn_pelangggan"
-            android:text="Master Pelanggan"
+            android:text="Data Pelanggan"
 
             android:paddingVertical="20dp"
             android:textColor="@color/white"
@@ -50,7 +48,39 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:fontFamily="@font/almendra"
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_pengguna"
+            android:text="Data Pengguna"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_supplier"
+            android:text="Data Supplier"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/btn_satuan"
+            android:text="Data Satuan"
+
+            android:paddingVertical="20dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_round_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:layout_marginTop="20dp"
             android:id="@+id/btn_laporan"
             android:text="Laporan"
@@ -63,7 +93,6 @@
 
 
         <Button
-            android:fontFamily="@font/almendra"
             android:layout_marginTop="20dp"
             android:id="@+id/btn_sync"
             android:text="Sync Data Master"

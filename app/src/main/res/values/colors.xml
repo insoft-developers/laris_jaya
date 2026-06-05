@@ -4,6 +4,11 @@
     <color name="colorPrimaryDark">#65DCE5</color>
     <color name="colorAccent">#0D5D98</color>
 
+    <color name="primary">#2563EB</color>
+    <color name="background">#F4F6F9</color>
+    <color name="textPrimary">#1E293B</color>
+    <color name="textSecondary">#64748B</color>
+
     <color name="address">#2F7092</color>
     <color name="followers">#0D5D98</color>
     <color name="headings">#3797CF</color>
@@ -26,7 +31,7 @@
     <color name="text_color">#0f0f0f</color>
     <color name="divider">#f2f2f2</color>
     <color name="purplefresh">#580672</color>
-    <color name="background">#dddddd</color>
+
 
 
     <color name="light_white">#d4d4d4</color>

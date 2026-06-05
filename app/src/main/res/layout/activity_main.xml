@@ -29,12 +29,12 @@
             <TextView
                 android:id="@+id/namapelanggan"
                 android:textStyle="bold"
-                android:fontFamily="@font/almendra"
+
                 android:textSize="18sp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
                 android:maxLines="2"
-                android:text=""
+                android:text="nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -42,11 +42,11 @@
                 android:layout_marginTop="4dp"
                 android:id="@+id/alamatpelanggan"
                 android:textStyle="bold"
-                android:fontFamily="@font/almendra"
+
                 android:textSize="13sp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
-                android:text=""
+                android:text="alamat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -54,11 +54,11 @@
                 android:layout_marginTop="2dp"
                 android:id="@+id/gruppelanggan"
                 android:textStyle="bold"
-                android:fontFamily="@font/almendra"
+
                 android:textSize="13sp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
-                android:text=""
+                android:text="group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

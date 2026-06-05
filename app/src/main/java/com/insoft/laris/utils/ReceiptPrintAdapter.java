@@ -2,6 +2,7 @@ package com.insoft.laris.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
@@ -66,6 +67,8 @@ public class ReceiptPrintAdapter extends PrintDocumentAdapter {
         paintDetail.setTextSize(39);
         paintDetail.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
 
+
+
         // Simulasi perhitungan tinggi (tanpa gambar dulu)
         y += 40 + (int)(paintTitle.descent() - paintTitle.ascent() + 20);
 
@@ -106,10 +109,22 @@ public class ReceiptPrintAdapter extends PrintDocumentAdapter {
 
         // Cetak nama toko
         y += 40;
-        String namaToko = "TOKO LELY JAYA";
+        String namaToko = "TOKO LARIS JAYA";
         float textWidth = paintTitle.measureText(namaToko);
         canvas.drawText(namaToko, 70, y, paintTitle);
-        y += paintTitle.descent() - paintTitle.ascent() + 20;
+        y += paintTitle.descent() - paintTitle.ascent() + 2;
+
+        y += 1;
+        String alamatToko = "Sei Kalam Dusun 6";
+        canvas.drawText(alamatToko, 70, y, paintNamaBarang);
+        y += paintNamaBarang.descent() - paintNamaBarang.ascent() + 2;
+
+        y += 1;
+        String hp = "No HP. 0822 7375 7110";
+        canvas.drawText(hp, 70, y, paintNamaBarang);
+        y += paintNamaBarang.descent() - paintNamaBarang.ascent() + 20;
+
+        y += 10;
 
         // Header
         for (String line : header.split("\n")) {
