@@ -17,66 +17,71 @@
         android:theme="@style/AppThemeLogin.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name="com.insoft.laris.report.PerInvoiceActivity"></activity>
-        <activity android:name="com.insoft.laris.report.SalesDateActivity" />
-        <activity android:name="com.insoft.laris.report.SalesByDateActivity" />
-        <activity android:name="com.insoft.laris.report.DetailItemActivity" />
-        <activity android:name="com.insoft.laris.report.SalesTodayActivity" />
-        <activity android:name="com.insoft.laris.admin.SalesReportActivity" />
+
+        <activity android:name=".report.PerInvoiceActivity" />
+        <activity android:name=".report.SalesDateActivity" />
+        <activity android:name=".report.SalesByDateActivity" />
+        <activity android:name=".report.DetailItemActivity" />
+        <activity android:name=".report.SalesTodayActivity" />
+        <activity android:name=".admin.SalesReportActivity" />
         <activity
-            android:name="com.insoft.laris.admin.PelangganEditActivity"
+            android:name=".admin.PelangganEditActivity"
             android:label="Edit Pelanggan"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.PelangganAddActivity"
+            android:name=".admin.PelangganAddActivity"
             android:label="Tambah Pelanggan"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.MasterPelangganActivity"
+            android:name=".admin.pengguna.PenggunaActivity"
+            android:label="Daftar Pengguna"
+            android:theme="@style/Theme.Bestbeauty" />
+        <activity
+            android:name=".admin.MasterPelangganActivity"
             android:label="Daftar Pelanggan"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.BarangEditActivity"
+            android:name=".admin.BarangEditActivity"
             android:label="Edit Barang"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.BarcodeActivity"
+            android:name=".admin.BarcodeActivity"
             android:label="Scan Barcode Produk"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.BarangAddActivity"
+            android:name=".admin.BarangAddActivity"
             android:label="Tambah Barang"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.MasterBarangActivity"
+            android:name=".admin.MasterBarangActivity"
             android:label="Master Barang"
             android:theme="@style/Theme.Bestbeauty" />
-        <activity android:name="com.insoft.laris.admin.ReceiptActivity" />
+        <activity android:name=".admin.ReceiptActivity" />
         <activity
-            android:name="com.insoft.laris.admin.PenjualanActivity"
+            android:name=".admin.PenjualanActivity"
             android:label="Penjualan Per Hold"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
-            android:name="com.insoft.laris.admin.ListPenjualanActivity"
+            android:name=".admin.ListPenjualanActivity"
             android:label="Daftar Penjualan Hold"
             android:theme="@style/Theme.Bestbeauty" />
-        <activity android:name="com.insoft.laris.AdminActivity" />
-        <activity android:name="com.insoft.laris.DetailActivity" />
-        <activity android:name="com.insoft.laris.TransaksiActivity" />
-        <activity android:name="com.insoft.laris.SettingActivity" />
-        <activity android:name="com.insoft.laris.BarangActivity" />
-        <activity android:name="com.insoft.laris.EditActivity" />
-        <activity android:name="com.insoft.laris.CustomerActivity" />
-        <activity android:name="com.insoft.laris.BarcodeActivity" />
-        <activity android:name="com.insoft.laris.LoginActivity" />
-        <activity android:name="com.insoft.laris.MainActivity" />
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".DetailActivity" />
+        <activity android:name=".TransaksiActivity" />
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".BarangActivity" />
+        <activity android:name=".EditActivity" />
+        <activity android:name=".CustomerActivity" />
+        <activity android:name=".BarcodeActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity
-            android:name="com.insoft.laris.SplashActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

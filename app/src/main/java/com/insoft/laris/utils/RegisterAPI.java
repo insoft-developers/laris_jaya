@@ -1,5 +1,7 @@
 package com.insoft.laris.utils;
 
+import com.insoft.laris.admin.pengguna.PenggunaRequestJson;
+import com.insoft.laris.admin.pengguna.PenggunaResponseJson;
 import com.insoft.laris.json.BarangResponseJson;
 import com.insoft.laris.json.BarcodeCekRequestJson;
 import com.insoft.laris.json.BarcodeCekResponseJson;
@@ -72,6 +74,7 @@ public interface RegisterAPI {
     @POST("daftar_pelanggan")
     Call<CustomerResponseJson> get_customer(@Body CustomerRequestJson param);
 
+
     @POST("tambah_pelanggan")
     Call<PelangganResponseJson> tambah_pelanggan (@Body PelangganRequestJson param);
 
@@ -134,5 +137,8 @@ public interface RegisterAPI {
 
     @POST("perinvoice")
     Call<PerInvoiceResponseJson> perinvoice(@Body PerInvoiceRequestJson param);
+
+    @POST("daftar_pengguna")
+    Call<PenggunaResponseJson> get_daftar_pengguna(@Body PenggunaRequestJson param);
 
 }

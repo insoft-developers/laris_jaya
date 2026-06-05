@@ -8,4 +8,6 @@ public class UtilsAPI {
     public static RegisterAPI getApiService() {
         return RetrofitClient.getClient(BASE_ROOT_URL).create(RegisterAPI.class);
     }
+
+
 }
