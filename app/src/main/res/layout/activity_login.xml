@@ -63,6 +63,7 @@
                     android:id="@+id/etusername"
                     android:layout_marginTop="20dp"
                     android:padding="15dp"
+                    android:inputType="text"
                     android:hint="Username"
                     android:textSize="16sp"
                     android:background="@drawable/bg_edittext"

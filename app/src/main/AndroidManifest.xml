@@ -23,7 +23,10 @@
         <activity android:name=".report.SalesByDateActivity" />
         <activity android:name=".report.DetailItemActivity" />
         <activity android:name=".report.SalesTodayActivity" />
-        <activity android:name=".admin.SalesReportActivity" />
+        <activity
+            android:name=".admin.SalesReportActivity"
+            android:label="Laporan Penjualan"
+            android:theme="@style/Theme.Bestbeauty" />
         <activity
             android:name=".admin.PelangganEditActivity"
             android:label="Edit Pelanggan"
@@ -35,6 +38,20 @@
         <activity
             android:name=".admin.pengguna.PenggunaActivity"
             android:label="Daftar Pengguna"
+            android:theme="@style/Theme.Bestbeauty" />
+        <activity
+            android:name=".admin.pengguna.PenggunaAddActivity"
+            android:label="Tambah Pengguna"
+            android:theme="@style/Theme.Bestbeauty" />
+
+        <activity
+            android:name=".admin.pengguna.PenggunaEditActivity"
+            android:label="Edit Pengguna"
+            android:theme="@style/Theme.Bestbeauty" />
+
+        <activity
+            android:name=".AdminActivity"
+            android:label="Dashboard"
             android:theme="@style/Theme.Bestbeauty" />
         <activity
             android:name=".admin.MasterPelangganActivity"
@@ -65,7 +82,7 @@
             android:name=".admin.ListPenjualanActivity"
             android:label="Daftar Penjualan Hold"
             android:theme="@style/Theme.Bestbeauty" />
-        <activity android:name=".AdminActivity" />
+
         <activity android:name=".DetailActivity" />
         <activity android:name=".TransaksiActivity" />
         <activity android:name=".SettingActivity" />

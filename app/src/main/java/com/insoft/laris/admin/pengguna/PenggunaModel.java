@@ -4,6 +4,16 @@ public class PenggunaModel {
     private int id;
     private String kd_pengguna;
     private String nm_pengguna;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private String password;
     private String nama;
     private String alamat;
     private String telepon;

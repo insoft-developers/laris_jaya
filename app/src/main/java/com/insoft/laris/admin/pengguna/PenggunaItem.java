@@ -22,11 +22,13 @@ public class PenggunaItem extends RecyclerView.Adapter<PenggunaItem.ViewHolder> 
     private Context context;
     private MyDatabaseHelper db;
     private List<PenggunaModel> pengguna;
+    private PenggunaInterface penggunaInterface;
 
 
-    public PenggunaItem(Context context, List<PenggunaModel> pengguna) {
+    public PenggunaItem(Context context, List<PenggunaModel> pengguna, PenggunaInterface penggunaInterface) {
         this.context = context;
         this.pengguna = pengguna;
+        this.penggunaInterface = penggunaInterface;
 
 
     }
@@ -40,11 +42,25 @@ public class PenggunaItem extends RecyclerView.Adapter<PenggunaItem.ViewHolder> 
 
 
     @Override
-    public void onBindViewHolder(PenggunaItem.ViewHolder holder, final int position) {
+    public void onBindViewHolder(PenggunaItem.ViewHolder holder,  final int position) {
         holder.kdPengguna.setText(pengguna.get(position).getKd_pengguna());
         holder.nmPengguna.setText(pengguna.get(position).getNm_pengguna());
         holder.name.setText(pengguna.get(position).getNama());
         holder.level.setText(pengguna.get(position).getLevel());
+        holder.rootlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                penggunaInterface.pilihPengguna(position);
+            }
+        });
+
+        holder.rootlayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                penggunaInterface.hapusPengguna(position);
+                return false;
+            }
+        });
 
 
     }

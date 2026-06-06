@@ -109,18 +109,18 @@ public class ReceiptPrintAdapter extends PrintDocumentAdapter {
 
         // Cetak nama toko
         y += 40;
-        String namaToko = "TOKO LARIS JAYA";
+        String namaToko = Constants.namaToko;
         float textWidth = paintTitle.measureText(namaToko);
         canvas.drawText(namaToko, 70, y, paintTitle);
         y += paintTitle.descent() - paintTitle.ascent() + 2;
 
         y += 1;
-        String alamatToko = "Sei Kalam Dusun 6";
+        String alamatToko = Constants.alamatToko;
         canvas.drawText(alamatToko, 70, y, paintNamaBarang);
         y += paintNamaBarang.descent() - paintNamaBarang.ascent() + 2;
 
         y += 1;
-        String hp = "No HP. 0822 7375 7110";
+        String hp = Constants.hpToko;
         canvas.drawText(hp, 70, y, paintNamaBarang);
         y += paintNamaBarang.descent() - paintNamaBarang.ascent() + 20;
 

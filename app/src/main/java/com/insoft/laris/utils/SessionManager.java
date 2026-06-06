@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.insoft.laris.AdminActivity;
 import com.insoft.laris.LoginActivity;
 import com.insoft.laris.MainActivity;
 
@@ -66,6 +67,6 @@ public class SessionManager {
         editor.commit();
         Intent i = new Intent(context, LoginActivity.class);
         context.startActivity(i);
-        ((MainActivity) context).finish();
+        ((AdminActivity) context).finish();
     }
 }

@@ -11,6 +11,7 @@ import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.CustomerResponseJson;
 import com.insoft.laris.json.DetailRequestJson;
 import com.insoft.laris.json.DetailResponseJson;
+import com.insoft.laris.json.GeneralResponseJson;
 import com.insoft.laris.json.HapusItemRequestJson;
 import com.insoft.laris.json.HapusItemResponseJson;
 import com.insoft.laris.json.HapusProdukRequestJson;
@@ -140,5 +141,15 @@ public interface RegisterAPI {
 
     @POST("daftar_pengguna")
     Call<PenggunaResponseJson> get_daftar_pengguna(@Body PenggunaRequestJson param);
+
+    @POST("tambah_pengguna")
+    Call<GeneralResponseJson> tambahPengguna(@Body PenggunaRequestJson param);
+
+    @POST("update_pengguna")
+    Call<GeneralResponseJson> updatePengguna(@Body PenggunaRequestJson param);
+
+    @POST("delete_pengguna")
+    Call<GeneralResponseJson> deletePengguna(@Body PenggunaRequestJson param);
+
 
 }

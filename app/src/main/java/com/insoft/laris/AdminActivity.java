@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.insoft.laris.admin.ListPenjualanActivity;
@@ -22,6 +23,7 @@ import com.insoft.laris.model.Pelanggan;
 import com.insoft.laris.model.Produk;
 import com.insoft.laris.utils.MyDatabaseHelper;
 import com.insoft.laris.utils.RegisterAPI;
+import com.insoft.laris.utils.SessionManager;
 import com.insoft.laris.utils.UtilsAPI;
 
 import java.util.List;
@@ -36,6 +38,8 @@ public class AdminActivity extends AppCompatActivity {
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
+    private TextView txtKeluar;
+    private SessionManager sessionManager;
 
     private RegisterAPI registerAPI;
     @Override
@@ -50,8 +54,10 @@ public class AdminActivity extends AppCompatActivity {
         btnpelanggan = findViewById(R.id.btn_pelangggan);
         btnlaporan = findViewById(R.id.btn_laporan);
         btnPengguna = findViewById(R.id.btn_pengguna);
+        txtKeluar = findViewById(R.id.txt_keluar);
         btn_sync = findViewById(R.id.btn_sync);
         loading = findViewById(R.id.loading);
+        sessionManager = new SessionManager(this);
 
         btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +105,13 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AdminActivity.this, MasterBarangActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        txtKeluar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sessionManager.logout();
             }
         });
     }
