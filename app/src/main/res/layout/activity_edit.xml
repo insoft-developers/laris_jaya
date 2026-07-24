@@ -1,157 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/button_round_1"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
     tools:context=".EditActivity">
 
     <LinearLayout
-
-        android:layout_margin="10dp"
-        android:padding="7dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="7dp">
+
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:fontFamily="@font/almendra"
             android:text="Kode Barang :"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="5dp"
-            android:background="@drawable/button_round_10"
-            android:fontFamily="@font/almendra"
-            android:layout_marginTop="5dp"
-            android:textSize="20sp"
             android:id="@+id/kodebarang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_round_10"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
             android:text="BR"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="20sp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:fontFamily="@font/almendra"
             android:text="Nama Barang :"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="5dp"
-            android:background="@drawable/button_round_10"
-            android:fontFamily="@font/almendra"
-            android:layout_marginTop="5dp"
-            android:textSize="20sp"
             android:id="@+id/namabarang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_round_10"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
             android:text="Supermi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="20sp" />
 
         <TextView
-            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="14sp"
-            android:fontFamily="@font/almendra"
             android:text="Satuan :"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="5dp"
-            android:background="@drawable/button_round_10"
-            android:fontFamily="@font/almendra"
-            android:layout_marginTop="5dp"
-            android:textSize="20sp"
             android:id="@+id/satuan"
-            android:text="Pieces"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:textSize="14sp"
-            android:fontFamily="@font/almendra"
-            android:text="Konversi :"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="5dp"
-            android:background="@drawable/button_round_10"
-            android:fontFamily="@font/almendra"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"
-            android:id="@+id/konversi"
-            android:text="10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:background="@drawable/button_round_10"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
+            android:text="Pieces"
+            android:textSize="20sp" />
 
         <TextView
-            android:textStyle="bold"
-            android:layout_marginTop="15dp"
-            android:textSize="14sp"
-            android:fontFamily="@font/almendra"
-            android:text="Jumlah :"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:id="@+id/etjumlah"
-            android:textSize="20sp"
-            android:paddingRight="10dp"
-            android:textAlignment="textEnd"
-            android:fontFamily="@font/almendra"
-            android:hint="0"
-            android:inputType="number"
-            android:layout_marginBottom="10dp"
-            android:paddingVertical="10dp"
-            android:background="@drawable/button_round_10"
+            android:text="Konversi :"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/konversi"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_round_10"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="7dp"
+            android:text="10"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Discount :"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="50dp"
-            android:weightSum="2"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-            <Button
-                android:layout_marginRight="30dp"
-                android:id="@+id/btnhapus"
+            <!-- Discount persen -->
+            <EditText
+                android:id="@+id/etdiscountpersen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_round_7"
-                android:text="Hapus"
-                android:textColor="#fff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:background="@drawable/button_round_10"
+                android:hint="0%"
+                android:inputType="numberDecimal"
+                android:paddingVertical="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="textEnd"
+                android:textSize="20sp" />
 
-            <Button
-                android:layout_marginLeft="30dp"
-                android:id="@+id/btnupdate"
-                android:layout_weight="1"
-                android:background="@drawable/button_round_2"
-                android:text="Update"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <!-- Discount rupiah -->
+            <EditText
+                android:id="@+id/etdiscount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_round_10"
+                android:hint="Rp0"
+                android:inputType="number"
+                android:paddingVertical="10dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="textEnd"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Jumlah :"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etjumlah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_round_10"
+            android:hint="0"
+            android:inputType="number"
+            android:paddingEnd="10dp"
+            android:paddingVertical="10dp"
+            android:textAlignment="textEnd"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnhapus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_round_7"
+                android:text="Hapus"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnupdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_round_2"
+                android:text="Update" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+</ScrollView>

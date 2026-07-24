@@ -21,7 +21,7 @@ import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
     private TextView kodebarang, namabarang, satuan, konversi;
-    private EditText etjumlah;
+    private EditText etjumlah, discount_persen, discount;
     private Button btnhapus, btnupdate;
     MyDatabaseHelper db;
     private List<Produk> dataproduk;
@@ -38,14 +38,19 @@ public class EditActivity extends AppCompatActivity {
         namabarang = findViewById(R.id.namabarang);
         satuan = findViewById(R.id.satuan);
         konversi = findViewById(R.id.konversi);
+        discount_persen = findViewById(R.id.etdiscountpersen);
+        discount = findViewById(R.id.etdiscount);
         etjumlah = findViewById(R.id.etjumlah);
         btnhapus = findViewById(R.id.btnhapus);
         btnupdate = findViewById(R.id.btnupdate) ;
+
 
         String itemcode = getIntent().getStringExtra("item_code");
         String itemname = getIntent().getStringExtra("item_name");
         String itemsatuan = getIntent().getStringExtra("item_satuan");
         String itemkonversi = getIntent().getStringExtra("item_konversi");
+        String itemjumlah = getIntent().getStringExtra("item_jumlah");
+        String itemdiscount = getIntent().getStringExtra("item_discount");
 
 
         kodebarang.setText(itemcode);
@@ -53,7 +58,9 @@ public class EditActivity extends AppCompatActivity {
         satuan.setText(itemsatuan);
         konversi.setText(itemkonversi);
 
-        etjumlah.setText("");
+        etjumlah.setText(itemjumlah);
+        discount.setText(itemdiscount);
+        discount_persen.setText("");
 
         btnupdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +116,29 @@ public class EditActivity extends AppCompatActivity {
 
             int totalbaru = hargaaktif * jumlahbaru;
 
-            db.updateitem(itemcode, jumlahbaru, hargaaktif, totalbaru);
+
+
+            String inputDiskon = discount_persen.getText().toString().trim();
+            String inputDiskonRupiah = discount.getText().toString().trim();
+
+            int disc_rupiah = inputDiskonRupiah.isEmpty() ? 0 : Integer.parseInt(inputDiskonRupiah);
+            int totalharga = totalbaru - disc_rupiah;
+
+            int disc_persen = inputDiskon.isEmpty()
+                    ? 0
+                    : Integer.parseInt(inputDiskon);
+
+            int disc_persen_value = (int) Math.round(
+                    totalharga * disc_persen / 100.0
+            );
+
+            int total_discount = disc_rupiah + disc_persen_value;
+
+            int total_setelah_discount = totalbaru - total_discount;
+
+
+
+            db.updateitem(itemcode, jumlahbaru, hargaaktif, totalbaru, total_discount, total_setelah_discount);
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK, intent);
             finish();

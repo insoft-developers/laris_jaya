@@ -428,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                     hargaaktif = data.getIntExtra("intent_harga_freelance", 0);
                 }
 
+
                 db.tambahitem(
                         kodebarang,
                         data.getStringExtra("intent_barcode"),
@@ -440,6 +441,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                         kodepengguna,
                         0,
                         data.getIntExtra("intent_diskon", 0),
+                        hargaaktif,
                         konversi
                 );
             } else {
@@ -467,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru);
+                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru);
             }
 
             displayData();
@@ -497,7 +499,8 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 map.put("kd_user", cursor.getString(9));
                 map.put("status", cursor.getString(10));
                 map.put("disk", cursor.getString(11));
-                map.put("konversi", cursor.getString(12));
+                map.put("subtotal", cursor.getString(12));
+                map.put("konversi", cursor.getString(13));
 
                 list_data.add(map);
                 itemAdapter = new ItemAdapter(MainActivity.this, list_data, MainActivity.this);
@@ -685,6 +688,8 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
         intent.putExtra("item_name", list_data.get(position).get("nm_barang"));
         intent.putExtra("item_satuan", list_data.get(position).get("satuan"));
         intent.putExtra("item_konversi", list_data.get(position).get("konversi"));
+        intent.putExtra("item_jumlah", list_data.get(position).get("jumlah"));
+        intent.putExtra("item_discount", list_data.get(position).get("disk"));
 
 
         startActivityForResult(intent, 600);

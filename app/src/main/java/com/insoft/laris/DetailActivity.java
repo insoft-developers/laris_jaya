@@ -105,6 +105,7 @@ public class DetailActivity extends AppCompatActivity {
                         cursor.getString(9),
                         Integer.parseInt(cursor.getString(10)),
                         Integer.parseInt(cursor.getString(11)),
+                        Integer.parseInt(cursor.getString(12)),
                         1
 
                 );

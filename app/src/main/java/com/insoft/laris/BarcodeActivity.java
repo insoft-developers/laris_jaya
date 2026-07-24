@@ -194,6 +194,7 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                         iduser,
                         0,
                         p.getDiskon(),
+                        hargaaktif,
                         p.getKonversi()
                 );
             } else {
@@ -220,7 +221,10 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru);
+
+
+
+                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru, 0, totalbaru);
             }
             cursor.close();
 

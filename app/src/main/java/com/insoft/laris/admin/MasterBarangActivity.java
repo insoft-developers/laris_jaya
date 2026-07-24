@@ -120,6 +120,8 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
         intent.putExtra("_hargamember", dataProduk.get(posisi).getHarga_member());
         intent.putExtra("_hargamemberkarton", dataProduk.get(posisi).getDiskon_member());
         intent.putExtra("_hargafreelance", dataProduk.get(posisi).getHarga_freelance());
+        intent.putExtra("_hargareseller", dataProduk.get(posisi).getHarga_reseller());
+        intent.putExtra("_stok", dataProduk.get(posisi).getStok());
         intent.putExtra("_hargafreelancekarton", dataProduk.get(posisi).getHarga_karton_freelance());
         startActivity(intent);
 

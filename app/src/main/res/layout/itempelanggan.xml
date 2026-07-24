@@ -20,6 +20,7 @@
             android:layout_marginLeft="5dp"
             android:layout_gravity="center"
             android:src="@drawable/nasalogo"
+            android:visibility="gone"
             android:layout_width="50dp"
             android:layout_height="50dp"/>
 

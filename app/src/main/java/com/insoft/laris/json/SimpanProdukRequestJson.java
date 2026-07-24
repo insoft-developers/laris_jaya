@@ -16,6 +16,26 @@ public class SimpanProdukRequestJson {
     private int harga_freelance;
     private int harga_freelance_karton;
 
+    public int getHarga_reseller() {
+        return harga_reseller;
+    }
+
+    public void setHarga_reseller(int harga_reseller) {
+        this.harga_reseller = harga_reseller;
+    }
+
+    private int harga_reseller;
+
+    public int getStok() {
+        return stok;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
+    }
+
+    private int stok;
+
     public String getKd_barang() {
         return kd_barang;
     }

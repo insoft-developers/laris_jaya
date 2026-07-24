@@ -30,6 +30,7 @@ public class BarangEditActivity extends AppCompatActivity {
     private EditText etKonversi, etHargaJual, etHargaJualKarton;
     private EditText etHargaMember, etHargaMemberKarton;
     private EditText etHargaFreelance, etHargaFreelanceKarton;
+    private EditText etHargaReseller, etStok;
     private Button btnSimpan;
 
     private ProgressBar loading;
@@ -40,6 +41,7 @@ public class BarangEditActivity extends AppCompatActivity {
 
     private String kodebarang_, barcode_, namabarang_;
     private int hargabeli_, konversi_, hargajual_, hargajualkarton_, hargamember_, hargamemberkarton_, hargafreelance_, hargafreelancekarton_;
+    private int hargareseller_, stok_;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,8 @@ public class BarangEditActivity extends AppCompatActivity {
         etHargaMemberKarton = findViewById(R.id.et_harga_member_karton);
         etHargaFreelance = findViewById(R.id.et_harga_freelance);
         etHargaFreelanceKarton = findViewById(R.id.et_harga_freelance_karton);
+        etHargaReseller = findViewById(R.id.et_harga_reseller);
+        etStok = findViewById(R.id.et_stok);
         btnSimpan = findViewById(R.id.btn_simpan_barang);
 
         btnbarcode = findViewById(R.id.btnbarcode);
@@ -71,6 +75,8 @@ public class BarangEditActivity extends AppCompatActivity {
         hargamemberkarton_ = getIntent().getIntExtra("_hargamemberkarton", 0);
         hargafreelance_ = getIntent().getIntExtra("_hargafreelance", 0);
         hargafreelancekarton_ = getIntent().getIntExtra("_hargafreelancekarton", 0);
+        stok_ = getIntent().getIntExtra("_stok", 0);
+        hargareseller_ = getIntent().getIntExtra("_hargareseller", 0);
 
 
         etBarcode.setText(barcode_);
@@ -83,6 +89,9 @@ public class BarangEditActivity extends AppCompatActivity {
         etHargaMemberKarton.setText(String.valueOf(hargamemberkarton_* konversi_));
         etHargaFreelance.setText(String.valueOf(hargafreelance_));
         etHargaFreelanceKarton.setText(String.valueOf(hargafreelancekarton_ * konversi_));
+        etStok.setText(String.valueOf(stok_));
+        etHargaReseller.setText(String.valueOf(hargareseller_));
+        etStok.setKeyListener(null);
 
 
         btnSimpan.setOnClickListener(new View.OnClickListener() {
@@ -100,14 +109,6 @@ public class BarangEditActivity extends AppCompatActivity {
                     etHargaJual.setError("Harga Jual Tidak Boleh Kosong...!");
                 } else if(etHargaJualKarton.getText().toString().isEmpty()) {
                     etHargaJualKarton.setError("Harga Jual Karton Tidak Boleh Kosong...!");
-                } else if(etHargaMember.getText().toString().isEmpty()) {
-                    etHargaMember.setError("Harga Member Tidak Boleh Kosong...!");
-                } else if(etHargaMemberKarton.getText().toString().isEmpty()) {
-                    etHargaMemberKarton.setError("Harga Member Karton Tidak Boleh Kosong...!");
-                } else if(etHargaFreelance.getText().toString().isEmpty()) {
-                    etHargaFreelance.setError("Harga Freelance Tidak Boleh Kosong...!");
-                } else if(etHargaFreelanceKarton.getText().toString().isEmpty()) {
-                    etHargaFreelanceKarton.setError("Harga Freelance Karton Tidak Boleh Kosong...!");
                 } else {
                     submitNewProduct();
                 }
@@ -216,12 +217,28 @@ public class BarangEditActivity extends AppCompatActivity {
         param.setKd_barang(kodebarang_);
         param.setBarcode(etBarcode.getText().toString());
         param.setHarga_beli(Integer.parseInt(etHargaBeli.getText().toString()));
-        param.setHarga_freelance(Integer.parseInt(etHargaFreelance.getText().toString()));
-        param.setHarga_freelance_karton(Integer.parseInt(etHargaFreelanceKarton.getText().toString()));
         param.setHarga_jual(Integer.parseInt(etHargaJual.getText().toString()));
         param.setHarga_jual_karton(Integer.parseInt(etHargaJualKarton.getText().toString()));
-        param.setHarga_member(Integer.parseInt(etHargaMember.getText().toString()));
-        param.setHarga_member_karton(Integer.parseInt(etHargaMemberKarton.getText().toString()));
+
+        if(etHargaMember.getText().toString().isEmpty()) {
+            param.setHarga_member(Integer.parseInt(etHargaJual.getText().toString()));
+        } else {
+            param.setHarga_member(Integer.parseInt(etHargaMember.getText().toString()));
+        }
+
+        if(etHargaMemberKarton.getText().toString().isEmpty()) {
+            param.setHarga_member_karton(Integer.parseInt(etHargaJualKarton.getText().toString()));
+        } else {
+            param.setHarga_member_karton(Integer.parseInt(etHargaMemberKarton.getText().toString()));
+        }
+
+
+        if(etHargaReseller.getText().toString().isEmpty()) {
+            param.setHarga_reseller(Integer.parseInt(etHargaJual.getText().toString()));
+        } else {
+            param.setHarga_reseller(Integer.parseInt(etHargaReseller.getText().toString()));
+        }
+
         param.setKonversi(Integer.parseInt(etKonversi.getText().toString()));
         param.setNama_barang(etNamaBarang.getText().toString());
 

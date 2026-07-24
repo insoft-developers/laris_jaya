@@ -18,6 +18,16 @@ public class Produk {
     private int harga_freelance;
     private int harga_karton_freelance;
 
+    public int getHarga_reseller() {
+        return harga_reseller;
+    }
+
+    public void setHarga_reseller(int harga_reseller) {
+        this.harga_reseller = harga_reseller;
+    }
+
+    private int harga_reseller;
+
     public String getKd_barang() {
         return kd_barang;
     }

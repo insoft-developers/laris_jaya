@@ -18,6 +18,7 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:scaleType="centerCrop"
+            android:visibility="gone"
             android:id="@+id/imagemenu"
             android:layout_marginLeft="5dp"
             android:layout_gravity="center"

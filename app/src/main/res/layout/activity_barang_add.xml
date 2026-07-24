@@ -168,6 +168,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -198,6 +199,26 @@
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/et_harga_reseller"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Harga Reseller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/et_stok"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/button_round_4"
+                android:hint="Stok"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <Button
                 android:layout_marginBottom="50dp"

@@ -73,6 +73,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_KEMBALI = "kembali";
     private static final String COLUMN_DEPO = "depo";
     private static final String COLUMN_BANK_DEPOSIT = "bank_deposit";
+    private static final String COLUMN_SUBTOTAL = "subtotal";
+
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -135,6 +137,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_KD_USER + " TEXT, " +
                 COLUMN_STATUS + " INTEGER, " +
                 COLUMN_DISK + " INTEGER, " +
+                COLUMN_SUBTOTAL + " INTEGER, " +
                 COLUMN_KONVERSI + " INTEGER);";
 
 
@@ -345,6 +348,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             String kduser,
             int status,
             int disk,
+            int subtotal,
             int konversi
             ) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -362,6 +366,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_KD_USER, kduser);
         cv.put(COLUMN_STATUS, status);
         cv.put(COLUMN_DISK, disk);
+        cv.put(COLUMN_SUBTOTAL, subtotal);
         cv.put(COLUMN_KONVERSI, konversi);
 
 
@@ -377,13 +382,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             String idproduk,
             int qty,
             int harga,
-            int total
+            int total,
+            int discount,
+            int total_setelah_discount
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_JUMLAH, qty);
         cv.put(COLUMN_HARGA, harga);
-        cv.put(COLUMN_TOTAL, total);
+        cv.put(COLUMN_TOTAL, total_setelah_discount);
+        cv.put(COLUMN_SUBTOTAL, total);
+        cv.put(COLUMN_DISK, discount);
 
         long result =  db.update(TABLE_NAME, cv, "kd_barang=?", new String[]{idproduk});
         if(result == 0) {

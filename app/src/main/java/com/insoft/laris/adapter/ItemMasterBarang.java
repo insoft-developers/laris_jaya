@@ -39,7 +39,9 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.namabarang.setText(produks.get(position).getNm_barang());
         holder.satuan.setText(produks.get(position).getSatuan());
-        holder.konversi.setText(String.valueOf(produks.get(position).getKonversi()));
+        holder.konversi.setText("Konversi ( "+String.valueOf(produks.get(position).getKonversi())+" )");
+        holder.stok.setText("Stok ( "+String.valueOf(produks.get(position).getStok())+" )");
+
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +66,7 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namabarang, satuan, konversi;
+        private TextView namabarang, satuan, konversi, stok;
         private LinearLayout rootlayout;
 
         public ViewHolder(View itemView) {
@@ -73,6 +75,7 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
             namabarang = itemView.findViewById(R.id.namabarang);
             satuan = itemView.findViewById(R.id.satuan);
             konversi = itemView.findViewById(R.id.konversi);
+            stok = itemView.findViewById(R.id.stok);
         }
     }
 }
