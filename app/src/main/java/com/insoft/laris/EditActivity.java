@@ -1,6 +1,7 @@
 package com.insoft.laris;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,6 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
+    private SwitchCompat switchHarga;
+    private TextView tvHargaUmum;
+    private TextView tvHargaReseller;
+    private TextView tvJenisHarga;
+
+    private boolean menggunakanHargaReseller = false;
     private TextView kodebarang, namabarang, satuan, konversi;
     private EditText etjumlah, discount_persen, discount;
     private Button btnhapus, btnupdate;
@@ -44,6 +51,11 @@ public class EditActivity extends AppCompatActivity {
         btnhapus = findViewById(R.id.btnhapus);
         btnupdate = findViewById(R.id.btnupdate) ;
 
+        switchHarga = findViewById(R.id.switchharga);
+        tvHargaUmum = findViewById(R.id.tvhargaumum);
+        tvHargaReseller = findViewById(R.id.tvhargareseller);
+        tvJenisHarga = findViewById(R.id.tvjenisharga);
+
 
         String itemcode = getIntent().getStringExtra("item_code");
         String itemname = getIntent().getStringExtra("item_name");
@@ -61,6 +73,13 @@ public class EditActivity extends AppCompatActivity {
         etjumlah.setText(itemjumlah);
         discount.setText(itemdiscount);
         discount_persen.setText("");
+
+        switchHarga.setChecked(false);
+        menggunakanHargaReseller = false;
+
+        tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
+        tvJenisHarga.setText("Menggunakan Harga Umum");
 
         btnupdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +100,45 @@ public class EditActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
+        });
+
+        switchHarga.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            menggunakanHargaReseller = isChecked;
+
+            if (isChecked) {
+                tvJenisHarga.setText("Menggunakan Harga Reseller");
+
+                tvHargaUmum.setTypeface(
+                        null,
+                        android.graphics.Typeface.NORMAL
+                );
+
+                tvHargaReseller.setTypeface(
+                        null,
+                        android.graphics.Typeface.BOLD
+                );
+
+                // Gunakan harga reseller
+                // hargaDipilih = hargaReseller;
+
+            } else {
+                tvJenisHarga.setText("Menggunakan Harga Umum");
+
+                tvHargaUmum.setTypeface(
+                        null,
+                        android.graphics.Typeface.BOLD
+                );
+
+                tvHargaReseller.setTypeface(
+                        null,
+                        android.graphics.Typeface.NORMAL
+                );
+
+                // Gunakan harga umum
+                // hargaDipilih = hargaUmum;
+            }
+
+         
         });
 
     }

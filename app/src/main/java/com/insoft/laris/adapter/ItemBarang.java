@@ -14,7 +14,9 @@ import com.insoft.laris.R;
 import com.insoft.laris.model.Produk;
 import com.insoft.laris.utils.MyDatabaseHelper;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
 
@@ -38,9 +40,19 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+
         holder.namabarang.setText(produks.get(position).getNm_barang());
         holder.satuan.setText(produks.get(position).getSatuan());
-        holder.konversi.setText(String.valueOf(produks.get(position).getKonversi()));
+        holder.konversi.setText("Konversi ( "+String.valueOf(produks.get(position).getKonversi())+" )");
+
+        holder.stok.setText(String.valueOf(produks.get(position).getStok()));
+        holder.harga.setText(formatRupiah.format(produks.get(position).getHarga_jual()));
+        holder.harga_reseller.setText(formatRupiah.format(produks.get(position).getHarga_reseller()));
+
+
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +68,7 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namabarang, satuan, konversi;
+        private TextView namabarang, satuan, konversi, stok, harga, harga_reseller;
         private LinearLayout rootlayout;
 
         public ViewHolder(View itemView) {
@@ -65,6 +77,9 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
             namabarang = itemView.findViewById(R.id.namabarang);
             satuan = itemView.findViewById(R.id.satuan);
             konversi = itemView.findViewById(R.id.konversi);
+            stok = itemView.findViewById(R.id.stok);
+            harga = itemView.findViewById(R.id.harga);
+            harga_reseller = itemView.findViewById(R.id.harga_reseller);
         }
     }
 }

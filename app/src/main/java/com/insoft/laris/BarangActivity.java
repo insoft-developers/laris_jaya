@@ -89,6 +89,7 @@ public class BarangActivity extends AppCompatActivity implements barangInterface
                 p.setDiskon_member(cursor.getInt(cursor.getColumnIndexOrThrow("diskon_member")));
                 p.setKd_supplier(cursor.getString(cursor.getColumnIndexOrThrow("kd_supplier")));
                 p.setDiskon(cursor.getInt(cursor.getColumnIndexOrThrow("diskon")));
+                p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller")));
                 list.add(p);
             } while (cursor.moveToNext());
         }

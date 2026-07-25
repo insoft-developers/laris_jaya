@@ -75,6 +75,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_BANK_DEPOSIT = "bank_deposit";
     private static final String COLUMN_SUBTOTAL = "subtotal";
 
+    private static final String COLUMN_HARGA_RESELLER = "harga_reseller";
+
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -183,7 +185,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_HARGA_MEMBER + " INTEGER, " +
                 COLUMN_DISKON_MEMBER + " INTEGER, " +
                 COLUMN_SUPPLIER + " TEXT, " +
-                COLUMN_DISKON + " INTEGER);";
+                COLUMN_DISKON + " INTEGER, " +
+                COLUMN_HARGA_RESELLER + " INTEGER);";
 
         db.execSQL(master_barang_table);
 
@@ -256,7 +259,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int harga_member,
             int diskon_member,
             String supplier,
-            int diskon
+            int diskon,
+            int harga_reseller
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -276,6 +280,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_DISKON_MEMBER, diskon_member);
         cv.put(COLUMN_SUPPLIER, supplier);
         cv.put(COLUMN_DISKON, diskon);
+        cv.put(COLUMN_HARGA_RESELLER, harga_reseller);
 
 
         long result =  db.insert(MASTER_BARANG, null, cv);

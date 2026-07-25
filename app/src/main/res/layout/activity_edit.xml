@@ -92,6 +92,69 @@
             android:text="10"
             android:textSize="20sp" />
 
+        <!-- Pilihan jenis harga -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Jenis Harga :"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button_round_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp">
+
+            <!-- Harga umum -->
+            <TextView
+                android:id="@+id/tvhargaumum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Harga Umum"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Switch harga -->
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchharga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:showText="false"
+                app:thumbTint="@color/white"
+                app:trackTint="@color/primary" />
+
+            <!-- Harga reseller -->
+            <TextView
+                android:id="@+id/tvhargareseller"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="Harga Reseller"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <!-- Status harga yang sedang digunakan -->
+        <TextView
+            android:id="@+id/tvjenisharga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="Menggunakan Harga Umum"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -149,7 +149,8 @@ public class AdminActivity extends AppCompatActivity {
                                         p.getHarga_member(),
                                         p.getDiskon_member(),
                                         p.getKd_supplier(),
-                                        p.getDiskon()
+                                        p.getDiskon(),
+                                        p.getHarga_reseller()
                                 );
                             }
 

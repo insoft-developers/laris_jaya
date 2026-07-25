@@ -214,7 +214,8 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                                         p.getHarga_member(),
                                         p.getDiskon_member(),
                                         p.getKd_supplier(),
-                                        p.getDiskon()
+                                        p.getDiskon(),
+                                        p.getHarga_reseller()
                                 );
                             }
 
