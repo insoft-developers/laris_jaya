@@ -74,8 +74,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DEPO = "depo";
     private static final String COLUMN_BANK_DEPOSIT = "bank_deposit";
     private static final String COLUMN_SUBTOTAL = "subtotal";
-
     private static final String COLUMN_HARGA_RESELLER = "harga_reseller";
+    private static final String COLUMN_PRICE_TYPE = "price_type";
 
 
     public MyDatabaseHelper(@Nullable Context context) {
@@ -140,7 +140,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_STATUS + " INTEGER, " +
                 COLUMN_DISK + " INTEGER, " +
                 COLUMN_SUBTOTAL + " INTEGER, " +
-                COLUMN_KONVERSI + " INTEGER);";
+                COLUMN_KONVERSI + " INTEGER, " +
+                COLUMN_PRICE_TYPE + " INTEGER);";
 
 
         db.execSQL(query);
@@ -354,7 +355,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int status,
             int disk,
             int subtotal,
-            int konversi
+            int konversi,
+            int price_type
             ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -373,6 +375,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_DISK, disk);
         cv.put(COLUMN_SUBTOTAL, subtotal);
         cv.put(COLUMN_KONVERSI, konversi);
+        cv.put(COLUMN_PRICE_TYPE, price_type);
 
 
         long result =  db.insert(TABLE_NAME, null, cv);
@@ -389,7 +392,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int harga,
             int total,
             int discount,
-            int total_setelah_discount
+            int total_setelah_discount,
+            int price_type
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -398,6 +402,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TOTAL, total_setelah_discount);
         cv.put(COLUMN_SUBTOTAL, total);
         cv.put(COLUMN_DISK, discount);
+        cv.put(COLUMN_PRICE_TYPE, price_type);
 
         long result =  db.update(TABLE_NAME, cv, "kd_barang=?", new String[]{idproduk});
         if(result == 0) {

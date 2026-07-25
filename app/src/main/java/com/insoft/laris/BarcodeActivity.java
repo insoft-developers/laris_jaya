@@ -195,12 +195,14 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                         0,
                         p.getDiskon(),
                         hargaaktif,
-                        p.getKonversi()
+                        p.getKonversi(),
+                        1
                 );
             } else {
                 cursor.moveToFirst();
                 int jumlah = cursor.getInt(5);
                 int jumlahbaru = jumlah + 1;
+                int price_type = cursor.getInt(14);
 
                 if(jumlahbaru >= konversi) {
                     if(cust_group.equalsIgnoreCase("Reguler")) {
@@ -221,10 +223,14 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
+                if(price_type == 2) {
+                    hargaaktif = p.getHarga_reseller();
+                    totalbaru = jumlahbaru * hargaaktif;
+                }
 
 
 
-                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru, 0, totalbaru);
+                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, price_type);
             }
             cursor.close();
 

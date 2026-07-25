@@ -74,12 +74,10 @@ public class EditActivity extends AppCompatActivity {
         discount.setText(itemdiscount);
         discount_persen.setText("");
 
-        switchHarga.setChecked(false);
-        menggunakanHargaReseller = false;
+        check_price_type(itemcode);
 
-        tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
-        tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
-        tvJenisHarga.setText("Menggunakan Harga Umum");
+
+
 
         btnupdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +116,7 @@ public class EditActivity extends AppCompatActivity {
                         android.graphics.Typeface.BOLD
                 );
 
+                menggunakanHargaReseller = true;
                 // Gunakan harga reseller
                 // hargaDipilih = hargaReseller;
 
@@ -136,9 +135,10 @@ public class EditActivity extends AppCompatActivity {
 
                 // Gunakan harga umum
                 // hargaDipilih = hargaUmum;
+                menggunakanHargaReseller = false;
             }
 
-         
+
         });
 
     }
@@ -174,7 +174,12 @@ public class EditActivity extends AppCompatActivity {
 
             int totalbaru = hargaaktif * jumlahbaru;
 
-
+            int price_type = 1;
+            if(menggunakanHargaReseller) {
+                hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller"));
+                totalbaru = hargaaktif * jumlahbaru;
+                price_type = 2;
+            }
 
             String inputDiskon = discount_persen.getText().toString().trim();
             String inputDiskonRupiah = discount.getText().toString().trim();
@@ -196,7 +201,7 @@ public class EditActivity extends AppCompatActivity {
 
 
 
-            db.updateitem(itemcode, jumlahbaru, hargaaktif, totalbaru, total_discount, total_setelah_discount);
+            db.updateitem(itemcode, jumlahbaru, hargaaktif, totalbaru, total_discount, total_setelah_discount, price_type);
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK, intent);
             finish();
@@ -204,5 +209,27 @@ public class EditActivity extends AppCompatActivity {
         cursor.close();
 
 
+    }
+
+    private void check_price_type(String itemcode) {
+        Cursor cursor = db.get_barang_by_kode(itemcode);
+        if (cursor != null && cursor.moveToFirst()) {
+            int price_type = cursor.getInt(cursor.getColumnIndexOrThrow("price_type"));
+            if(price_type == 2) {
+                switchHarga.setChecked(true);
+                menggunakanHargaReseller = true;
+                tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
+                tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
+                tvJenisHarga.setText("Menggunakan Harga Reseller");
+            } else {
+                switchHarga.setChecked(false);
+                menggunakanHargaReseller = false;
+
+                tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
+                tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
+                tvJenisHarga.setText("Menggunakan Harga Umum");
+            }
+        }
+        cursor.close();
     }
 }

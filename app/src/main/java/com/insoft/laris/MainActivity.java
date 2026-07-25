@@ -443,13 +443,13 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                         0,
                         data.getIntExtra("intent_diskon", 0),
                         hargaaktif,
-                        konversi
+                        konversi,
+                        0
                 );
             } else {
                 cursor.moveToFirst();
-
-
                 int jumlah = Integer.parseInt(cursor.getString(5));
+                int price_type = Integer.parseInt(cursor.getString(14));
                 int jumlahbaru = jumlah + 1;
                 if(jumlahbaru >= konversi) {
                     if(cust_group.equalsIgnoreCase("Reguler")) {
@@ -470,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru);
+                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, 0);
             }
 
             displayData();
