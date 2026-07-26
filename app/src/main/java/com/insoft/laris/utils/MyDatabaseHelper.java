@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.insoft.laris.model.Produk;
+import com.insoft.laris.model.RingkasanTransaksi;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     private Context context;
@@ -77,6 +79,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_HARGA_RESELLER = "harga_reseller";
     private static final String COLUMN_PRICE_TYPE = "price_type";
 
+    private static final String COLUMN_TOTAL_DISCOUNT = "total_dicount";
+
+
 
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -105,7 +110,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_MODAL + " INTEGER, " +
                 COLUMN_TOTAL + " TEXT, " +
                 COLUMN_STATUS + " INTEGER, " +
-                COLUMN_DISK + " INTEGER);";
+                COLUMN_DISK + " INTEGER, " +
+                COLUMN_KONVERSI + " INTEGER, " +
+                COLUMN_PRICE_TYPE + " INTEGER, " +
+                COLUMN_SUBTOTAL + " INTEGER);";
         db.execSQL(query_penjualan_item);
 
 
@@ -121,7 +129,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_KEMBALI + " INTEGER, " +
                 COLUMN_KD_USER + " TEXT, " +
                 COLUMN_DEPO + " INTEGER, " +
-                COLUMN_BANK_DEPOSIT + " INTEGER);";
+                COLUMN_BANK_DEPOSIT + " INTEGER, " +
+                COLUMN_SUBTOTAL + " INTEGER, " +
+                COLUMN_TOTAL_DISCOUNT + " INTEGER);";
         db.execSQL(query_penjualan);
 
 
@@ -474,7 +484,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor tampilkan_penjualan() {
 
-        String query = "SELECT p.id, c.nm_pelanggan, c.alamat, p.belanja, p.tanggal, p.nota " +
+        String query = "SELECT p.id, c.nm_pelanggan, c.alamat, p.belanja, p.tanggal, p.nota, p.subtotal, p.total_dicount, p.kembali, p.bayar " +
                 "FROM "+TABLE_PENJUALAN+" p " +
                 "LEFT JOIN "+MASTER_PELANGGAN+" c ON p.kd_pelanggan = c.kd_pelanggan ORDER BY p.id DESC";
 
@@ -491,7 +501,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor tampilkan_penjualan_item(String nota) {
-        String query = "SELECT "+COLUMN_ID+","+COLUMN_NM_BARANG+","+COLUMN_TOTAL+", "+COLUMN_JUMLAH+","+COLUMN_HARGA+" FROM " + TABLE_PENJUALAN_ITEM + " WHERE "+ COLUMN_NOTA+ "='"+ nota +"'  ORDER BY "+ COLUMN_ID+" DESC";
+        String query = "SELECT "+COLUMN_ID+","+COLUMN_NM_BARANG+","+COLUMN_TOTAL+", "+COLUMN_JUMLAH+","+COLUMN_HARGA+","+COLUMN_KONVERSI+","+COLUMN_DISK+","+COLUMN_SUBTOTAL+","+COLUMN_PRICE_TYPE+" FROM " + TABLE_PENJUALAN_ITEM + " WHERE "+ COLUMN_NOTA+ "='"+ nota +"'  ORDER BY "+ COLUMN_ID+" DESC";
         SQLiteDatabase db  = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -638,6 +648,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             p.setKonversi(cursor.getInt(cursor.getColumnIndexOrThrow("konversi")));
             p.setKd_supplier(cursor.getString(cursor.getColumnIndexOrThrow("kd_supplier")));
             p.setDiskon(cursor.getInt(cursor.getColumnIndexOrThrow("diskon")));
+            p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller")));
         }
         cursor.close();
         db.close();
@@ -694,7 +705,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int kembali,
             String kd_user,
             int depo,
-            int bank_deposit
+            int bank_deposit,
+            int total_discount,
+            int subtotal
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -709,6 +722,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_KD_USER, kd_user);
         cv.put(COLUMN_DEPO, depo);
         cv.put(COLUMN_BANK_DEPOSIT, bank_deposit);
+        cv.put(COLUMN_TOTAL_DISCOUNT, total_discount);
+        cv.put(COLUMN_SUBTOTAL, subtotal);
 
         long result =  db.insert(TABLE_PENJUALAN, null, cv);
         if(result == -1) {
@@ -731,7 +746,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int modal,
             int total,
             int status,
-            int disk
+            int disk,
+            int subtotal,
+            int konversi,
+            int price_type
+
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -746,6 +765,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TOTAL, total);
         cv.put(COLUMN_STATUS, status);
         cv.put(COLUMN_DISK, disk);
+        cv.put(COLUMN_SUBTOTAL, subtotal);
+        cv.put(COLUMN_KONVERSI, konversi);
+        cv.put(COLUMN_PRICE_TYPE, price_type);
+
 
         long result =  db.insert(TABLE_PENJUALAN_ITEM, null, cv);
         if(result == -1) {
@@ -756,6 +779,57 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public RingkasanTransaksi getRingkasanTransaksi() {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        long subtotal = 0;
+        long diskon = 0;
+        long total = 0;
+
+        String query =
+                "SELECT " +
+                        "COALESCE(SUM(" + COLUMN_SUBTOTAL + "), 0) AS subtotal, " +
+                        "COALESCE(SUM(" + COLUMN_DISK + "), 0) AS diskon, " +
+                        "COALESCE(SUM(" + COLUMN_TOTAL + "), 0) AS total " +
+                        "FROM " + TABLE_NAME;
+
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                subtotal = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("subtotal")
+                );
+
+                diskon = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("diskon")
+                );
+
+                total = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("total")
+                );
+            }
+
+        } catch (Exception e) {
+            Log.e(
+                    "DatabaseHelper",
+                    "Gagal mengambil ringkasan transaksi",
+                    e
+            );
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return new RingkasanTransaksi(
+                subtotal,
+                diskon,
+                total
+        );
+    }
 }
 

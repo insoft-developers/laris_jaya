@@ -14,10 +14,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,7 +32,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.insoft.laris.Interface.itemInterface;
 import com.insoft.laris.adapter.ItemAdapter;
 import com.insoft.laris.json.BarangResponseJson;
@@ -33,6 +45,7 @@ import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.CustomerResponseJson;
 import com.insoft.laris.model.Pelanggan;
 import com.insoft.laris.model.Produk;
+import com.insoft.laris.model.RingkasanTransaksi;
 import com.insoft.laris.utils.MyDatabaseHelper;
 import com.insoft.laris.utils.RegisterAPI;
 import com.insoft.laris.utils.SessionManager;
@@ -69,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
     private EditText totalHidden;
+
+    private long totalPembayaran = 0;
+    private long totalKembalian = 0;
+    private long totalKekurangan = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,24 +298,380 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
 
 
 
-    private void showdialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Simpan Transaksi")
-                .setMessage("Apakah Anda Yakin Ingin Menyimpan Data Transaksi Ini...? ")
-                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        submit();
-                    }
-                })
-                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+    private String formatRupiah(long nominal) {
+        NumberFormat format =
+                NumberFormat.getNumberInstance(
+                        new Locale("id", "ID")
+                );
 
-                    }
-                })
-                .show();
+        format.setMaximumFractionDigits(0);
+        format.setMinimumFractionDigits(0);
+
+        return "Rp " + format.format(nominal);
+    }
+    private void showdialog() {
+        View view = getLayoutInflater().inflate(
+                R.layout.dialog_pembayaran,
+                null
+        );
+
+        TextView tvSubtotal = view.findViewById(R.id.tvSubtotal);
+        TextView tvTotalDiskon = view.findViewById(R.id.tvTotalDiskon);
+        TextView tvTotalBelanja = view.findViewById(R.id.tvTotalBelanja);
+        TextView tvKembalian = view.findViewById(R.id.tvKembalian);
+        TextView tvPeringatan = view.findViewById(R.id.tvPeringatan);
+
+        TextInputLayout layoutPembayaran =
+                view.findViewById(R.id.layoutPembayaran);
+
+        TextInputEditText etPembayaran =
+                view.findViewById(R.id.etPembayaran);
+
+        TextView tvLabelKembalian =
+                view.findViewById(R.id.tvLabelKembalian);
+
+        MaterialCardView cardKembalian =
+                view.findViewById(R.id.cardKembalian);
+
+        MaterialButton btn10000 =
+                view.findViewById(R.id.btn10000);
+
+        MaterialButton btn20000 =
+                view.findViewById(R.id.btn20000);
+
+        MaterialButton btn50000 =
+                view.findViewById(R.id.btn50000);
+
+        MaterialButton btn100000 =
+                view.findViewById(R.id.btn100000);
+
+        MaterialButton btnUangPas =
+                view.findViewById(R.id.btnUangPas);
+
+        MaterialButton btnBatal = view.findViewById(R.id.btnBatal);
+        MaterialButton btnSimpan = view.findViewById(R.id.btnSimpan);
+        MaterialButton btnResetPembayaran =
+                view.findViewById(R.id.btnResetPembayaran);
+
+        /*
+         * Sesuaikan dengan variabel total transaksi milik Anda.
+         */
+        RingkasanTransaksi ringkasan =
+                db.getRingkasanTransaksi();
+
+        final long subtotal = ringkasan.getSubtotal();
+        final long diskon = ringkasan.getDiskon();
+        final long totalBelanja = ringkasan.getTotal();
+
+
+        tvSubtotal.setText(formatRupiah(subtotal));
+        tvTotalDiskon.setText("- " + formatRupiah(diskon));
+        tvTotalBelanja.setText(formatRupiah(totalBelanja));
+
+
+        tvKembalian.setText(formatRupiah(0));
+
+        AlertDialog alertDialog =
+                new MaterialAlertDialogBuilder(this)
+                        .setView(view)
+                        .setCancelable(false)
+                        .create();
+
+        etPembayaran.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(
+                    CharSequence charSequence,
+                    int start,
+                    int count,
+                    int after
+            ) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence charSequence,
+                    int start,
+                    int before,
+                    int count
+            ) {
+                String input = charSequence.toString()
+                        .replaceAll("[^0-9]", "")
+                        .trim();
+
+                /*
+                 * Tombol simpan hanya dinonaktifkan jika input kosong.
+                 * Pembayaran kurang tetap diperbolehkan disimpan.
+                 */
+                if (input.isEmpty()) {
+                    tvLabelKembalian.setText("Kembalian");
+                    tvKembalian.setText(formatRupiah(0));
+
+                    tvLabelKembalian.setTextColor(
+                            Color.parseColor("#047857")
+                    );
+
+                    tvKembalian.setTextColor(
+                            Color.parseColor("#065F46")
+                    );
+
+                    cardKembalian.setCardBackgroundColor(
+                            Color.parseColor("#ECFDF5")
+                    );
+
+                    cardKembalian.setStrokeColor(
+                            Color.parseColor("#A7F3D0")
+                    );
+
+                    tvPeringatan.setVisibility(View.GONE);
+                    layoutPembayaran.setError(null);
+                    btnSimpan.setEnabled(false);
+                    return;
+                }
+
+                long pembayaran;
+
+                try {
+                    pembayaran = Long.parseLong(input);
+                } catch (NumberFormatException e) {
+                    pembayaran = 0;
+                }
+
+                btnSimpan.setEnabled(true);
+                layoutPembayaran.setError(null);
+
+                if (pembayaran >= totalBelanja) {
+                    long kembalian = pembayaran - totalBelanja;
+
+                    tvLabelKembalian.setText("Kembalian");
+                    tvKembalian.setText(formatRupiah(kembalian));
+
+                    tvLabelKembalian.setTextColor(
+                            Color.parseColor("#047857")
+                    );
+
+                    tvKembalian.setTextColor(
+                            Color.parseColor("#065F46")
+                    );
+
+                    cardKembalian.setCardBackgroundColor(
+                            Color.parseColor("#ECFDF5")
+                    );
+
+                    cardKembalian.setStrokeColor(
+                            Color.parseColor("#A7F3D0")
+                    );
+
+                    tvPeringatan.setVisibility(View.GONE);
+
+                } else {
+                    long kekurangan = totalBelanja - pembayaran;
+
+                    tvLabelKembalian.setText("Kekurangan");
+                    tvKembalian.setText(formatRupiah(kekurangan));
+
+                    tvLabelKembalian.setTextColor(
+                            Color.parseColor("#B45309")
+                    );
+
+                    tvKembalian.setTextColor(
+                            Color.parseColor("#92400E")
+                    );
+
+                    cardKembalian.setCardBackgroundColor(
+                            Color.parseColor("#FFFBEB")
+                    );
+
+                    cardKembalian.setStrokeColor(
+                            Color.parseColor("#FCD34D")
+                    );
+
+                    tvPeringatan.setText(
+                            "Pembayaran kurang "
+                                    + formatRupiah(kekurangan)
+                                    + ". Transaksi tetap dapat disimpan."
+                    );
+
+                    tvPeringatan.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        btn10000.setOnClickListener(v ->
+                tambahNominalPembayaran(etPembayaran, 10000)
+        );
+
+        btn20000.setOnClickListener(v ->
+                tambahNominalPembayaran(etPembayaran, 20000)
+        );
+
+        btn50000.setOnClickListener(v ->
+                tambahNominalPembayaran(etPembayaran, 50000)
+        );
+
+        btn100000.setOnClickListener(v ->
+                tambahNominalPembayaran(etPembayaran, 100000)
+        );
+
+        btnUangPas.setOnClickListener(v ->
+                setPembayaranPas(
+                        etPembayaran,
+                        totalBelanja
+                )
+        );
+
+        btnResetPembayaran.setOnClickListener(v -> {
+            etPembayaran.setText("");
+            etPembayaran.requestFocus();
+        });
+
+        btnBatal.setOnClickListener(v -> alertDialog.dismiss());
+
+        btnSimpan.setOnClickListener(v -> {
+            String inputPembayaran =
+                    etPembayaran.getText() == null
+                            ? ""
+                            : etPembayaran.getText()
+                            .toString()
+                            .replaceAll("[^0-9]", "")
+                            .trim();
+
+            if (inputPembayaran.isEmpty()) {
+                layoutPembayaran.setError(
+                        "Jumlah pembayaran harus diisi"
+                );
+
+                etPembayaran.requestFocus();
+                return;
+            }
+
+            long pembayaran;
+
+            try {
+                pembayaran = Long.parseLong(inputPembayaran);
+            } catch (NumberFormatException e) {
+                layoutPembayaran.setError(
+                        "Nominal pembayaran tidak valid"
+                );
+
+                etPembayaran.requestFocus();
+                return;
+            }
+
+            /*
+             * Simpan pembayaran.
+             */
+            totalPembayaran = pembayaran;
+
+            /*
+             * Jika pembayaran lebih, hasilnya menjadi kembalian.
+             * Jika kurang, kembalian dibuat 0.
+             */
+            totalKembalian = Math.max(
+                    0,
+                    pembayaran - totalBelanja
+            );
+
+            /*
+             * Jika pembayaran kurang, simpan nilai kekurangannya.
+             * Jika lunas atau lebih, kekurangan dibuat 0.
+             */
+            totalKekurangan = Math.max(
+                    0,
+                    totalBelanja - pembayaran
+            );
+
+
+
+            alertDialog.dismiss();
+
+            long totalSisa;
+            if(totalPembayaran < totalBelanja) {
+                totalSisa = totalKekurangan;
+            } else {
+                totalSisa = totalKembalian;
+            }
+            submit(Integer.parseInt(String.valueOf(totalBelanja)), Integer.parseInt(String.valueOf(totalPembayaran)), Integer.parseInt(String.valueOf(totalSisa)), Integer.parseInt(String.valueOf(diskon)), Integer.parseInt(String.valueOf(subtotal)));
+        });
+
+        alertDialog.setOnShowListener(dialog -> {
+            Window window = alertDialog.getWindow();
+
+            if (window != null) {
+                window.setBackgroundDrawable(
+                        new ColorDrawable(Color.LTGRAY)
+                );
+
+                DisplayMetrics displayMetrics =
+                        getResources().getDisplayMetrics();
+
+                int lebarDialog =
+                        (int) (displayMetrics.widthPixels * 0.92);
+
+                window.setLayout(
+                        lebarDialog,
+                        WindowManager.LayoutParams.WRAP_CONTENT
+                );
+
+                window.setSoftInputMode(
+                        WindowManager.LayoutParams
+                                .SOFT_INPUT_ADJUST_RESIZE
+                );
+            }
+
+            etPembayaran.requestFocus();
+        });
+
+        alertDialog.show();
+    }
+
+
+    private void setPembayaranPas(
+            TextInputEditText etPembayaran,
+            long totalBelanja
+    ) {
+        etPembayaran.setText(
+                String.valueOf(totalBelanja)
+        );
+
+        etPembayaran.setSelection(
+                etPembayaran.getText().length()
+        );
+    }
+    private void tambahNominalPembayaran(
+            TextInputEditText etPembayaran,
+            long nominalTambahan
+    ) {
+        long pembayaranSaatIni = 0;
+
+        if (etPembayaran.getText() != null) {
+            String input = etPembayaran.getText()
+                    .toString()
+                    .replaceAll("[^0-9]", "")
+                    .trim();
+
+            if (!input.isEmpty()) {
+                try {
+                    pembayaranSaatIni = Long.parseLong(input);
+                } catch (NumberFormatException e) {
+                    pembayaranSaatIni = 0;
+                }
+            }
+        }
+
+        long totalPembayaranBaru =
+                pembayaranSaatIni + nominalTambahan;
+
+        etPembayaran.setText(
+                String.valueOf(totalPembayaranBaru)
+        );
+
+        etPembayaran.setSelection(
+                etPembayaran.getText().length()
+        );
     }
 
 
@@ -313,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
 
     }
 
-    private void submit() {
+    private void submit(int belanja,int bayar, int kembali, int discount, int subtotal  ) {
         HashMap<String,String> user = sessionManager.getSessionData();
         String userkode = user.get(sessionManager.ID);
 
@@ -326,7 +699,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
         String sekarang = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         loading.setVisibility(View.VISIBLE);
-        int total_penjualan = Integer.parseInt(totalHidden.getText().toString());
+
 
         String nota = db.generateNota(userkode);
         db.tambah_penjualan(
@@ -334,13 +707,14 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 cust_code,
                 "Penjualan",
                 sekarang,
-                total_penjualan,
-                total_penjualan,
+                belanja,
+                bayar,
                 0,
-                0,
+                kembali,
                 userkode,
                 0,
-                0
+                0,
+                discount,subtotal
         );
 
 
@@ -357,7 +731,11 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                     cursor.getInt(7),
                     cursor.getInt(8),
                     cursor.getInt(10),
-                    cursor.getInt(11)
+                    cursor.getInt(11),
+                    cursor.getInt(12),
+                    cursor.getInt(13),
+                    cursor.getInt(14)
+
             );
         }
 
@@ -470,7 +848,12 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, 0);
+                if(price_type == 2) {
+                    hargaaktif = data.getIntExtra("intent_harga_reseller", 0);
+                    totalbaru = jumlahbaru * hargaaktif;
+
+                }
+                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, price_type);
             }
 
             displayData();

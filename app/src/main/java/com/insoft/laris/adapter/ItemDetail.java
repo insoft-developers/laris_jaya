@@ -17,6 +17,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ItemDetail extends RecyclerView.Adapter<ItemDetail.ViewHolder> {
 
@@ -42,11 +43,39 @@ public class ItemDetail extends RecyclerView.Adapter<ItemDetail.ViewHolder> {
         holder.namaproduk.setText(pesanan.get(position).get("nm_barang"));
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        holder.totalharga.setText(formatRupiah.format(Integer.parseInt(pesanan.get(position).get("total"))));
+        int xtotal =
+                pesanan.get(position).get("total") == null
+                        || pesanan.get(position).get("total").trim().isEmpty()
+                        ? 0
+                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("total")));
+        holder.totalharga.setText(formatRupiah.format(xtotal)) ;
+
+
         holder.jumlah.setText(pesanan.get(position).get("jumlah"));
-        holder.hargasatuan.setText(formatRupiah.format(Integer.parseInt(pesanan.get(position).get("harga"))));
-        holder.subtotal.setText(formatRupiah.format(Integer.parseInt(pesanan.get(position).get("subtotal"))));
-        holder.discount.setText(formatRupiah.format(Integer.parseInt(pesanan.get(position).get("disk"))));
+        int xhargasatuan =
+                pesanan.get(position).get("harga") == null
+                        || pesanan.get(position).get("harga").trim().isEmpty()
+                        ? 0
+                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("harga")));
+        holder.hargasatuan.setText(formatRupiah.format(xhargasatuan)) ;
+
+
+
+        int xsubtotal =
+                pesanan.get(position).get("subtotal") == null
+                        || pesanan.get(position).get("subtotal").trim().isEmpty()
+                        ? 0
+                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("subtotal")));
+        holder.subtotal.setText(formatRupiah.format(xsubtotal)) ;
+
+
+        int xdisk =
+                pesanan.get(position).get("disk") == null
+                        || pesanan.get(position).get("disk").trim().isEmpty()
+                        ? 0
+                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("disk")));
+        holder.discount.setText(formatRupiah.format(xdisk)) ;
+
 
 
     }
@@ -76,4 +105,7 @@ public class ItemDetail extends RecyclerView.Adapter<ItemDetail.ViewHolder> {
 
         }
     }
+
+
+
 }

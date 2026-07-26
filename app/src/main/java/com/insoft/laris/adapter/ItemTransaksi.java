@@ -2,6 +2,7 @@ package com.insoft.laris.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ItemTransaksi extends RecyclerView.Adapter<ItemTransaksi.ViewHolder> {
 
@@ -48,6 +50,24 @@ public class ItemTransaksi extends RecyclerView.Adapter<ItemTransaksi.ViewHolder
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         holder.totalharga.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("total"))));
+        holder.subtotal.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("subtotal"))));
+        holder.pembayaran.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("pembayaran"))));
+        holder.diskon.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("discount"))));
+        holder.kembalian.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("kembalian"))));
+
+        int totalBelanja = Integer.parseInt(Objects.requireNonNull(transaksi.get(position).get("total")));
+        int totalBayar = Integer.parseInt(Objects.requireNonNull(transaksi.get(position).get("pembayaran")));
+        if(totalBayar < totalBelanja) {
+            holder.labelKembalian.setText("Belum Dibayar");
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#DC2626")
+            );
+        } else {
+            holder.labelKembalian.setText("Kembalian");
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#059669")
+            );
+        }
 
         holder.listitem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +86,7 @@ public class ItemTransaksi extends RecyclerView.Adapter<ItemTransaksi.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namapelanggan, totalharga, alamat, idhold, tanggal;
+        private TextView namapelanggan, totalharga, alamat, idhold, tanggal, subtotal, pembayaran, diskon,kembalian, labelKembalian;
         private LinearLayout listitem;
 
         public ViewHolder(View itemView) {
@@ -77,6 +97,11 @@ public class ItemTransaksi extends RecyclerView.Adapter<ItemTransaksi.ViewHolder
             idhold = itemView.findViewById(R.id.idhold);
             listitem = itemView.findViewById(R.id.rootlayout);
             tanggal = itemView.findViewById(R.id.tanggal);
+            subtotal = itemView.findViewById(R.id.subtotal);
+            pembayaran = itemView.findViewById(R.id.pembayaran);
+            diskon = itemView.findViewById(R.id.diskon);
+            kembalian = itemView.findViewById(R.id.kembalian);
+            labelKembalian = itemView.findViewById(R.id.labelKembalian);
 
         }
     }

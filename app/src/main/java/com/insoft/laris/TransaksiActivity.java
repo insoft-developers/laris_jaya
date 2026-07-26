@@ -96,7 +96,6 @@ public class TransaksiActivity extends AppCompatActivity {
     }
 
 
-
     private void display_data() {
         list_data = new ArrayList<HashMap<String, String>>();
         Cursor cursor = db.tampilkan_penjualan();
@@ -111,6 +110,10 @@ public class TransaksiActivity extends AppCompatActivity {
                 map.put("total", cursor.getString(3));
                 map.put("tanggal", cursor.getString(4));
                 map.put("nota", cursor.getString(5));
+                map.put("subtotal", cursor.getString(6));
+                map.put("discount", cursor.getString(7));
+                map.put("kembalian", cursor.getString(8));
+                map.put("pembayaran", cursor.getString(9));
 
                 list_data.add(map);
                 adapter = new ItemTransaksi(TransaksiActivity.this, list_data);

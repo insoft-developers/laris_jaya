@@ -212,7 +212,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void check_price_type(String itemcode) {
-        Cursor cursor = db.get_barang_by_kode(itemcode);
+        Cursor cursor = db.periksadata(itemcode);
         if (cursor != null && cursor.moveToFirst()) {
             int price_type = cursor.getInt(cursor.getColumnIndexOrThrow("price_type"));
             if(price_type == 2) {

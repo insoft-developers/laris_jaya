@@ -90,7 +90,9 @@
         <activity android:name=".CustomerActivity" />
         <activity android:name=".BarcodeActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.Bestbeauty"
+            />
 
         <uses-library
             android:name="org.apache.http.legacy"

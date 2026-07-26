@@ -118,6 +118,7 @@ public class BarangActivity extends AppCompatActivity implements barangInterface
         String satuan = produkList.get(position).getSatuan();
         int hargabeli = produkList.get(position).getHarga_beli();
         int diskon = produkList.get(position).getDiskon();
+        int harga_reseller = produkList.get(position).getHarga_reseller();
 
         Intent intent = new Intent();
         intent.putExtra("intent_konversi", konversi);
@@ -133,6 +134,7 @@ public class BarangActivity extends AppCompatActivity implements barangInterface
         intent.putExtra("intent_satuan", satuan);
         intent.putExtra("intent_harga_beli", hargabeli);
         intent.putExtra("intent_diskon", diskon);
+        intent.putExtra("intent_harga_reseller", harga_reseller);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
