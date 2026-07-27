@@ -12,6 +12,24 @@ public class SalesItem {
     public int total;
     public int status;
     public int disk;
+    public int price_type;
+    public int subtotal;
+
+    public int getPrice_type() {
+        return price_type;
+    }
+
+    public void setPrice_type(int price_type) {
+        this.price_type = price_type;
+    }
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
 
     public String getNota() {
         return nota;

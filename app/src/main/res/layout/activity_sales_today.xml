@@ -1,51 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F7FA"
     tools:context=".report.SalesTodayActivity">
 
-    <LinearLayout
-        android:id="@+id/layout_atas"
+    <!-- Bagian header -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@drawable/bg_header_penjualan"
+        android:elevation="6dp"
+        app:elevation="6dp">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:background="@drawable/button_round_1"
+        <LinearLayout
+            android:id="@+id/layout_atas"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:elevation="0dp"
-            android:id="@+id/appbar_id">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="18dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="14dp">
 
+            <!-- Judul halaman -->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Penjualan Hari Ini"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        </com.google.android.material.appbar.AppBarLayout>
+            <!-- Keterangan -->
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Pantau transaksi dan detail penjualan"
+                android:textColor="#DDEBFF"
+                android:textSize="12sp" />
 
-        <TextView
-            android:padding="4dp"
-            android:background="@drawable/button_round_1"
-            android:textAlignment="center"
-            android:text="PENJUALAN HARI INI"
+        </LinearLayout>
 
+        <!-- Tab laporan -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="52dp"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicator="@drawable/bg_tab_indicator"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            app:tabRippleColor="#33FFFFFF"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextAppearance="@style/TabTextAppearanceSales"
+            app:tabTextColor="#BFD5F5" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:layout_below="@id/layout_atas"
-        app:tabTextColor="@color/white"
-        app:tabSelectedTextColor="@color/brown"
-        android:background="@drawable/button_round_1"
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Isi tab -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_layout" />
+        android:background="#F5F7FA"
+        android:clipToPadding="false"
+        android:paddingTop="6dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

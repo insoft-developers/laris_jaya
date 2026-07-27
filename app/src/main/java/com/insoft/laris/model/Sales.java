@@ -14,6 +14,8 @@ public class Sales {
     public String kd_user;
     public int depo;
     public int bank_deposit;
+    public int subtotal;
+    public int total_discount;
     public List<SalesItem> item;
 
     public String getNota() {
@@ -86,6 +88,22 @@ public class Sales {
 
     public void setKd_user(String kd_user) {
         this.kd_user = kd_user;
+    }
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public int getTotal_discount() {
+        return total_discount;
+    }
+
+    public void setTotal_discount(int total_discount) {
+        this.total_discount = total_discount;
     }
 
     public int getDepo() {

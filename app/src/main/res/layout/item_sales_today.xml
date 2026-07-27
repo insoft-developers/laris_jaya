@@ -1,92 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootlayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_marginBottom="8dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="7dp"
+    android:background="@drawable/bg_item_penjualan"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:padding="14dp">
 
+    <!-- Nomor invoice dan tanggal -->
     <LinearLayout
-        android:background="@drawable/button_round_6"
-        android:paddingVertical="5dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <!-- Invoice -->
+        <TextView
+            android:id="@+id/invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_invoice_badge"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="BB-1001" />
 
+        <!-- Tanggal -->
+        <TextView
+            android:id="@+id/tanggal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawablePadding="5dp"
+            android:gravity="end|center_vertical"
+            android:textColor="#6B7280"
+            android:textSize="12sp"
+            tools:text="21-12-2021" />
+
+    </LinearLayout>
+
+    <!-- Garis pemisah -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="#ECEFF1" />
+
+    <!-- Informasi pelanggan -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Ikon pelanggan sederhana -->
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/bg_customer_icon"
+            android:gravity="center"
+            android:text="P"
+            android:textColor="#1565C0"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_weight="1"
-
-                    android:layout_marginHorizontal="10dp"
-                    android:id="@+id/invoice"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:paddingHorizontal="5dp"
-                    android:text="BB-1001"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:layout_weight="1"
-
-                    android:layout_marginHorizontal="10dp"
-                    android:id="@+id/tanggal"
-                    android:textAlignment="textEnd"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:paddingHorizontal="5dp"
-                    android:text="21-12-2021"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pelanggan"
+                android:textColor="#8A8A8A"
+                android:textSize="11sp" />
 
-                android:layout_marginHorizontal="10dp"
+            <TextView
                 android:id="@+id/namacustomer"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Indra Rahdian"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-            <TextView
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:textAlignment="textEnd"
-
-                android:layout_marginHorizontal="10dp"
-                android:id="@+id/totalpenjualan"
-                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#1F2937"
                 android:textSize="15sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Rp. 200.000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold"
+                tools:text="Indra Rahdian" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Total transaksi -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/bg_total_penjualan"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTAL PENJUALAN"
+                android:textColor="#607D8B"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Nilai transaksi"
+                android:textColor="#90A4AE"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/totalpenjualan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="#D32F2F"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="Rp200.000" />
 
     </LinearLayout>
 

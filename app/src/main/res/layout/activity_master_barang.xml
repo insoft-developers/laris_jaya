@@ -25,7 +25,6 @@
             android:layout_marginHorizontal="5dp"
             android:paddingVertical="15dp"
             android:paddingHorizontal="15dp"
-            android:fontFamily="@font/almendra"
             android:hint="Cari Nama Barang"
             android:background="@drawable/button_round_4"
             android:layout_width="match_parent"
@@ -46,6 +45,16 @@
         android:visibility="gone"
         android:layout_centerInParent="true"
         android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_print"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

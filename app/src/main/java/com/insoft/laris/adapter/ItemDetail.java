@@ -70,10 +70,10 @@ public class ItemDetail extends RecyclerView.Adapter<ItemDetail.ViewHolder> {
 
 
         int xdisk =
-                pesanan.get(position).get("disk") == null
-                        || pesanan.get(position).get("disk").trim().isEmpty()
+                pesanan.get(position).get("discount") == null
+                        || pesanan.get(position).get("discount").trim().isEmpty()
                         ? 0
-                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("disk")));
+                        : Integer.parseInt(Objects.requireNonNull(pesanan.get(position).get("discount")));
         holder.discount.setText(formatRupiah.format(xdisk)) ;
 
 

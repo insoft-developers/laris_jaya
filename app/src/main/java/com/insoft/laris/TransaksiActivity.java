@@ -142,6 +142,8 @@ public class TransaksiActivity extends AppCompatActivity {
                 pj.kd_user = cursorPenjualan.getString(cursorPenjualan.getColumnIndexOrThrow("kd_user"));
                 pj.depo = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("depo"));
                 pj.bank_deposit = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("bank_deposit"));
+                pj.total_discount = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("total_dicount"));
+                pj.subtotal = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("subtotal"));
 
                 Cursor cursorDetail = database.rawQuery("SELECT * FROM penjualan_item WHERE nota = ?", new String[]{pj.nota});
                 List<SalesItem> listItem = new ArrayList<>();
@@ -159,6 +161,8 @@ public class TransaksiActivity extends AppCompatActivity {
                         it.total = cursorDetail.getInt(cursorDetail.getColumnIndexOrThrow("total"));
                         it.status = cursorDetail.getInt(cursorDetail.getColumnIndexOrThrow("status"));
                         it.disk = cursorDetail.getInt(cursorDetail.getColumnIndexOrThrow("disk"));
+                        it.price_type = cursorDetail.getInt(cursorDetail.getColumnIndexOrThrow("price_type"));
+                        it.subtotal = cursorDetail.getInt(cursorDetail.getColumnIndexOrThrow("subtotal"));
 
                         listItem.add(it);
                     } while (cursorDetail.moveToNext());
@@ -188,17 +192,17 @@ public class TransaksiActivity extends AppCompatActivity {
                         database.close();
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Gagal: " + response.message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Gagal: " + response.message().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Gagal: " + response.message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Gagal: " + response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<SalesResponseJson> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error: " + t.getMessage().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

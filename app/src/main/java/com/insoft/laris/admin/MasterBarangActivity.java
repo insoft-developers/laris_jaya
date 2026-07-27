@@ -5,14 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.insoft.laris.Interface.masterBarangInterface;
@@ -23,10 +30,17 @@ import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.HapusProdukRequestJson;
 import com.insoft.laris.json.HapusProdukResponseJson;
 import com.insoft.laris.model.Produk;
+import com.insoft.laris.utils.MasterBarangPrintAdapter;
+import com.insoft.laris.utils.MyDatabaseHelper;
 import com.insoft.laris.utils.RegisterAPI;
 import com.insoft.laris.utils.UtilsAPI;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,17 +51,22 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
     private ProgressBar loading;
     private EditText etcari;
     private RecyclerView rvbarang;
-    private FloatingActionButton fabtambah;
+    private FloatingActionButton fabtambah, fabprint;
+
+    private MyDatabaseHelper db;
+
     private List<Produk> dataProduk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_barang);
         registerAPI = UtilsAPI.getApiService();
+        db = new MyDatabaseHelper(this);
         loading = findViewById(R.id.loading);
         etcari = findViewById(R.id.etcari);
         rvbarang = findViewById(R.id.rvbarang);
         fabtambah = findViewById(R.id.fab_tambah);
+        fabprint = findViewById(R.id.fab_print);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(RecyclerView.VERTICAL);
         rvbarang.setLayoutManager(llm);
@@ -79,6 +98,205 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
                 startActivity(intent);
             }
         });
+
+
+        fabprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                printMasterBarang58mm();
+            }
+        });
+    }
+
+    private void printMasterBarang58mm() {
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        SQLiteDatabase database = db.getReadableDatabase();
+
+        Cursor cursor = database.rawQuery(
+                "SELECT kd_barang, nm_barang, stok, harga_jual, harga_reseller " +
+                        "FROM master_barang " +
+                        "ORDER BY nm_barang ASC",
+                null
+        );
+
+        ArrayList<String> barisCetak = new ArrayList<>();
+
+        try {
+            if (cursor.getCount() == 0) {
+                Toast.makeText(
+                        this,
+                        "Data master barang masih kosong",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
+
+            String tanggalCetak = new SimpleDateFormat(
+                    "dd-MM-yyyy HH:mm",
+                    Locale.getDefault()
+            ).format(new Date());
+
+            barisCetak.add("      DAFTAR MASTER BARANG");
+            barisCetak.add("================================");
+            barisCetak.add("Tanggal : " + tanggalCetak);
+            barisCetak.add("Jumlah  : " + cursor.getCount() + " barang");
+            barisCetak.add("================================");
+
+            int nomor = 1;
+            long totalStok = 0;
+
+            while (cursor.moveToNext()) {
+                String kodeBarang = cursor.getString(
+                        cursor.getColumnIndexOrThrow("kd_barang")
+                );
+
+                String namaBarang = cursor.getString(
+                        cursor.getColumnIndexOrThrow("nm_barang")
+                );
+
+                long stok = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("stok")
+                );
+
+                long harga = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("harga_jual")
+                );
+
+                long hargaReseller = cursor.getLong(
+                        cursor.getColumnIndexOrThrow("harga_reseller")
+                );
+
+                totalStok += stok;
+
+                barisCetak.add(
+                        nomor + ". " + potongTeks(namaBarang, 28)
+                );
+
+                barisCetak.add(
+                        "   Stok     : " + stok
+                );
+
+                barisCetak.add(
+                        "   Harga    : " + formatRupiah.format(harga)
+                );
+
+                barisCetak.add(
+                        "   Reseller : " + formatRupiah.format(hargaReseller)
+                );
+
+                barisCetak.add("--------------------------------");
+
+                nomor++;
+            }
+
+            barisCetak.add("TOTAL JENIS BARANG : " + cursor.getCount());
+            barisCetak.add("TOTAL SELURUH STOK : " + totalStok);
+            barisCetak.add("================================");
+            barisCetak.add("");
+            barisCetak.add("");
+
+            jalankanPrintMasterBarang(barisCetak);
+
+        } catch (Exception e) {
+            Log.e(
+                    "PRINT_MASTER_BARANG",
+                    "Gagal mencetak data barang",
+                    e
+            );
+
+            Toast.makeText(
+                    this,
+                    "Gagal mencetak: " + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+
+        } finally {
+            cursor.close();
+            database.close();
+        }
+    }
+
+
+    private void jalankanPrintMasterBarang(
+            ArrayList<String> barisCetak
+    ) {
+        PrintManager printManager =
+                (PrintManager) getSystemService(Context.PRINT_SERVICE);
+
+        if (printManager == null) {
+            Toast.makeText(
+                    this,
+                    "Layanan printer tidak tersedia",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+        PrintAttributes.MediaSize mediaSize58mm =
+                new PrintAttributes.MediaSize(
+                        "THERMAL_58MM",
+                        "Thermal 58 mm",
+                        2283,
+                        7874
+                );
+
+        PrintAttributes printAttributes =
+                new PrintAttributes.Builder()
+                        .setMediaSize(mediaSize58mm)
+                        .setMinMargins(
+                                new PrintAttributes.Margins(
+                                        20,
+                                        20,
+                                        20,
+                                        20
+                                )
+                        )
+                        .setColorMode(
+                                PrintAttributes.COLOR_MODE_MONOCHROME
+                        )
+                        .setResolution(
+                                new PrintAttributes.Resolution(
+                                        "THERMAL_203_DPI",
+                                        "Thermal 203 DPI",
+                                        203,
+                                        203
+                                )
+                        )
+                        .build();
+
+        printManager.print(
+                "Master Barang",
+                new MasterBarangPrintAdapter(
+                        this,
+                        barisCetak
+                ),
+                printAttributes
+        );
+    }
+
+
+    private String potongTeks(String teks, int panjangMaksimal) {
+        if (teks == null) {
+            return "";
+        }
+
+        teks = teks.trim();
+
+        if (teks.length() <= panjangMaksimal) {
+            return teks;
+        }
+
+        if (panjangMaksimal <= 3) {
+            return teks.substring(0, panjangMaksimal);
+        }
+
+        return teks.substring(
+                0,
+                panjangMaksimal - 3
+        ) + "...";
     }
 
     private void fetch_data(String s) {

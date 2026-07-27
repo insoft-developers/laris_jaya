@@ -250,8 +250,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.insert(MASTER_PELANGGAN, null, cv);
         if(result == -1) {
             Toast.makeText(context, "Gagal Tambah Item Master Pelanggan", Toast.LENGTH_SHORT).show();
-        }else {
-
         }
     }
 
@@ -347,8 +345,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.insert(TABLE_TRANSAKSI, null, cv);
         if(result == -1) {
             Toast.makeText(context, "Gagal Tambah Transaksi", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Tambah Transaksi", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -391,8 +387,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.insert(TABLE_NAME, null, cv);
         if(result == -1) {
             Toast.makeText(context, "Gagal Tambah Item", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Tambah Penjualan", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -417,8 +411,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.update(TABLE_NAME, cv, "kd_barang=?", new String[]{idproduk});
         if(result == 0) {
             Toast.makeText(context, "Gagal Update Item", Toast.LENGTH_SHORT).show();
-        }else {
-
         }
     }
 
@@ -531,8 +523,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.delete(TABLE_NAME, "kd_barang=?", new String[]{row_id});
         if(result == -1) {
             Toast.makeText(context, "Gagal Hapus Item", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Hapus Item", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -542,8 +532,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.delete(TABLE_TRANSAKSI, "id_hold=?", new String[]{idhold});
         if(result == -1) {
             Toast.makeText(context, "Gagal Hapus Transaksi", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Hapus Transaksi", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -728,8 +716,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.insert(TABLE_PENJUALAN, null, cv);
         if(result == -1) {
             Toast.makeText(context, "Gagal Tambah Penjualan", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Tambah Penjualan", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -773,8 +759,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result =  db.insert(TABLE_PENJUALAN_ITEM, null, cv);
         if(result == -1) {
             Toast.makeText(context, "Gagal Tambah Penjualan Item", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Sukses Tambah Penjualan Item", Toast.LENGTH_SHORT).show();
         }
     }
 

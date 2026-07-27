@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -139,6 +140,9 @@ public class DetailActivity extends AppCompatActivity {
                 map.put("total", cursor.getString(2));
                 map.put("jumlah", cursor.getString(3));
                 map.put("harga", cursor.getString(4));
+                map.put("discount", cursor.getString(6));
+                map.put("subtotal", cursor.getString(7));
+
 
                 list_data.add(map);
                 itemDetail = new ItemDetail(DetailActivity.this, list_data);
@@ -152,61 +156,274 @@ public class DetailActivity extends AppCompatActivity {
 
     private void print_receipt(String nota) {
         SQLiteDatabase database = db.getReadableDatabase();
-        Cursor cursorHeader = database.rawQuery("SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, c.nm_pelanggan FROM penjualan p LEFT JOIN master_pelanggan c ON c.kd_pelanggan = p.kd_pelanggan WHERE p.nota = ?", new String[]{nota});
-        Cursor cursorDetail = database.rawQuery("SELECT nm_barang, jumlah, harga, total FROM penjualan_item WHERE nota = ?", new String[]{nota});
-        StringBuilder struk = new StringBuilder();
 
+        String queryHeader =
+                "SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, " +
+                        "c.nm_pelanggan, c.telepon, p.subtotal, p.total_dicount " +
+                        "FROM penjualan p " +
+                        "LEFT JOIN master_pelanggan c " +
+                        "ON c.kd_pelanggan = p.kd_pelanggan " +
+                        "WHERE p.nota = ?";
 
-        String header = "";
-        String detail = "";
-        String footer = "";
+        String queryDetail =
+                "SELECT nm_barang, jumlah, harga, total, subtotal, disk " +
+                        "FROM penjualan_item " +
+                        "WHERE nota = ?";
 
-        if (cursorHeader.moveToFirst()) {
-            header += "Pelanggan : " + cursorHeader.getString(5) + "\n";
-            header += "Nota : " + cursorHeader.getString(0) + "\n";
-            header += "Tanggal : " + cursorHeader.getString(1) + "\n";
-            header += "-------------------------------------------------\n";
-
-            while (cursorDetail.moveToNext()) {
-                detail += cursorDetail.getString(0) + "\n" +
-                        cursorDetail.getInt(1) + " x " +
-                        formatRupiah.format(cursorDetail.getInt(2)) + " = " +
-                        formatRupiah.format(cursorDetail.getInt(3)) + "\n\n";
-            }
-
-            footer += "-------------------------------------------------\n";
-            footer += "Total : " + formatRupiah.format(cursorHeader.getInt(2)) + "\n";
-            footer += "Bayar : " + formatRupiah.format(cursorHeader.getInt(3)) + "\n";
-            footer += "Kembali: " + cursorHeader.getInt(4) + "\n";
-            footer += "Terima Kasih\n";
-        }
-
-        cursorHeader.close();
-        cursorDetail.close();
-        database.close();
-
-        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
-        PrintAttributes.Builder builder = new PrintAttributes.Builder();
-        builder.setMediaSize(PrintAttributes.MediaSize.NA_INDEX_4X6); // bisa diubah sesuai printer
-
-        printManager.print(
-                "Struk Penjualan",
-                new ReceiptPrintAdapter(this, header, detail, footer),
-                builder.build()
+        Cursor cursorHeader = database.rawQuery(
+                queryHeader,
+                new String[]{nota}
         );
 
-    }
+        Cursor cursorDetail = database.rawQuery(
+                queryDetail,
+                new String[]{nota}
+        );
 
+        StringBuilder header = new StringBuilder();
+        StringBuilder detail = new StringBuilder();
+        StringBuilder footer = new StringBuilder();
+
+        String garisTebal = "================================\n";
+        String garisTipis = "--------------------------------\n";
+
+        try {
+            if (!cursorHeader.moveToFirst()) {
+                Toast.makeText(
+                        this,
+                        "Data transaksi tidak ditemukan",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
+
+            /*
+             * HEADER
+             *
+             * 0 = nota
+             * 1 = tanggal
+             * 2 = belanja
+             * 3 = bayar
+             * 4 = kembali
+             * 5 = nama pelanggan
+             * 6 = telepon
+             * 7 = subtotal
+             * 8 = total discount
+             */
+
+            String namaPelanggan = cursorHeader.getString(5);
+
+            if (namaPelanggan == null || namaPelanggan.trim().isEmpty()) {
+                namaPelanggan = "Pelanggan Umum";
+            }
+
+            header.append("        STRUK PENJUALAN\n");
+            header.append(garisTebal);
+            header.append("Pelanggan : ")
+                    .append(namaPelanggan)
+                    .append("\n");
+
+            header.append("No. Nota  : ")
+                    .append(cursorHeader.getString(0))
+                    .append("\n");
+
+            header.append("Tanggal   : ")
+                    .append(cursorHeader.getString(1))
+                    .append("\n");
+
+            header.append(garisTebal);
+            header.append("DETAIL BELANJA\n");
+            header.append(garisTipis);
+
+            /*
+             * DETAIL PRODUK
+             *
+             * 0 = nama barang
+             * 1 = jumlah
+             * 2 = harga
+             * 3 = total akhir
+             * 4 = subtotal
+             * 5 = diskon
+             */
+
+            int nomorUrut = 1;
+
+            while (cursorDetail.moveToNext()) {
+                String namaBarang = cursorDetail.getString(0);
+                long jumlah = cursorDetail.getLong(1);
+                long hargaSatuan = cursorDetail.getLong(2);
+                long totalProduk = cursorDetail.getLong(3);
+                long subtotalProduk = cursorDetail.getLong(4);
+                long diskonProduk = cursorDetail.getLong(5);
+
+                /*
+                 * Jika kolom subtotal belum memiliki nilai,
+                 * subtotal dihitung dari jumlah × harga.
+                 */
+                if (subtotalProduk <= 0) {
+                    subtotalProduk = jumlah * hargaSatuan;
+                }
+
+                /*
+                 * Jika kolom disk belum memiliki nilai,
+                 * diskon dihitung dari subtotal - total.
+                 */
+                if (diskonProduk <= 0) {
+                    diskonProduk = subtotalProduk - totalProduk;
+                }
+
+                if (diskonProduk < 0) {
+                    diskonProduk = 0;
+                }
+
+                /*
+                 * Jika total produk kosong,
+                 * total dihitung dari subtotal - diskon.
+                 */
+                if (totalProduk <= 0) {
+                    totalProduk = subtotalProduk - diskonProduk;
+                }
+
+                detail.append(nomorUrut)
+                        .append(". ")
+                        .append(namaBarang)
+                        .append("\n");
+
+                detail.append("   ")
+                        .append(jumlah)
+                        .append(" x ")
+                        .append(formatRupiah.format(hargaSatuan))
+                        .append("\n");
+
+                detail.append("   Subtotal : ")
+                        .append(formatRupiah.format(subtotalProduk))
+                        .append("\n");
+
+                detail.append("   Diskon   : -")
+                        .append(formatRupiah.format(diskonProduk))
+                        .append("\n");
+
+                detail.append("   Total    : ")
+                        .append(formatRupiah.format(totalProduk))
+                        .append("\n");
+
+                detail.append(garisTipis);
+
+                nomorUrut++;
+            }
+
+            long subtotalTransaksi = cursorHeader.getLong(7);
+            long totalDiskon = cursorHeader.getLong(8);
+            long totalBelanja = cursorHeader.getLong(2);
+            long pembayaran = cursorHeader.getLong(3);
+            long kembalian = cursorHeader.getLong(4);
+
+            /*
+             * FOOTER DAN RINGKASAN PEMBAYARAN
+             */
+
+            footer.append("RINGKASAN PEMBAYARAN\n");
+            footer.append(garisTipis);
+
+            footer.append("Subtotal     : ")
+                    .append(formatRupiah.format(subtotalTransaksi))
+                    .append("\n");
+
+            footer.append("Total Diskon : -")
+                    .append(formatRupiah.format(totalDiskon))
+                    .append("\n");
+
+            footer.append(garisTipis);
+
+            footer.append("TOTAL BELANJA: ")
+                    .append(formatRupiah.format(totalBelanja))
+                    .append("\n");
+
+            footer.append("Pembayaran   : ")
+                    .append(formatRupiah.format(pembayaran))
+                    .append("\n");
+            
+
+            if(totalBelanja > pembayaran) {
+                footer.append("Belum Dibayar    : ")
+                        .append(formatRupiah.format(kembalian))
+                        .append("\n");
+            } else {
+                footer.append("Kembalian    : ")
+                        .append(formatRupiah.format(kembalian))
+                        .append("\n");
+            }
+
+
+            footer.append(garisTebal);
+            footer.append("       TERIMA KASIH\n");
+            footer.append("  TELAH BERBELANJA DI KAMI\n");
+            footer.append(garisTebal);
+
+            PrintManager printManager =
+                    (PrintManager) getSystemService(Context.PRINT_SERVICE);
+
+            if (printManager == null) {
+                Toast.makeText(
+                        this,
+                        "Layanan printer tidak tersedia",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
+
+            PrintAttributes.Builder builder =
+                    new PrintAttributes.Builder();
+
+            builder.setMediaSize(
+                    PrintAttributes.MediaSize.NA_INDEX_4X6
+            );
+
+            builder.setMinMargins(
+                    PrintAttributes.Margins.NO_MARGINS
+            );
+
+            builder.setColorMode(
+                    PrintAttributes.COLOR_MODE_MONOCHROME
+            );
+
+            printManager.print(
+                    "Struk Penjualan " + nota,
+                    new ReceiptPrintAdapter(
+                            this,
+                            header.toString(),
+                            detail.toString(),
+                            footer.toString()
+                    ),
+                    builder.build()
+            );
+
+        } catch (Exception e) {
+            Log.e("PRINT_RECEIPT", "Gagal mencetak struk", e);
+
+            Toast.makeText(
+                    this,
+                    "Gagal mencetak struk: " + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+
+        } finally {
+            cursorHeader.close();
+            cursorDetail.close();
+        }
+    }
     private void whatsapp(String nota) {
         SQLiteDatabase database = db.getReadableDatabase();
         Cursor cursorHeader = database.rawQuery(
-                "SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, c.nm_pelanggan, c.telepon " +
+                "SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, c.nm_pelanggan, c.telepon, p.subtotal, p.total_dicount " +
                         "FROM penjualan p " +
                         "LEFT JOIN master_pelanggan c ON c.kd_pelanggan = p.kd_pelanggan " +
                         "WHERE p.nota = ?", new String[]{nota});
 
         Cursor cursorDetail = database.rawQuery(
-                "SELECT nm_barang, jumlah, harga, total " +
+                "SELECT nm_barang, jumlah, harga, total, subtotal, disk " +
                         "FROM penjualan_item WHERE nota = ?", new String[]{nota});
 
 
@@ -214,33 +431,144 @@ public class DetailActivity extends AppCompatActivity {
 
         StringBuilder struk = new StringBuilder();
 
-        if (cursorHeader.moveToFirst()) {
-            struk.append("Pelanggan : ").append(cursorHeader.getString(5)).append("\n");
-            struk.append("Nota      : ").append(cursorHeader.getString(0)).append("\n");
-            struk.append("Tanggal   : ").append(cursorHeader.getString(1)).append("\n");
-            struk.append("-------------------------------------------------\n");
+        if (!cursorHeader.moveToFirst()) {
+            cursorHeader.close();
+            cursorDetail.close();
+            database.close();
 
-            while (cursorDetail.moveToNext()) {
-                struk.append(cursorDetail.getString(0)).append("\n")
-                        .append(cursorDetail.getInt(1)).append(" x ")
-                        .append(formatRupiah.format(cursorDetail.getInt(2))).append(" = ")
-                        .append(formatRupiah.format(cursorDetail.getInt(3))).append("\n\n");
-            }
-
-            struk.append("-------------------------------------------------\n");
-            struk.append("Total   : ").append(formatRupiah.format(cursorHeader.getInt(2))).append("\n");
-            struk.append("Bayar   : ").append(formatRupiah.format(cursorHeader.getInt(3))).append("\n");
-            struk.append("Kembali : ").append(cursorHeader.getInt(4)).append("\n");
-            struk.append("Terima Kasih\n");
+            Toast.makeText(this, "Data transaksi tidak ditemukan", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+
         String nomorPelanggan = formatNomor(cursorHeader.getString(6));
+
+        String namaPelanggan = cursorHeader.getString(5);
+        String nomorNota = cursorHeader.getString(0);
+        String tanggal = cursorHeader.getString(1);
+
+        long totalSubtotal = cursorHeader.getLong(7);
+        long totalDiskon = cursorHeader.getLong(8);
+        long totalBelanja = cursorHeader.getLong(2);
+        long pembayaran = cursorHeader.getLong(3);
+        long kembalian = cursorHeader.getLong(4);
+
+        String garis = "---------------------------\n";
+
+        struk.append("```\n");
+        struk.append("        STRUK PEMBAYARAN\n");
+        struk.append("===========================\n");
+        struk.append("Pelanggan : ")
+                .append(namaPelanggan == null || namaPelanggan.trim().isEmpty()
+                        ? "Umum"
+                        : namaPelanggan)
+                .append("\n");
+
+        struk.append("No. Nota  : ")
+                .append(nomorNota)
+                .append("\n");
+
+        struk.append("Tanggal   : ")
+                .append(tanggal)
+                .append("\n");
+
+        struk.append("===========================\n");
+        struk.append("DETAIL BELANJA\n");
+        struk.append(garis);
+
+        int nomorUrut = 1;
+
+        while (cursorDetail.moveToNext()) {
+
+            /*
+             * Data detail
+             * Index 0 = Nama produk
+             * Index 1 = Jumlah
+             * Index 2 = Harga satuan
+             * Index 7 = Total produk setelah diskon
+             */
+
+            String namaProduk = cursorDetail.getString(0);
+            long jumlah = cursorDetail.getLong(1);
+            long hargaSatuan = cursorDetail.getLong(2);
+            long totalProduk = cursorDetail.getLong(3);
+
+            // Subtotal sebelum diskon
+            long subtotalProduk = jumlah * hargaSatuan;
+
+            // Diskon dihitung dari subtotal dikurangi total produk
+            long diskonProduk = subtotalProduk - totalProduk;
+
+            // Mencegah nilai diskon menjadi minus
+            if (diskonProduk < 0) {
+                diskonProduk = 0;
+            }
+
+            struk.append(nomorUrut)
+                    .append(". ")
+                    .append(namaProduk)
+                    .append("\n");
+
+            struk.append("   ")
+                    .append(jumlah)
+                    .append(" x ")
+                    .append(formatRupiah.format(hargaSatuan))
+                    .append("\n");
+
+            struk.append("   Subtotal : ")
+                    .append(formatRupiah.format(subtotalProduk))
+                    .append("\n");
+
+            struk.append("   Diskon   : -")
+                    .append(formatRupiah.format(diskonProduk))
+                    .append("\n");
+
+            struk.append("   Total    : ")
+                    .append(formatRupiah.format(totalProduk))
+                    .append("\n");
+
+            struk.append(garis);
+
+            nomorUrut++;
+        }
+
+        struk.append("RINGKASAN PEMBAYARAN\n");
+        struk.append(garis);
+
+        struk.append("Subtotal     : ")
+                .append(formatRupiah.format(totalSubtotal))
+                .append("\n");
+
+        struk.append("Total Diskon : -")
+                .append(formatRupiah.format(totalDiskon))
+                .append("\n");
+
+        struk.append(garis);
+
+        struk.append("TOTAL BELANJA: ")
+                .append(formatRupiah.format(totalBelanja))
+                .append("\n");
+
+        struk.append("Pembayaran   : ")
+                .append(formatRupiah.format(pembayaran))
+                .append("\n");
+
+        struk.append("Kembalian    : ")
+                .append(formatRupiah.format(kembalian))
+                .append("\n");
+
+        struk.append("===========================\n");
+        struk.append("     TERIMA KASIH TELAH\n");
+        struk.append("       BERBELANJA\n");
+        struk.append("===========================\n");
+        struk.append("```");
 
         cursorHeader.close();
         cursorDetail.close();
         database.close();
 
         String pesan = struk.toString();
+
         kirimWhatsapp(nomorPelanggan, pesan);
     }
 

@@ -23,6 +23,6 @@ public class Constants {
 
 
     public static String namaToko = "UD SURYO PRABOT";
-    public static String alamatToko = "Jl Besar Sei.Kalam - T.Panji";
+    public static String alamatToko = "Jl Bsr Sei.Kalam T.Panji";
     public static String hpToko = "HP: 0823 6108 1238";
 }
