@@ -5,15 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 
+import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.R;
 import com.insoft.laris.report.SalesByDateActivity;
 import com.insoft.laris.report.SalesTodayActivity;
 
 public class SalesReportActivity extends AppCompatActivity {
-    private LinearLayout sales_tday;
-    private  LinearLayout penjualantanggal;
+    private MaterialCardView sales_tday;
+    private  MaterialCardView penjualantanggal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

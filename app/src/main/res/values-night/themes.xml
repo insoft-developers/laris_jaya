@@ -14,6 +14,33 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.BestbeautyNoBar"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Warna utama -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Warna sekunder -->
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorSecondaryVariant">@color/colorAccentDark</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/white</item>
+
+        <!-- Hilangkan ActionBar bawaan -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+
+        <!-- Background aplikasi -->
+        <item name="android:windowBackground">@color/white</item>
+
+    </style>
+
     <style name="AppThemeLogin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

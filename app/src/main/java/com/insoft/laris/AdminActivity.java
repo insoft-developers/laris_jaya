@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.admin.ListPenjualanActivity;
 import com.insoft.laris.admin.MasterBarangActivity;
 import com.insoft.laris.admin.MasterPelangganActivity;
@@ -34,7 +35,7 @@ import retrofit2.Response;
 
 public class AdminActivity extends AppCompatActivity {
     private ProgressBar loading;
-    private Button btnpenjualan, btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna;
+    private MaterialCardView btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna;
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
@@ -48,7 +49,7 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
 
         db = new MyDatabaseHelper(this);
-        btnpenjualan = findViewById(R.id.btn_penjualan);
+
         btnbarang = findViewById(R.id.btn_barang);
         btnlaporan = findViewById(R.id.btn_laporan);
         btnpelanggan = findViewById(R.id.btn_pelangggan);
@@ -83,13 +84,13 @@ public class AdminActivity extends AppCompatActivity {
         });
 
 
-        btnpenjualan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, ListPenjualanActivity.class);
-                startActivity(intent);
-            }
-        });
+//        btnpenjualan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(AdminActivity.this, ListPenjualanActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         btnpelanggan.setOnClickListener(new View.OnClickListener() {
             @Override

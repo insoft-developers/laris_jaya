@@ -25,7 +25,7 @@
         <activity
             android:name=".admin.SalesReportActivity"
             android:label="Laporan Penjualan"
-            android:theme="@style/Theme.Bestbeauty" />
+            android:theme="@style/Theme.BestbeautyNoBar" />
         <activity
             android:name=".admin.PelangganEditActivity"
             android:label="Edit Pelanggan"
@@ -51,7 +51,7 @@
         <activity
             android:name=".AdminActivity"
             android:label="Dashboard"
-            android:theme="@style/Theme.Bestbeauty" />
+            android:theme="@style/Theme.BestbeautyNoBar" />
         <activity
             android:name=".admin.MasterPelangganActivity"
             android:label="Daftar Pelanggan"

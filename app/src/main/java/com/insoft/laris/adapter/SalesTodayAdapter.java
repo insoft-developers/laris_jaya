@@ -1,7 +1,11 @@
 package com.insoft.laris.adapter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +49,29 @@ public class SalesTodayAdapter extends RecyclerView.Adapter<SalesTodayAdapter.Vi
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         holder.totalpenjualan.setText(formatRupiah.format(laporan.get(position).getBelanja()));
+        holder.subtotal.setText(formatRupiah.format(laporan.get(position).getSubtotal()));
+        holder.discount.setText(formatRupiah.format(laporan.get(position).getTotal_discount()));
+        holder.pembayaran.setText(formatRupiah.format(laporan.get(position).getBayar()));
+        int xpembayaran = laporan.get(position).getBayar();
+        int xbelanja = laporan.get(position).getBelanja();
+
+        if(xpembayaran >= xbelanja) {
+            holder.lblkembalian.setText("Kembalian");
+            holder.lunas.setVisibility(VISIBLE);
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#059669")
+            );
+        } else {
+            holder.lblkembalian.setText("BLM DIBAYAR");
+
+            holder.lunas.setVisibility(GONE);
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#DC2626")
+            );
+        }
+
+        holder.kembalian.setText(formatRupiah.format(laporan.get(position).getKembali()));
+
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +90,7 @@ public class SalesTodayAdapter extends RecyclerView.Adapter<SalesTodayAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView invoice, namacustomer, tanggal, totalpenjualan;
+        private TextView invoice, namacustomer, tanggal, totalpenjualan, subtotal, discount, pembayaran, kembalian, lblkembalian, lunas;
         private ImageView fotocustomer;
         private LinearLayout rootlayout;
         public ViewHolder(View itemView) {
@@ -72,6 +99,13 @@ public class SalesTodayAdapter extends RecyclerView.Adapter<SalesTodayAdapter.Vi
             namacustomer = itemView.findViewById(R.id.namacustomer);
             tanggal = itemView.findViewById(R.id.tanggal);
             totalpenjualan = itemView.findViewById(R.id.totalpenjualan);
+            subtotal = itemView.findViewById(R.id.subtotalpenjualan);
+            discount = itemView.findViewById(R.id.discountpenjualan);
+            pembayaran = itemView.findViewById(R.id.pembayaran);
+            kembalian =itemView.findViewById(R.id.kembalian);
+            lblkembalian = itemView.findViewById(R.id.lblkembalian);
+            lunas = itemView.findViewById(R.id.lunas);
+
 
 
             rootlayout = itemView.findViewById(R.id.rootlayout);

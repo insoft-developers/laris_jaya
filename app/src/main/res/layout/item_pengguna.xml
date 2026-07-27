@@ -1,87 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootlayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_marginBottom="12dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_item_penjualan"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="14dp">
 
+    <!-- Header pengguna -->
     <LinearLayout
-        android:background="@drawable/button_round_2"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="5dp"
-        android:layout_marginHorizontal="5dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            android:id="@+id/imagemenu"
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center"
-            android:src="@drawable/nasalogo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
 
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imagemenu"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:contentDescription="Foto pengguna"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nasalogo"
+                android:visibility="gone"
+                app:civ_border_color="#D6E4F5"
+                app:civ_border_width="1dp"
+                tools:visibility="gone" />
+
+
+
+        <!-- Nama dan level -->
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-
-                android:layout_marginHorizontal="10dp"
-                android:id="@+id/kdPengguna"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Kode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-
-                android:layout_marginHorizontal="10dp"
-                android:id="@+id/nmPengguna"
-
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_marginHorizontal="10dp"
                 android:id="@+id/name"
-
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#1F2937"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Indra Rahdian" />
 
             <TextView
-                android:layout_marginHorizontal="10dp"
-                android:id="@+id/level"
-
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Level"
+                android:id="@+id/nmPengguna"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                 />
 
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bg_summary_penjualan"
+                android:paddingStart="9dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="9dp"
+                android:paddingBottom="3dp"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                tools:text="ADMINISTRATOR" />
 
         </LinearLayout>
 
+        <!-- Panah -->
+        <TextView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_arrow_menu"
+            android:gravity="center"
+            android:text="›"
+            android:textColor="#64748B"
+            android:textSize="23sp"
+            android:textStyle="bold" />
 
+    </LinearLayout>
 
+    <!-- Garis pemisah -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="10dp"
+        android:background="#E8EDF2" />
+
+    <!-- Kode pengguna -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Kode Pengguna"
+            android:textColor="#94A3B8"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/kdPengguna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_invoice_badge"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="9dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="9dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="USR-001" />
 
     </LinearLayout>
 
