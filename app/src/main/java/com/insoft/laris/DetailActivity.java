@@ -553,9 +553,16 @@ public class DetailActivity extends AppCompatActivity {
                 .append(formatRupiah.format(pembayaran))
                 .append("\n");
 
-        struk.append("Kembalian    : ")
-                .append(formatRupiah.format(kembalian))
-                .append("\n");
+
+        if(totalBelanja > pembayaran) {
+            struk.append("BLM BAYAR    : ")
+                    .append(formatRupiah.format(kembalian))
+                    .append("\n");
+        } else {
+            struk.append("Kembalian    : ")
+                    .append(formatRupiah.format(kembalian))
+                    .append("\n");
+        }
 
         struk.append("===========================\n");
         struk.append("     TERIMA KASIH TELAH\n");

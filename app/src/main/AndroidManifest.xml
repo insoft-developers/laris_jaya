@@ -21,7 +21,9 @@
         <activity android:name=".report.SalesDateActivity" />
         <activity android:name=".report.SalesByDateActivity" />
         <activity android:name=".report.DetailItemActivity" />
-        <activity android:name=".report.SalesTodayActivity" />
+        <activity android:name=".report.SalesTodayActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
         <activity
             android:name=".admin.SalesReportActivity"
             android:label="Laporan Penjualan"

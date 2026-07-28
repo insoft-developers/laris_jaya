@@ -48,6 +48,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         holder.hargasatuan.setText(formatRupiah.format(items.get(position).getHarga()));
         holder.totalharga.setText(formatRupiah.format(items.get(position).getTotal()));
         holder.quantity.setText(String.valueOf(items.get(position).getJumlah()));
+
+        holder.subtotal.setText(formatRupiah.format(items.get(position).getSubtotal()));
+        holder.discount.setText(formatRupiah.format(items.get(position).getDisk()));
     }
 
     @Override
@@ -56,7 +59,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namaproduk, hargasatuan, totalharga, quantity;
+        private TextView namaproduk, hargasatuan, totalharga, quantity, subtotal, discount;
         private ImageView fotoproduk;
         private LinearLayout rootlayout;
         public ViewHolder(View itemView) {
@@ -66,6 +69,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             hargasatuan = itemView.findViewById(R.id.hargasatuan);
             totalharga = itemView.findViewById(R.id.totalharga);
             quantity = itemView.findViewById(R.id.quantity);
+            subtotal = itemView.findViewById(R.id.subtotal);
+            discount = itemView.findViewById(R.id.discount);
 
             rootlayout = itemView.findViewById(R.id.rootlayout);
 

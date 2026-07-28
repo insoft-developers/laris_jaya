@@ -15,20 +15,25 @@
         android:layout_height="match_parent"/>
 
     <LinearLayout
-        android:background="@drawable/button_round_1"
+        android:background="@drawable/bg_summary_penjualan"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:paddingTop="8dp"
+        android:layout_marginBottom="10dp"
         android:layout_height="40dp">
 
         <TextView
-            android:textSize="13sp"
-
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="Rp. 1.200.000"
             android:id="@+id/summarypenjualan"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:gravity="center_horizontal"
+            android:text="Rp1.200.000"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Rp1.200.000" />
 
     </LinearLayout>
 

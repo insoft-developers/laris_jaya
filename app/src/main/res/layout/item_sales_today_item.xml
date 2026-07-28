@@ -1,81 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootlayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginBottom="8dp"
-    android:layout_height="wrap_content">
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#E5E7EB"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:background="@drawable/button_round_6"
-        android:paddingVertical="5dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp">
 
-
-
+        <!-- Bagian atas -->
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <!-- Ikon produk -->
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_product_icon"
+                android:gravity="center"
+                android:text="P"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
+            <!-- Informasi produk -->
             <LinearLayout
-                android:weightSum="2"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_weight="1"
-
-                    android:layout_marginHorizontal="10dp"
                     android:id="@+id/namaproduk"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:paddingHorizontal="5dp"
-                    android:text="BB-1001"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="BB-1001"
+                    android:textColor="#111827"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
-
+                <TextView
+                    android:id="@+id/satuanproduk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Indra Rahdian"
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
+        </LinearLayout>
+
+        <!-- Garis pemisah -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="#EEF0F3" />
+
+        <!-- Nilai penjualan -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
             <TextView
-
-                android:layout_marginHorizontal="10dp"
-                android:id="@+id/satuanproduk"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
-                android:text="Indra Rahdian"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nilai Penjualan"
+                android:textColor="#6B7280"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText" />
 
             <TextView
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:textAlignment="textEnd"
-
-                android:layout_marginHorizontal="10dp"
                 android:id="@+id/nilaipenjualan"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:paddingHorizontal="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Rp. 200.000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textColor="#D32F2F"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

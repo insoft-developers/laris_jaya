@@ -8,6 +8,26 @@ public class Item {
     private int harga;
     private String satuan;
 
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public int getDisk() {
+        return disk;
+    }
+
+    public void setDisk(int disk) {
+        this.disk = disk;
+    }
+
+    private int subtotal;
+    private int disk;
+
+
 
     public String getKd_barang() {
         return kd_barang;

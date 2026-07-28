@@ -10,6 +10,42 @@ public class Header {
     private String keterangan;
     private String nm_pelanggan;
     private String alamat;
+    private int bayar;
+    private int kembali;
+    private int subtotal;
+    private int total_discount;
+
+    public int getBayar() {
+        return bayar;
+    }
+
+    public void setBayar(int bayar) {
+        this.bayar = bayar;
+    }
+
+    public int getKembali() {
+        return kembali;
+    }
+
+    public void setKembali(int kembali) {
+        this.kembali = kembali;
+    }
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public int getTotal_discount() {
+        return total_discount;
+    }
+
+    public void setTotal_discount(int total_discount) {
+        this.total_discount = total_discount;
+    }
 
     public int getId() {
         return id;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.R;
 import com.insoft.laris.model.SalesTodayItem;
 
@@ -45,7 +46,7 @@ public class SalesTodayItemAdapter extends RecyclerView.Adapter<SalesTodayItemAd
 
         holder.namaproduk.setText(laporan.get(position).getNm_barang());
         holder.satuanproduk.setText(String.valueOf(laporan.get(position).getJumlahpenjualan())+" "+laporan.get(position).getSatuan());
-        holder.nilaipenjualan.setText("Nilai Penjualan : "+formatRupiah.format(laporan.get(position).getNilaipenjualan()));
+        holder.nilaipenjualan.setText(formatRupiah.format(laporan.get(position).getNilaipenjualan()));
 
 
 
@@ -60,7 +61,7 @@ public class SalesTodayItemAdapter extends RecyclerView.Adapter<SalesTodayItemAd
 
         private TextView namaproduk, nilaipenjualan, satuanproduk;
         private ImageView fotoproduk;
-        private LinearLayout rootlayout;
+        private MaterialCardView rootlayout;
         public ViewHolder(View itemView) {
         super(itemView);
             namaproduk = itemView.findViewById(R.id.namaproduk);

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,8 @@ import retrofit2.Callback;
 public class DetailItemActivity extends AppCompatActivity {
 
     private TextView tanggal, namacustomer, summary, invoices;
+    private TextView subtotal, discount, pembayaran, kembalian, lblkembalian;
+
     private ImageView image;
     private RecyclerView rvitem;
     private ProgressBar loading;
@@ -45,6 +48,12 @@ public class DetailItemActivity extends AppCompatActivity {
         tanggal = findViewById(R.id.tanggal);
         namacustomer = findViewById(R.id.namacustomer);
         summary = findViewById(R.id.summary);
+
+        subtotal = findViewById(R.id.subtotal);
+        discount = findViewById(R.id.discount);
+        pembayaran = findViewById(R.id.pembayaran);
+        kembalian = findViewById(R.id.kembalian);
+        lblkembalian = findViewById(R.id.lblkembalian);
 
 
         loading = findViewById(R.id.loading);
@@ -74,7 +83,27 @@ public class DetailItemActivity extends AppCompatActivity {
                     namacustomer.setText(header.get(0).getNm_pelanggan()+" - "+header.get(0).getAlamat());
                     Locale localeID = new Locale("in", "ID");
                     NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-                    summary.setText("TOTAL : "+formatRupiah.format(header.get(0).getBelanja()));
+                    summary.setText(formatRupiah.format(header.get(0).getBelanja()));
+                    subtotal.setText(formatRupiah.format(header.get(0).getSubtotal()));
+                    discount.setText(formatRupiah.format(header.get(0).getTotal_discount()));
+                    pembayaran.setText(formatRupiah.format(header.get(0).getBayar()));
+                    kembalian.setText(formatRupiah.format(header.get(0).getKembali()));
+                    int xsummary = header.get(0).getBelanja();
+                    int xbayar = header.get(0).getBayar();
+                    if(xsummary > xbayar) {
+                        lblkembalian.setText("Belum Dibayar");
+                        kembalian.setTextColor(
+                                Color.parseColor("#DC2626")
+                        );
+                    } else {
+                        lblkembalian.setText("Kembalian");
+                        kembalian.setTextColor(
+                                Color.parseColor("#059669")
+                        );
+                    }
+
+
+
                     DetailAdapter adapter = new DetailAdapter(DetailItemActivity.this, response.body().getItem());
                     adapter.notifyDataSetChanged();
                     rvitem.setAdapter(adapter);
