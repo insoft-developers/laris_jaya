@@ -93,7 +93,7 @@ public class SalesTanggalFragment extends Fragment {
                     int totalpenjualan = response.body().getTotal();
                     Locale localeID = new Locale("in", "ID");
                     NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-                    summarypenjualan.setText("TOTAL PENJUALAN : "+formatRupiah.format(totalpenjualan));
+                    summarypenjualan.setText("TOTAL : "+formatRupiah.format(totalpenjualan));
                 }else{
                     loading.setVisibility(View.GONE);
                     Log.d("REs", response.toString());
