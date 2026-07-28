@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -55,6 +57,7 @@ import com.insoft.laris.utils.UtilsAPI;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -353,6 +356,24 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
         MaterialButton btnResetPembayaran =
                 view.findViewById(R.id.btnResetPembayaran);
 
+        LinearLayout layoutTempo = view.findViewById(R.id.layoutTempo);
+
+        ChipGroup groupTempo = view.findViewById(R.id.groupTempo);
+
+        Chip chipTempo3 = view.findViewById(R.id.chipTempo3);
+        Chip chipTempo7 = view.findViewById(R.id.chipTempo7);
+        Chip chipTempo14 = view.findViewById(R.id.chipTempo14);
+        Chip chipTempo21 = view.findViewById(R.id.chipTempo21);
+        Chip chipTempo28 = view.findViewById(R.id.chipTempo28);
+
+        TextView tvJatuhTempo = view.findViewById(R.id.tvJatuhTempo);
+
+        /*
+         * Array dipakai karena nilainya diubah dari dalam listener.
+         */
+        final int[] tempoHariDipilih = {0};
+        final String[] tanggalJatuhTempo = {null};
+
         /*
          * Sesuaikan dengan variabel total transaksi milik Anda.
          */
@@ -376,6 +397,46 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                         .setView(view)
                         .setCancelable(false)
                         .create();
+
+        View.OnClickListener listenerTempo = v -> {
+            int jumlahHari;
+
+            if (v.getId() == R.id.chipTempo3) {
+                jumlahHari = 3;
+            } else if (v.getId() == R.id.chipTempo7) {
+                jumlahHari = 7;
+            } else if (v.getId() == R.id.chipTempo14) {
+                jumlahHari = 14;
+            } else if (v.getId() == R.id.chipTempo21) {
+                jumlahHari = 21;
+            } else if (v.getId() == R.id.chipTempo28) {
+                jumlahHari = 28;
+            } else {
+                jumlahHari = 0;
+            }
+
+            tempoHariDipilih[0] = jumlahHari;
+
+            if (jumlahHari > 0) {
+                tanggalJatuhTempo[0] =
+                        hitungTanggalJatuhTempoDatabase(jumlahHari);
+
+                tvJatuhTempo.setText(
+                        "Jatuh tempo: "
+                                + hitungTanggalJatuhTempoTampilan(jumlahHari)
+                );
+
+                tvJatuhTempo.setTextColor(
+                        Color.parseColor("#92400E")
+                );
+            }
+        };
+
+        chipTempo3.setOnClickListener(listenerTempo);
+        chipTempo7.setOnClickListener(listenerTempo);
+        chipTempo14.setOnClickListener(listenerTempo);
+        chipTempo21.setOnClickListener(listenerTempo);
+        chipTempo28.setOnClickListener(listenerTempo);
 
         etPembayaran.addTextChangedListener(new TextWatcher() {
             @Override
@@ -425,6 +486,16 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                     tvPeringatan.setVisibility(View.GONE);
                     layoutPembayaran.setError(null);
                     btnSimpan.setEnabled(false);
+
+                    layoutTempo.setVisibility(View.GONE);
+                    groupTempo.clearCheck();
+
+                    tempoHariDipilih[0] = 0;
+                    tanggalJatuhTempo[0] = null;
+
+                    tvJatuhTempo.setText(
+                            "Belum ada tempo yang dipilih"
+                    );
                     return;
                 }
 
@@ -463,8 +534,20 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
 
                     tvPeringatan.setVisibility(View.GONE);
 
+                    layoutTempo.setVisibility(View.GONE);
+                    groupTempo.clearCheck();
+
+                    tempoHariDipilih[0] = 0;
+                    tanggalJatuhTempo[0] = null;
+
+                    tvJatuhTempo.setText(
+                            "Belum ada tempo yang dipilih"
+                    );
+
                 } else {
                     long kekurangan = totalBelanja - pembayaran;
+
+                    layoutTempo.setVisibility(View.VISIBLE);
 
                     tvLabelKembalian.setText("Kekurangan");
                     tvKembalian.setText(formatRupiah(kekurangan));
@@ -488,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                     tvPeringatan.setText(
                             "Pembayaran kurang "
                                     + formatRupiah(kekurangan)
-                                    + ". Transaksi tetap dapat disimpan."
+                                    + ". Silakan pilih tempo pembayaran."
                     );
 
                     tvPeringatan.setVisibility(View.VISIBLE);
@@ -564,6 +647,32 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             /*
              * Simpan pembayaran.
              */
+
+            if (pembayaran < totalBelanja
+                    && tempoHariDipilih[0] == 0) {
+
+                tvPeringatan.setText(
+                        "Pilih tempo pembayaran terlebih dahulu."
+                );
+
+                tvPeringatan.setVisibility(View.VISIBLE);
+
+                tvJatuhTempo.setText(
+                        "Tempo pembayaran wajib dipilih"
+                );
+
+                tvJatuhTempo.setTextColor(
+                        Color.parseColor("#DC2626")
+                );
+
+                Toast.makeText(
+                        this,
+                        "Silakan pilih tempo 3, 7, 14, 21, atau 28 hari",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                return;
+            }
             totalPembayaran = pembayaran;
 
             /*
@@ -594,7 +703,16 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             } else {
                 totalSisa = totalKembalian;
             }
-            submit(Integer.parseInt(String.valueOf(totalBelanja)), Integer.parseInt(String.valueOf(totalPembayaran)), Integer.parseInt(String.valueOf(totalSisa)), Integer.parseInt(String.valueOf(diskon)), Integer.parseInt(String.valueOf(subtotal)));
+
+            int tempoHari = 0;
+            String jatuhTempo = null;
+
+            if (pembayaran < totalBelanja) {
+                tempoHari = tempoHariDipilih[0];
+                jatuhTempo = tanggalJatuhTempo[0];
+            }
+            submit(Integer.parseInt(String.valueOf(totalBelanja)), Integer.parseInt(String.valueOf(totalPembayaran)), Integer.parseInt(String.valueOf(totalSisa)), Integer.parseInt(String.valueOf(diskon)), Integer.parseInt(String.valueOf(subtotal)),  tempoHari,
+                    jatuhTempo);
         });
 
         alertDialog.setOnShowListener(dialog -> {
@@ -626,6 +744,30 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
         });
 
         alertDialog.show();
+    }
+
+    private String hitungTanggalJatuhTempoDatabase(int jumlahHari) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, jumlahHari);
+
+        SimpleDateFormat format = new SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+        );
+
+        return format.format(calendar.getTime());
+    }
+
+    private String hitungTanggalJatuhTempoTampilan(int jumlahHari) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, jumlahHari);
+
+        SimpleDateFormat format = new SimpleDateFormat(
+                "dd MMMM yyyy",
+                new Locale("id", "ID")
+        );
+
+        return format.format(calendar.getTime());
     }
 
 
@@ -686,7 +828,8 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
 
     }
 
-    private void submit(int belanja,int bayar, int kembali, int discount, int subtotal  ) {
+    private void submit(int belanja,int bayar, int kembali, int discount, int subtotal, int tempoHari,
+                        String jatuhTempo  ) {
         HashMap<String,String> user = sessionManager.getSessionData();
         String userkode = user.get(sessionManager.ID);
 
@@ -714,7 +857,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 userkode,
                 0,
                 0,
-                discount,subtotal
+                discount,subtotal, tempoHari, jatuhTempo
         );
 
 

@@ -16,6 +16,36 @@ public class Sales {
     public int bank_deposit;
     public int subtotal;
     public int total_discount;
+
+    public String getStatus_pembayaran() {
+        return status_pembayaran;
+    }
+
+    public void setStatus_pembayaran(String status_pembayaran) {
+        this.status_pembayaran = status_pembayaran;
+    }
+
+    public String status_pembayaran;
+
+    public int getTempo_hari() {
+        return tempo_hari;
+    }
+
+    public void setTempo_hari(int tempo_hari) {
+        this.tempo_hari = tempo_hari;
+    }
+
+    public String getJatuh_tempo() {
+        return jatuh_tempo;
+    }
+
+    public void setJatuh_tempo(String jatuh_tempo) {
+        this.jatuh_tempo = jatuh_tempo;
+    }
+
+    public int tempo_hari;
+    public String jatuh_tempo;
+
     public List<SalesItem> item;
 
     public String getNota() {

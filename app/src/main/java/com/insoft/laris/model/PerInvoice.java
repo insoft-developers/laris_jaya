@@ -10,6 +10,44 @@ public class PerInvoice {
     private String tanggal;
     private String nm_pelanggan;
 
+    private int subtotal;
+    private int bayar;
+    private int total_discount;
+    private int kembali;
+
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public int getBayar() {
+        return bayar;
+    }
+
+    public void setBayar(int bayar) {
+        this.bayar = bayar;
+    }
+
+    public int getTotal_discount() {
+        return total_discount;
+    }
+
+    public void setTotal_discount(int total_discount) {
+        this.total_discount = total_discount;
+    }
+
+    public int getKembali() {
+        return kembali;
+    }
+
+    public void setKembali(int kembali) {
+        this.kembali = kembali;
+    }
+
     public int getId() {
         return id;
     }

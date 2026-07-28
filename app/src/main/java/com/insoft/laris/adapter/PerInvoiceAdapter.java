@@ -1,7 +1,11 @@
 package com.insoft.laris.adapter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +48,29 @@ public class PerInvoiceAdapter extends RecyclerView.Adapter<PerInvoiceAdapter.Vi
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         holder.totalpenjualan.setText(formatRupiah.format(laporan.get(position).getTotal_penjualan()));
+        holder.subtotalpenjualan.setText(formatRupiah.format(laporan.get(position).getSubtotal()));
+        holder.discountpenjualan.setText(formatRupiah.format(laporan.get(position).getTotal_discount()));
+        holder.pembayaran.setText(formatRupiah.format(laporan.get(position).getBayar()));
+        holder.kembalian.setText(formatRupiah.format(laporan.get(position).getKembali()));
+
+
+        int xpembayaran = laporan.get(position).getBayar();
+        int xbelanja = laporan.get(position).getTotal_penjualan();
+
+        if(xpembayaran >= xbelanja) {
+            holder.lblkembalian.setText("Kembalian");
+            holder.lunas.setVisibility(VISIBLE);
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#059669")
+            );
+        } else {
+            holder.lblkembalian.setText("BLM DIBAYAR");
+
+            holder.lunas.setVisibility(GONE);
+            holder.kembalian.setTextColor(
+                    Color.parseColor("#DC2626")
+            );
+        }
 
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +90,8 @@ public class PerInvoiceAdapter extends RecyclerView.Adapter<PerInvoiceAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView invoice, namacustomer, tanggal, totalpenjualan;
+        private TextView invoice, namacustomer, tanggal, totalpenjualan, lunas;
+        private TextView subtotalpenjualan, discountpenjualan, pembayaran, kembalian, lblkembalian;
         private ImageView fotocustomer;
         private LinearLayout rootlayout;
         public ViewHolder(View itemView) {
@@ -72,7 +100,12 @@ public class PerInvoiceAdapter extends RecyclerView.Adapter<PerInvoiceAdapter.Vi
             namacustomer = itemView.findViewById(R.id.namacustomer);
             tanggal = itemView.findViewById(R.id.tanggal);
             totalpenjualan = itemView.findViewById(R.id.totalpenjualan);
-
+            subtotalpenjualan = itemView.findViewById(R.id.subtotalpenjualan);
+            discountpenjualan = itemView.findViewById(R.id.discountpenjualan);
+            pembayaran = itemView.findViewById(R.id.pembayaran);
+            kembalian = itemView.findViewById(R.id.kembalian);
+            lblkembalian = itemView.findViewById(R.id.lblkembalian);
+            lunas = itemView.findViewById(R.id.lunas);
 
             rootlayout = itemView.findViewById(R.id.rootlayout);
 

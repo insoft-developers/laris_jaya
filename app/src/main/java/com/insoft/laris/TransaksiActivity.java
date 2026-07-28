@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -144,6 +145,14 @@ public class TransaksiActivity extends AppCompatActivity {
                 pj.bank_deposit = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("bank_deposit"));
                 pj.total_discount = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("total_dicount"));
                 pj.subtotal = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("subtotal"));
+                pj.tempo_hari = cursorPenjualan.getInt(cursorPenjualan.getColumnIndexOrThrow("tempo_hari"));
+                if(cursorPenjualan.getString(cursorPenjualan.getColumnIndexOrThrow("jatuh_tempo")) == null || cursorPenjualan.getString(cursorPenjualan.getColumnIndexOrThrow("jatuh_tempo")).isEmpty() ) {
+                    pj.jatuh_tempo = "";
+                } else {
+                    pj.jatuh_tempo = cursorPenjualan.getString(cursorPenjualan.getColumnIndexOrThrow("jatuh_tempo"));
+                }
+
+                pj.status_pembayaran = cursorPenjualan.getString(cursorPenjualan.getColumnIndexOrThrow("status_pembayaran"));
 
                 Cursor cursorDetail = database.rawQuery("SELECT * FROM penjualan_item WHERE nota = ?", new String[]{pj.nota});
                 List<SalesItem> listItem = new ArrayList<>();
@@ -183,6 +192,7 @@ public class TransaksiActivity extends AppCompatActivity {
             public void onResponse(Call<SalesResponseJson> call, Response<SalesResponseJson> response) {
                 if(response.isSuccessful()) {
                     String resultcode = response.body().getResultcode();
+                    Log.d("cek data", resultcode);
                     if(resultcode.equalsIgnoreCase("00")) {
                         Toast.makeText(getApplicationContext(), "Sync sukses!", Toast.LENGTH_SHORT).show();
                         // Hapus data lokal setelah sukses

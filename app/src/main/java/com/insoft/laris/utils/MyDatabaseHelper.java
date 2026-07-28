@@ -80,6 +80,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PRICE_TYPE = "price_type";
 
     private static final String COLUMN_TOTAL_DISCOUNT = "total_dicount";
+    private static final String COLUMN_STATUS_PEMBAYARAN = "status_pembayaran";
+
+    private static final String COLUMN_TEMPO_HARI = "tempo_hari";
+    private static final String COLUMN_JATUH_TEMPO = "jatuh_tempo";
 
 
 
@@ -131,7 +135,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DEPO + " INTEGER, " +
                 COLUMN_BANK_DEPOSIT + " INTEGER, " +
                 COLUMN_SUBTOTAL + " INTEGER, " +
-                COLUMN_TOTAL_DISCOUNT + " INTEGER);";
+                COLUMN_TOTAL_DISCOUNT + " INTEGER, " +
+                COLUMN_TEMPO_HARI + " INTEGER, " +
+                COLUMN_JATUH_TEMPO + " TEXT, " +
+                COLUMN_STATUS_PEMBAYARAN + " TEXT);";
         db.execSQL(query_penjualan);
 
 
@@ -695,7 +702,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int depo,
             int bank_deposit,
             int total_discount,
-            int subtotal
+            int subtotal,
+            int tempo_hari,
+            String jatuh_tempo
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -712,6 +721,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_BANK_DEPOSIT, bank_deposit);
         cv.put(COLUMN_TOTAL_DISCOUNT, total_discount);
         cv.put(COLUMN_SUBTOTAL, subtotal);
+        if (bayar < belanja) {
+            cv.put(COLUMN_STATUS_PEMBAYARAN, "TEMPO");
+        } else {
+            cv.put(COLUMN_STATUS_PEMBAYARAN, "LUNAS");
+        }
+
+        cv.put(COLUMN_TEMPO_HARI, tempo_hari);
+        cv.put(COLUMN_JATUH_TEMPO, jatuh_tempo);
 
         long result =  db.insert(TABLE_PENJUALAN, null, cv);
         if(result == -1) {
