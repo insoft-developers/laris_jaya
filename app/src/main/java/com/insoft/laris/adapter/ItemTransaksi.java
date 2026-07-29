@@ -51,12 +51,12 @@ public class ItemTransaksi extends RecyclerView.Adapter<ItemTransaksi.ViewHolder
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         holder.totalharga.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("total"))));
         holder.subtotal.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("subtotal"))));
-        holder.pembayaran.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("pembayaran"))));
+        holder.pembayaran.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("Pembayaran"))));
         holder.diskon.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("discount"))));
         holder.kembalian.setText(formatRupiah.format(Integer.parseInt(transaksi.get(position).get("kembalian"))));
 
         int totalBelanja = Integer.parseInt(Objects.requireNonNull(transaksi.get(position).get("total")));
-        int totalBayar = Integer.parseInt(Objects.requireNonNull(transaksi.get(position).get("pembayaran")));
+        int totalBayar = Integer.parseInt(Objects.requireNonNull(transaksi.get(position).get("Pembayaran")));
         if(totalBayar < totalBelanja) {
             holder.labelKembalian.setText("Belum Dibayar");
             holder.kembalian.setTextColor(

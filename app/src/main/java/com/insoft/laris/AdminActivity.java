@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
-import com.insoft.laris.admin.ListPenjualanActivity;
 import com.insoft.laris.admin.MasterBarangActivity;
 import com.insoft.laris.admin.MasterPelangganActivity;
+import com.insoft.laris.admin.pembayaran.PembayaranActivity;
+import com.insoft.laris.admin.piutang.PiutangActivity;
 import com.insoft.laris.admin.SalesReportActivity;
 import com.insoft.laris.admin.pengguna.PenggunaActivity;
 import com.insoft.laris.json.BarangResponseJson;
@@ -35,7 +35,8 @@ import retrofit2.Response;
 
 public class AdminActivity extends AppCompatActivity {
     private ProgressBar loading;
-    private MaterialCardView btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna;
+    private MaterialCardView btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna, btnPiutang;
+    private MaterialCardView btnpembayaran;
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
@@ -55,8 +56,10 @@ public class AdminActivity extends AppCompatActivity {
         btnpelanggan = findViewById(R.id.btn_pelangggan);
         btnlaporan = findViewById(R.id.btn_laporan);
         btnPengguna = findViewById(R.id.btn_pengguna);
+        btnpembayaran = findViewById(R.id.btn_pembayaran);
         txtKeluar = findViewById(R.id.txt_keluar);
         btn_sync = findViewById(R.id.btn_sync);
+        btnPiutang = findViewById(R.id.btn_piutang);
         loading = findViewById(R.id.loading);
         sessionManager = new SessionManager(this);
 
@@ -64,6 +67,16 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 get_product_list();
+            }
+        });
+
+        btnpembayaran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(AdminActivity.this, PembayaranActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -105,6 +118,14 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminActivity.this, MasterBarangActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnPiutang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, PiutangActivity.class);
                 startActivity(intent);
             }
         });

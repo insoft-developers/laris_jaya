@@ -67,7 +67,7 @@
 
         </LinearLayout>
 
-        <!-- Ringkasan pembayaran -->
+        <!-- Ringkasan Pembayaran -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -213,7 +213,7 @@
                 android:textStyle="bold" />
 
         </com.google.android.material.textfield.TextInputLayout>
-        <!-- Pilihan nominal pembayaran cepat -->
+        <!-- Pilihan nominal Pembayaran cepat -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -571,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                     tvPeringatan.setText(
                             "Pembayaran kurang "
                                     + formatRupiah(kekurangan)
-                                    + ". Silakan pilih tempo pembayaran."
+                                    + ". Silakan pilih tempo Pembayaran."
                     );
 
                     tvPeringatan.setVisibility(View.VISIBLE);
@@ -624,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
 
             if (inputPembayaran.isEmpty()) {
                 layoutPembayaran.setError(
-                        "Jumlah pembayaran harus diisi"
+                        "Jumlah Pembayaran harus diisi"
                 );
 
                 etPembayaran.requestFocus();
@@ -637,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 pembayaran = Long.parseLong(inputPembayaran);
             } catch (NumberFormatException e) {
                 layoutPembayaran.setError(
-                        "Nominal pembayaran tidak valid"
+                        "Nominal Pembayaran tidak valid"
                 );
 
                 etPembayaran.requestFocus();
@@ -645,20 +645,20 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             }
 
             /*
-             * Simpan pembayaran.
+             * Simpan Pembayaran.
              */
 
             if (pembayaran < totalBelanja
                     && tempoHariDipilih[0] == 0) {
 
                 tvPeringatan.setText(
-                        "Pilih tempo pembayaran terlebih dahulu."
+                        "Pilih tempo Pembayaran terlebih dahulu."
                 );
 
                 tvPeringatan.setVisibility(View.VISIBLE);
 
                 tvJatuhTempo.setText(
-                        "Tempo pembayaran wajib dipilih"
+                        "Tempo Pembayaran wajib dipilih"
                 );
 
                 tvJatuhTempo.setTextColor(
@@ -676,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             totalPembayaran = pembayaran;
 
             /*
-             * Jika pembayaran lebih, hasilnya menjadi kembalian.
+             * Jika Pembayaran lebih, hasilnya menjadi kembalian.
              * Jika kurang, kembalian dibuat 0.
              */
             totalKembalian = Math.max(
@@ -685,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             );
 
             /*
-             * Jika pembayaran kurang, simpan nilai kekurangannya.
+             * Jika Pembayaran kurang, simpan nilai kekurangannya.
              * Jika lunas atau lebih, kekurangan dibuat 0.
              */
             totalKekurangan = Math.max(

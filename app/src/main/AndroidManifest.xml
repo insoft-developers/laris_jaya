@@ -89,6 +89,16 @@
             android:label="Daftar Penjualan Hold"
             android:theme="@style/Theme.Bestbeauty" />
 
+        <activity
+            android:name=".admin.piutang.PiutangActivity"
+            android:label="Daftar Piutang"
+            android:theme="@style/Theme.BestbeautyNoBar" />
+
+        <activity
+            android:name=".admin.pembayaran.PembayaranActivity"
+            android:label="Daftar Pembayaran"
+            android:theme="@style/Theme.BestbeautyNoBar" />
+
         <activity android:name=".DetailActivity" />
         <activity android:name=".TransaksiActivity" />
         <activity android:name=".SettingActivity" />

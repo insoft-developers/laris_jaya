@@ -151,7 +151,7 @@
                 android:layout_marginEnd="18dp"
                 android:background="#E5E7EB" />
 
-            <!-- Rincian pembayaran -->
+            <!-- Rincian Pembayaran -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

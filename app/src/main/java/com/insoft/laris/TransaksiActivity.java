@@ -114,7 +114,7 @@ public class TransaksiActivity extends AppCompatActivity {
                 map.put("subtotal", cursor.getString(6));
                 map.put("discount", cursor.getString(7));
                 map.put("kembalian", cursor.getString(8));
-                map.put("pembayaran", cursor.getString(9));
+                map.put("Pembayaran", cursor.getString(9));
 
                 list_data.add(map);
                 adapter = new ItemTransaksi(TransaksiActivity.this, list_data);
