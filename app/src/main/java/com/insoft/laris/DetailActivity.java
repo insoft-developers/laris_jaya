@@ -1,15 +1,26 @@
 package com.insoft.laris;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintManager;
@@ -22,7 +33,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.insoft.laris.adapter.ItemDetail;
+import com.insoft.laris.utils.BluetoothPrinter58mm2;
 import com.insoft.laris.utils.MyDatabaseHelper;
+import com.insoft.laris.utils.ReceiptPenjualanUtils;
 import com.insoft.laris.utils.ReceiptPrintAdapter;
 import com.insoft.laris.utils.SessionPelanggan;
 
@@ -30,7 +43,9 @@ import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -43,11 +58,35 @@ public class DetailActivity extends AppCompatActivity {
     private SessionPelanggan sessionPelanggan;
     Locale localeID = new Locale("id", "ID");
     NumberFormat formatRupiah = NumberFormat.getInstance(localeID);
+    private String notaMenungguPrint;
+    private ActivityResultLauncher<String>
+            bluetoothPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        bluetoothPermissionLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestPermission(),
+                        diberikan -> {
+                            if (diberikan
+                                    && notaMenungguPrint != null) {
+
+                                tampilkanPilihanPrinterPenjualan(
+                                        notaMenungguPrint
+                                );
+
+                            } else {
+                                Toast.makeText(
+                                        this,
+                                        "Izin Bluetooth diperlukan",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        }
+                );
         db = new MyDatabaseHelper(this);
         rv_detail = findViewById(R.id.rv_detail);
         loading = findViewById(R.id.loading);
@@ -66,14 +105,16 @@ public class DetailActivity extends AppCompatActivity {
         btn_print.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                print_receipt(nota);
+//                print_receipt(nota);
+                prosesPrintPenjualan(nota);
             }
         });
 
         btn_wa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                whatsapp(nota);
+//                whatsapp(nota);
+                kirimStrukPenjualanWhatsApp(nota);
             }
         });
 
@@ -645,5 +686,280 @@ public class DetailActivity extends AppCompatActivity {
         return nomor; // kalau sudah format internasional langsung return
     }
 
+    private void cetakStrukPenjualan(
+            BluetoothDevice printer,
+            String nota
+    ) {
+        SQLiteDatabase database =
+                db.getReadableDatabase();
+
+        final String teksStruk;
+
+        try {
+            teksStruk =
+                    ReceiptPenjualanUtils
+                            .buatTeksStruk(
+                                    database,
+                                    nota
+                            );
+
+        } catch (Exception e) {
+            Toast.makeText(
+                    this,
+                    e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        Toast.makeText(
+                this,
+                "Menghubungkan printer...",
+                Toast.LENGTH_SHORT
+        ).show();
+
+        BluetoothPrinter58mm2.printText(
+                printer,
+                teksStruk,
+                new BluetoothPrinter58mm2.PrintCallback() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        DetailActivity.this,
+                                        "Struk berhasil dicetak",
+                                        Toast.LENGTH_SHORT
+                                ).show()
+                        );
+                    }
+
+                    @Override
+                    public void onError(String pesan) {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        DetailActivity.this,
+                                        "Print gagal: " + pesan,
+                                        Toast.LENGTH_LONG
+                                ).show()
+                        );
+                    }
+                }
+        );
+    }
+
+
+    private void prosesPrintPenjualan(String nota) {
+        notaMenungguPrint = nota;
+
+        if (Build.VERSION.SDK_INT
+                >= Build.VERSION_CODES.S
+                && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+        ) != PackageManager.PERMISSION_GRANTED) {
+
+            bluetoothPermissionLauncher.launch(
+                    Manifest.permission.BLUETOOTH_CONNECT
+            );
+
+            return;
+        }
+
+        tampilkanPilihanPrinterPenjualan(nota);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void tampilkanPilihanPrinterPenjualan(
+            String nota
+    ) {
+        BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(
+                        Context.BLUETOOTH_SERVICE
+                );
+
+        BluetoothAdapter bluetoothAdapter =
+                bluetoothManager == null
+                        ? null
+                        : bluetoothManager.getAdapter();
+
+        if (bluetoothAdapter == null) {
+            Toast.makeText(
+                    this,
+                    "Perangkat tidak mendukung Bluetooth",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()) {
+            Toast.makeText(
+                    this,
+                    "Aktifkan Bluetooth terlebih dahulu",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        Set<BluetoothDevice> perangkatTerpasang =
+                bluetoothAdapter.getBondedDevices();
+
+        if (perangkatTerpasang == null
+                || perangkatTerpasang.isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Belum ada printer Bluetooth yang dipasangkan",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        List<BluetoothDevice> daftarPrinter =
+                new ArrayList<>(
+                        perangkatTerpasang
+                );
+
+        String[] namaPrinter =
+                new String[daftarPrinter.size()];
+
+        for (int i = 0; i < daftarPrinter.size(); i++) {
+            BluetoothDevice perangkat =
+                    daftarPrinter.get(i);
+
+            String nama = perangkat.getName();
+
+            if (nama == null || nama.trim().isEmpty()) {
+                nama = "Perangkat Bluetooth";
+            }
+
+            namaPrinter[i] =
+                    nama
+                            + "\n"
+                            + perangkat.getAddress();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Pilih printer 58 mm")
+                .setItems(
+                        namaPrinter,
+                        (dialog, posisi) -> {
+                            BluetoothDevice printer =
+                                    daftarPrinter.get(posisi);
+
+                            cetakStrukPenjualan(
+                                    printer,
+                                    nota
+                            );
+                        }
+                )
+                .setNegativeButton(
+                        "Batal",
+                        null
+                )
+                .show();
+    }
+
+
+    private void kirimStrukPenjualanWhatsApp(
+            String nota
+    ) {
+        SQLiteDatabase database =
+                db.getReadableDatabase();
+
+        try {
+            Uri gambarUri =
+                    ReceiptPenjualanUtils
+                            .simpanGambarStruk(
+                                    this,
+                                    database,
+                                    nota
+                            );
+
+            Intent kirimIntent =
+                    new Intent(Intent.ACTION_SEND);
+
+            kirimIntent.setType("image/png");
+
+            kirimIntent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    gambarUri
+            );
+
+            kirimIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    "Struk penjualan nomor nota "
+                            + nota
+            );
+
+            kirimIntent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+
+            /*
+             * Coba WhatsApp biasa.
+             */
+            Intent whatsappIntent =
+                    new Intent(kirimIntent);
+
+            whatsappIntent.setPackage(
+                    "com.whatsapp"
+            );
+
+            try {
+                startActivity(whatsappIntent);
+                return;
+
+            } catch (ActivityNotFoundException ignored) {
+            }
+
+            /*
+             * Coba WhatsApp Business.
+             */
+            Intent whatsappBusinessIntent =
+                    new Intent(kirimIntent);
+
+            whatsappBusinessIntent.setPackage(
+                    "com.whatsapp.w4b"
+            );
+
+            try {
+                startActivity(
+                        whatsappBusinessIntent
+                );
+
+                return;
+
+            } catch (ActivityNotFoundException ignored) {
+            }
+
+            /*
+             * WhatsApp tidak ada, buka menu share.
+             */
+            startActivity(
+                    Intent.createChooser(
+                            kirimIntent,
+                            "Kirim struk penjualan"
+                    )
+            );
+
+        } catch (Exception e) {
+            Log.e(
+                    "STRUK_WHATSAPP",
+                    "Gagal mengirim struk",
+                    e
+            );
+
+            Toast.makeText(
+                    this,
+                    "Gagal membuat struk: "
+                            + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+        }
+    }
 
 }

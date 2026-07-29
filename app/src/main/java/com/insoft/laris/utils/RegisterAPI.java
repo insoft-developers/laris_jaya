@@ -1,9 +1,13 @@
 package com.insoft.laris.utils;
 
+import com.insoft.laris.admin.pembayaran.PembayaranHapusRequestJson;
+import com.insoft.laris.admin.pembayaran.PembayaranHapusResponseJson;
 import com.insoft.laris.admin.pembayaran.PembayaranRequestJson;
 import com.insoft.laris.admin.pembayaran.PembayaranResponseJson;
 import com.insoft.laris.admin.pengguna.PenggunaRequestJson;
 import com.insoft.laris.admin.pengguna.PenggunaResponseJson;
+import com.insoft.laris.admin.piutang.PembayaranSimpanRequestJson;
+import com.insoft.laris.admin.piutang.PembayaranSimpanResponseJson;
 import com.insoft.laris.admin.piutang.PiutangRequestJson;
 import com.insoft.laris.admin.piutang.PiutangResponseJson;
 import com.insoft.laris.json.BarangResponseJson;
@@ -160,6 +164,12 @@ public interface RegisterAPI {
 
     @POST("pembayaran_list")
     Call<PembayaranResponseJson> pembayaranList(@Body PembayaranRequestJson param);
+
+    @POST("tambah_pembayaran")
+    Call<PembayaranSimpanResponseJson> tambah_pembayaran(@Body PembayaranSimpanRequestJson param);
+
+    @POST("hapus_pembayaran")
+    Call<PembayaranHapusResponseJson> hapus_pembayaran(@Body PembayaranHapusRequestJson param);
 
 
 }

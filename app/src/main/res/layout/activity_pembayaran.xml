@@ -34,12 +34,13 @@
         android:background="@drawable/bg_search_piutang"
         android:paddingHorizontal="6dp"
         app:iconifiedByDefault="false"
-        app:queryHint="Cari No Nota atau nama pelanggan..." />
+        app:queryHint="Cari Nama pelanggan..." />
 
     <!-- FILTER -->
 
     <!-- FILTER TANGGAL -->
     <com.google.android.material.card.MaterialCardView
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

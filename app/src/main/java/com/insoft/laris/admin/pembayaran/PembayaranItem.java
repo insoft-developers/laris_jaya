@@ -28,12 +28,14 @@ public class PembayaranItem extends RecyclerView.Adapter<PembayaranItem.ViewHold
 
     private Context context;
     private List<Pembayaran> pembayaran;
+    private ActionButtonInterface actionButtonInterface;
 
 
 
-    public PembayaranItem(Context context, List<Pembayaran> pembayaran) {
+    public PembayaranItem(Context context, List<Pembayaran> pembayaran, ActionButtonInterface actionButtonInterface) {
         this.context = context;
         this.pembayaran = pembayaran;
+        this.actionButtonInterface = actionButtonInterface;
     }
 
     @Override
@@ -58,13 +60,42 @@ public class PembayaranItem extends RecyclerView.Adapter<PembayaranItem.ViewHold
         holder.tvSisa.setText(formatRupiah.format(pembayaran.get(position).getSisa()));
         holder.tvKeterangan.setText(pembayaran.get(position).getKeterangan());
 
+        holder.btnHapus.setOnClickListener(view -> {
+            int posisi = holder.getAdapterPosition();
 
-        holder.rootlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            if (posisi == RecyclerView.NO_POSITION) {
+                return;
+            }
 
+            if (actionButtonInterface != null) {
+                actionButtonInterface.onHapus(pembayaran.get(posisi));
             }
         });
+
+        holder.btnPrint.setOnClickListener(view -> {
+            int posisi = holder.getAdapterPosition();
+
+            if (posisi == RecyclerView.NO_POSITION) {
+                return;
+            }
+
+            if (actionButtonInterface != null) {
+                actionButtonInterface.onPrint(pembayaran.get(posisi));
+            }
+        });
+
+        holder.btnWhatsApp.setOnClickListener(view -> {
+            int posisi = holder.getAdapterPosition();
+
+            if (posisi == RecyclerView.NO_POSITION) {
+                return;
+            }
+
+            if (actionButtonInterface != null) {
+                actionButtonInterface.onWhatsApp(pembayaran.get(posisi));
+            }
+        });
+
 
 
 
@@ -86,8 +117,7 @@ public class PembayaranItem extends RecyclerView.Adapter<PembayaranItem.ViewHold
                 tvSisa,
                 tvKeterangan;
 
-        private MaterialButton btnHapus,
-                btnPrint;
+        private MaterialButton btnHapus, btnPrint, btnWhatsApp;
 
         private MaterialCardView rootlayout;
 
@@ -105,6 +135,7 @@ public class PembayaranItem extends RecyclerView.Adapter<PembayaranItem.ViewHold
             tvKeterangan = itemView.findViewById(R.id.tvKeterangan);
             btnHapus = itemView.findViewById(R.id.btnHapus);
             btnPrint = itemView.findViewById(R.id.btnPrint);
+            btnWhatsApp = itemView.findViewById(R.id.btnWhatsApp);
 
         }
     }

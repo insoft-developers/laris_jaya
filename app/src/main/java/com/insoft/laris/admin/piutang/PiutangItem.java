@@ -1,5 +1,8 @@
 package com.insoft.laris.admin.piutang;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.Interface.pelangganInterface;
 import com.insoft.laris.R;
@@ -27,12 +31,14 @@ public class PiutangItem extends RecyclerView.Adapter<PiutangItem.ViewHolder> {
 
     private Context context;
     private List<Piutang> piutang;
+    private PiutangInterface piutangInterface;
 
 
 
-    public PiutangItem(Context context, List<Piutang> piutang) {
+    public PiutangItem(Context context, List<Piutang> piutang, PiutangInterface piutangInterface) {
         this.context = context;
         this.piutang = piutang;
+        this.piutangInterface = piutangInterface;
     }
 
     @Override
@@ -54,9 +60,11 @@ public class PiutangItem extends RecyclerView.Adapter<PiutangItem.ViewHolder> {
         if(sisaPiutang > 0) {
             holder.tvStatus.setText("OUTSTANDING");
             holder.tvStatus.setBackgroundResource(R.drawable.bg_status_outstanding);
+            holder.btnPembayaran.setVisibility(VISIBLE);
         } else {
             holder.tvStatus.setText("LUNAS");
             holder.tvStatus.setBackgroundResource(R.drawable.bg_status_lunas);
+            holder.btnPembayaran.setVisibility(GONE);
         }
 
         holder.tvTotalBelanja.setText(formatRupiah.format(piutang.get(position).getBelanja()));
@@ -65,10 +73,17 @@ public class PiutangItem extends RecyclerView.Adapter<PiutangItem.ViewHolder> {
         holder.tvJatuhTempo.setText("tanggal jatuh tempo : "+formatTanggal(String.valueOf(piutang.get(position).getJatuh_tempo())));
         holder.tvTanggal.setText(formatTanggal(String.valueOf(piutang.get(position).getTanggal())));
 
-        holder.rootlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.btnPembayaran.setOnClickListener(view -> {
+            int currentPosition = holder.getAdapterPosition();
 
+            if (currentPosition == RecyclerView.NO_POSITION) {
+                return;
+            }
+
+            Piutang dataDipilih = piutang.get(currentPosition);
+
+            if (piutangInterface != null) {
+                piutangInterface.onPembayaranClick(dataDipilih);
             }
         });
 
@@ -85,6 +100,7 @@ public class PiutangItem extends RecyclerView.Adapter<PiutangItem.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvNamaPelanggan,tvInvoice, tvStatus, tvTotalBelanja, tvSudahDibayar, tvSisaPiutang, tvJatuhTempo, tvTanggal;
         private MaterialCardView rootlayout;
+        private MaterialButton btnPembayaran;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +114,7 @@ public class PiutangItem extends RecyclerView.Adapter<PiutangItem.ViewHolder> {
             tvSisaPiutang = itemView.findViewById(R.id.tvSisaPiutang);
             tvJatuhTempo = itemView.findViewById(R.id.tvJatuhTempo);
             tvTanggal = itemView.findViewById(R.id.tvTanggal);
+            btnPembayaran  = itemView.findViewById(R.id.btnPembayaran);
         }
     }
 
