@@ -10,6 +10,12 @@ import com.insoft.laris.admin.piutang.PembayaranSimpanRequestJson;
 import com.insoft.laris.admin.piutang.PembayaranSimpanResponseJson;
 import com.insoft.laris.admin.piutang.PiutangRequestJson;
 import com.insoft.laris.admin.piutang.PiutangResponseJson;
+import com.insoft.laris.admin.supplier.SupplierRequestJson;
+import com.insoft.laris.admin.supplier.SupplierResponseJson;
+import com.insoft.laris.admin.supplier.hapus.SupplierHapusRequestJson;
+import com.insoft.laris.admin.supplier.hapus.SupplierHapusResponseJson;
+import com.insoft.laris.admin.supplier.tambah.SupplierTambahRequestJson;
+import com.insoft.laris.admin.supplier.tambah.SupplierTambahResponseJson;
 import com.insoft.laris.json.BarangResponseJson;
 import com.insoft.laris.json.BarcodeCekRequestJson;
 import com.insoft.laris.json.BarcodeCekResponseJson;
@@ -176,6 +182,21 @@ public interface RegisterAPI {
 
     @POST("pengguna_list")
     Call<PenggunaTransferResponseJson> pengguna_list(@Body PenggunaTransferRequestJson param);
+
+
+    @POST("supplier_list")
+    Call<SupplierResponseJson> supplier_list(@Body SupplierRequestJson param);
+
+
+
+    @POST("supplier_tambah")
+    Call<SupplierTambahResponseJson> supplier_tambah(@Body SupplierTambahRequestJson param);
+
+    @POST("supplier_update")
+    Call<SupplierTambahResponseJson> supplier_update(@Body SupplierTambahRequestJson param);
+
+    @POST("supplier_hapus")
+    Call<SupplierHapusResponseJson> supplier_hapus(@Body SupplierHapusRequestJson param);
 
 
 }

@@ -18,6 +18,7 @@ import com.insoft.laris.admin.pengguna.PenggunaModel;
 import com.insoft.laris.admin.piutang.PiutangActivity;
 import com.insoft.laris.admin.SalesReportActivity;
 import com.insoft.laris.admin.pengguna.PenggunaActivity;
+import com.insoft.laris.admin.supplier.SupplierActivity;
 import com.insoft.laris.json.BarangResponseJson;
 import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.CustomerResponseJson;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 public class AdminActivity extends AppCompatActivity {
     private ProgressBar loading;
     private MaterialCardView btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna, btnPiutang;
-    private MaterialCardView btnpembayaran;
+    private MaterialCardView btnpembayaran, btnsupplier;
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
@@ -62,6 +63,7 @@ public class AdminActivity extends AppCompatActivity {
         btnlaporan = findViewById(R.id.btn_laporan);
         btnPengguna = findViewById(R.id.btn_pengguna);
         btnpembayaran = findViewById(R.id.btn_pembayaran);
+        btnsupplier = findViewById(R.id.btn_supplier);
         txtKeluar = findViewById(R.id.txt_keluar);
         btn_sync = findViewById(R.id.btn_sync);
         btnPiutang = findViewById(R.id.btn_piutang);
@@ -131,6 +133,14 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminActivity.this, PiutangActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnsupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, SupplierActivity.class);
                 startActivity(intent);
             }
         });

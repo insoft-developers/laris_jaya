@@ -111,6 +111,14 @@
             android:label="Daftar Pembayaran"
             android:theme="@style/Theme.BestbeautyNoBar" />
 
+        <activity android:name="com.insoft.laris.admin.supplier.SupplierActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
+        <activity android:name="com.insoft.laris.admin.supplier.tambah.SupplierTambahActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
         <activity android:name=".DetailActivity" />
         <activity android:name=".TransaksiActivity" />
         <activity android:name=".SettingActivity" />
@@ -136,6 +144,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <meta-data
             android:name="preloaded_fonts"
