@@ -700,7 +700,7 @@ public class DetailActivity extends AppCompatActivity {
                     ReceiptPenjualanUtils
                             .buatTeksStruk(
                                     database,
-                                    nota
+                                    nota, DetailActivity.this
                             );
 
         } catch (Exception e) {

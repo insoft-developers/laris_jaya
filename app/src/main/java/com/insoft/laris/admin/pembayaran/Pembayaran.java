@@ -11,6 +11,26 @@ public class Pembayaran {
     private  int sisa;
     private String tanggal;
     private String keterangan;
+    private String kd_user;
+
+    private String nama;
+
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getKd_user() {
+        return kd_user;
+    }
+
+    public void setKd_user(String kd_user) {
+        this.kd_user = kd_user;
+    }
 
     public int getId() {
         return id;

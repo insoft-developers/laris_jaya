@@ -9,4 +9,8 @@
         name="struk_penjualan"
         path="struk_penjualan/" />
 
+    <cache-path
+        name="master_barang"
+        path="master_barang/" />
+
 </paths>

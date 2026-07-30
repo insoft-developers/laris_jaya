@@ -38,9 +38,11 @@ import com.insoft.laris.admin.pengguna.PenggunaItem;
 import com.insoft.laris.admin.pengguna.PenggunaRequestJson;
 import com.insoft.laris.admin.pengguna.PenggunaResponseJson;
 import com.insoft.laris.utils.RegisterAPI;
+import com.insoft.laris.utils.SessionManager;
 import com.insoft.laris.utils.UtilsAPI;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,7 +67,9 @@ public class PiutangActivity  extends AppCompatActivity {
     private RegisterAPI api;
     private List<Piutang> piutangList;
 
+    private SessionManager session;
 
+    String kodepengguna = "";
 
 
     @Override
@@ -73,6 +77,10 @@ public class PiutangActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piutang);
         api = UtilsAPI.getApiService();
+        session = new SessionManager(this);
+
+        HashMap<String,String> pengguna = session.getSessionData();
+        kodepengguna = pengguna.get(session.ID);
 
         searchPiutang =
                 findViewById(R.id.searchPiutang);
@@ -369,12 +377,15 @@ public class PiutangActivity  extends AppCompatActivity {
     }
 
     private void simpanPembayaran(String nota, String pelanggan, int nilai, int pembayaran, String keterangan) {
+
+
         PembayaranSimpanRequestJson param = new PembayaranSimpanRequestJson();
         param.setNota(nota);
         param.setPelanggan(pelanggan);
         param.setNilai_nota(nilai);
         param.setPembayaran(pembayaran);
         param.setKeterangan(keterangan);
+        param.setKd_user(kodepengguna);
 
         api.tambah_pembayaran(param).enqueue(new Callback<PembayaranSimpanResponseJson>() {
             @SuppressLint("NotifyDataSetChanged")

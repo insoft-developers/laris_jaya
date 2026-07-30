@@ -30,6 +30,8 @@ import com.insoft.laris.json.LoginRequestJson;
 import com.insoft.laris.json.LoginResponseJson;
 import com.insoft.laris.json.PelangganRequestJson;
 import com.insoft.laris.json.PelangganResponseJson;
+import com.insoft.laris.json.PenggunaTransferRequestJson;
+import com.insoft.laris.json.PenggunaTransferResponseJson;
 import com.insoft.laris.json.PenjualanRequestJson;
 import com.insoft.laris.json.PenjualanResponseJson;
 import com.insoft.laris.json.PerInvoiceRequestJson;
@@ -170,6 +172,10 @@ public interface RegisterAPI {
 
     @POST("hapus_pembayaran")
     Call<PembayaranHapusResponseJson> hapus_pembayaran(@Body PembayaranHapusRequestJson param);
+
+
+    @POST("pengguna_list")
+    Call<PenggunaTransferResponseJson> pengguna_list(@Body PenggunaTransferRequestJson param);
 
 
 }

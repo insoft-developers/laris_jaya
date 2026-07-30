@@ -26,6 +26,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String MASTER_BARANG = "master_barang";
     private static final String MASTER_PELANGGAN = "master_pelanggan";
 
+    private static final String MASTER_PENGGUNA = "master_pengguna";
+
     private static final String COLUMN_ID = "id"; //0
     private static final String COLUMN_KD_BARANG = "kd_barang"; //1
     private static final String COLUMN_BARCODE = "barcode"; //2
@@ -84,6 +86,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String COLUMN_TEMPO_HARI = "tempo_hari";
     private static final String COLUMN_JATUH_TEMPO = "jatuh_tempo";
+
+    private static final String COLUMN_KD_PENGGUNA = "kd_pengguna";
+    private static final String COLUMN_NM_PENGGUNA = "nm_pengguna";
+    private static final String COLUMN_NAME = "nama";
+    private static final String COLUMN_PHONE = "telepon";
+    private static final String COLUMN_LEVEL = "level";
 
 
 
@@ -220,6 +228,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(master_pelanggan_table);
 
+
+        String master_pengguna_table = "CREATE TABLE " + MASTER_PENGGUNA +
+                " (" + COLUMN_CUSTMER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                COLUMN_KD_PENGGUNA + " TEXT, " +
+                COLUMN_NM_PENGGUNA + " TEXT, " +
+                COLUMN_NAME + " TEXT, " +
+                COLUMN_PHONE + " TEXT, " +
+                COLUMN_LEVEL + " TEXT);";
+
+        db.execSQL(master_pengguna_table);
+
     }
 
     @Override
@@ -231,9 +250,32 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PENJUALAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PENJUALAN_ITEM);
         db.execSQL("DROP TABLE IF EXISTS " + MASTER_PELANGGAN);
+        db.execSQL("DROP TABLE IF EXISTS " + MASTER_PENGGUNA);
     }
 
+    public void insert_master_pengguna(
+            String kdPengguna,
+            String nmPengguna,
+            String name,
+            String telepon,
+            String level
 
+    ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+
+        cv.put(COLUMN_KD_PENGGUNA, kdPengguna);
+        cv.put(COLUMN_NM_PENGGUNA, nmPengguna);
+        cv.put(COLUMN_NAME, name);
+        cv.put(COLUMN_PHONE, telepon);
+        cv.put(COLUMN_LEVEL, level);
+
+        long result =  db.insert(MASTER_PENGGUNA, null, cv);
+        if(result == -1) {
+            Toast.makeText(context, "Gagal Tambah Item Master Pengguna", Toast.LENGTH_SHORT).show();
+        }
+    }
     public void insert_master_pelanggan(
             String code,
             String name,
@@ -592,6 +634,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void clear_master_pengguna() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(MASTER_PENGGUNA, null, null);
+
+    }
+
+
     public void clear_master_pelanggan() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MASTER_PELANGGAN, null, null);
@@ -831,6 +880,37 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 diskon,
                 total
         );
+    }
+
+
+    public String getNamaPengguna(String kdPengguna) {
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        String namaPengguna = "";
+
+        String query =
+                "SELECT nama " +
+                        "FROM master_pengguna " +
+                        "WHERE kd_pengguna = ? " +
+                        "LIMIT 1";
+
+        try (Cursor cursor = database.rawQuery(
+                query,
+                new String[]{kdPengguna}
+        )) {
+
+            if (cursor.moveToFirst()) {
+                namaPengguna = cursor.getString(
+                        cursor.getColumnIndexOrThrow("nama")
+                );
+            }
+
+        } catch (Exception e) {
+            Log.e("DATABASE_ERROR",
+                    "Gagal mengambil nama pengguna: " + e.getMessage());
+        }
+
+        return namaPengguna;
     }
 }
 

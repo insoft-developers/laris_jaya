@@ -1,15 +1,27 @@
 package com.insoft.laris.admin;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintManager;
@@ -30,8 +42,11 @@ import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.HapusProdukRequestJson;
 import com.insoft.laris.json.HapusProdukResponseJson;
 import com.insoft.laris.model.Produk;
+import com.insoft.laris.utils.BluetoothPrinter58mm2;
+import com.insoft.laris.utils.Constants;
 import com.insoft.laris.utils.MasterBarangPrintAdapter;
 import com.insoft.laris.utils.MyDatabaseHelper;
+import com.insoft.laris.utils.ReceiptMasterBarangUtils;
 import com.insoft.laris.utils.RegisterAPI;
 import com.insoft.laris.utils.UtilsAPI;
 
@@ -41,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,9 +67,14 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
     private ProgressBar loading;
     private EditText etcari;
     private RecyclerView rvbarang;
-    private FloatingActionButton fabtambah, fabprint;
+    private FloatingActionButton fabtambah, fabprint, fabwa;
 
     private MyDatabaseHelper db;
+
+    private String teksMasterBarangMenungguPrint;
+
+    private ActivityResultLauncher<String>
+            bluetoothPermissionLauncher;
 
     private List<Produk> dataProduk;
     @Override
@@ -67,9 +88,33 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
         rvbarang = findViewById(R.id.rvbarang);
         fabtambah = findViewById(R.id.fab_tambah);
         fabprint = findViewById(R.id.fab_print);
+        fabwa = findViewById(R.id.fab_wa);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(RecyclerView.VERTICAL);
         rvbarang.setLayoutManager(llm);
+
+
+        bluetoothPermissionLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestPermission(),
+                        diberikan -> {
+                            if (diberikan
+                                    && teksMasterBarangMenungguPrint != null) {
+
+                                tampilkanPilihanPrinterMasterBarang(
+                                        teksMasterBarangMenungguPrint
+                                );
+
+                            } else {
+                                Toast.makeText(
+                                        this,
+                                        "Izin Bluetooth diperlukan untuk mencetak",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        }
+                );
+
 
 
         fetch_data("");
@@ -103,200 +148,273 @@ public class MasterBarangActivity extends AppCompatActivity implements masterBar
         fabprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                printMasterBarang58mm();
+                prosesPrintMasterBarang();
+            }
+        });
+
+        fabwa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                kirimMasterBarangWhatsApp();
             }
         });
     }
 
-    private void printMasterBarang58mm() {
-        Locale localeID = new Locale("in", "ID");
-        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-        SQLiteDatabase database = db.getReadableDatabase();
-
-        Cursor cursor = database.rawQuery(
-                "SELECT kd_barang, nm_barang, stok, harga_jual, harga_reseller " +
-                        "FROM master_barang " +
-                        "ORDER BY nm_barang ASC",
-                null
-        );
-
-        ArrayList<String> barisCetak = new ArrayList<>();
+    private void prosesPrintMasterBarang() {
+        SQLiteDatabase database =
+                db.getReadableDatabase();
 
         try {
-            if (cursor.getCount() == 0) {
-                Toast.makeText(
-                        this,
-                        "Data master barang masih kosong",
-                        Toast.LENGTH_SHORT
-                ).show();
-
-                return;
-            }
-
-            String tanggalCetak = new SimpleDateFormat(
-                    "dd-MM-yyyy HH:mm",
-                    Locale.getDefault()
-            ).format(new Date());
-
-            barisCetak.add("      DAFTAR MASTER BARANG");
-            barisCetak.add("================================");
-            barisCetak.add("Tanggal : " + tanggalCetak);
-            barisCetak.add("Jumlah  : " + cursor.getCount() + " barang");
-            barisCetak.add("================================");
-
-            int nomor = 1;
-            long totalStok = 0;
-
-            while (cursor.moveToNext()) {
-                String kodeBarang = cursor.getString(
-                        cursor.getColumnIndexOrThrow("kd_barang")
-                );
-
-                String namaBarang = cursor.getString(
-                        cursor.getColumnIndexOrThrow("nm_barang")
-                );
-
-                long stok = cursor.getLong(
-                        cursor.getColumnIndexOrThrow("stok")
-                );
-
-                long harga = cursor.getLong(
-                        cursor.getColumnIndexOrThrow("harga_jual")
-                );
-
-                long hargaReseller = cursor.getLong(
-                        cursor.getColumnIndexOrThrow("harga_reseller")
-                );
-
-                totalStok += stok;
-
-                barisCetak.add(
-                        nomor + ". " + potongTeks(namaBarang, 28)
-                );
-
-                barisCetak.add(
-                        "   Stok     : " + stok
-                );
-
-                barisCetak.add(
-                        "   Harga    : " + formatRupiah.format(harga)
-                );
-
-                barisCetak.add(
-                        "   Reseller : " + formatRupiah.format(hargaReseller)
-                );
-
-                barisCetak.add("--------------------------------");
-
-                nomor++;
-            }
-
-            barisCetak.add("TOTAL JENIS BARANG : " + cursor.getCount());
-            barisCetak.add("TOTAL SELURUH STOK : " + totalStok);
-            barisCetak.add("================================");
-            barisCetak.add("");
-            barisCetak.add("");
-
-            jalankanPrintMasterBarang(barisCetak);
+            teksMasterBarangMenungguPrint =
+                    ReceiptMasterBarangUtils
+                            .buatTeksStruk(database);
 
         } catch (Exception e) {
-            Log.e(
-                    "PRINT_MASTER_BARANG",
-                    "Gagal mencetak data barang",
-                    e
-            );
-
             Toast.makeText(
                     this,
-                    "Gagal mencetak: " + e.getMessage(),
+                    e.getMessage(),
                     Toast.LENGTH_LONG
-            ).show();
-
-        } finally {
-            cursor.close();
-            database.close();
-        }
-    }
-
-
-    private void jalankanPrintMasterBarang(
-            ArrayList<String> barisCetak
-    ) {
-        PrintManager printManager =
-                (PrintManager) getSystemService(Context.PRINT_SERVICE);
-
-        if (printManager == null) {
-            Toast.makeText(
-                    this,
-                    "Layanan printer tidak tersedia",
-                    Toast.LENGTH_SHORT
             ).show();
 
             return;
         }
 
-        PrintAttributes.MediaSize mediaSize58mm =
-                new PrintAttributes.MediaSize(
-                        "THERMAL_58MM",
-                        "Thermal 58 mm",
-                        2283,
-                        7874
-                );
+        if (Build.VERSION.SDK_INT
+                >= Build.VERSION_CODES.S
+                && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+        ) != PackageManager.PERMISSION_GRANTED) {
 
-        PrintAttributes printAttributes =
-                new PrintAttributes.Builder()
-                        .setMediaSize(mediaSize58mm)
-                        .setMinMargins(
-                                new PrintAttributes.Margins(
-                                        20,
-                                        20,
-                                        20,
-                                        20
-                                )
-                        )
-                        .setColorMode(
-                                PrintAttributes.COLOR_MODE_MONOCHROME
-                        )
-                        .setResolution(
-                                new PrintAttributes.Resolution(
-                                        "THERMAL_203_DPI",
-                                        "Thermal 203 DPI",
-                                        203,
-                                        203
-                                )
-                        )
-                        .build();
+            bluetoothPermissionLauncher.launch(
+                    Manifest.permission.BLUETOOTH_CONNECT
+            );
 
-        printManager.print(
-                "Master Barang",
-                new MasterBarangPrintAdapter(
-                        this,
-                        barisCetak
-                ),
-                printAttributes
+            return;
+        }
+
+        tampilkanPilihanPrinterMasterBarang(
+                teksMasterBarangMenungguPrint
         );
     }
 
 
-    private String potongTeks(String teks, int panjangMaksimal) {
-        if (teks == null) {
-            return "";
+    @SuppressLint("MissingPermission")
+    private void tampilkanPilihanPrinterMasterBarang(
+            String teksStruk
+    ) {
+        BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(
+                        Context.BLUETOOTH_SERVICE
+                );
+
+        BluetoothAdapter bluetoothAdapter =
+                bluetoothManager == null
+                        ? null
+                        : bluetoothManager.getAdapter();
+
+        if (bluetoothAdapter == null) {
+            Toast.makeText(
+                    this,
+                    "Perangkat tidak mendukung Bluetooth",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
         }
 
-        teks = teks.trim();
+        if (!bluetoothAdapter.isEnabled()) {
+            Toast.makeText(
+                    this,
+                    "Aktifkan Bluetooth terlebih dahulu",
+                    Toast.LENGTH_LONG
+            ).show();
 
-        if (teks.length() <= panjangMaksimal) {
-            return teks;
+            return;
         }
 
-        if (panjangMaksimal <= 3) {
-            return teks.substring(0, panjangMaksimal);
+        Set<BluetoothDevice> perangkatTerpasang =
+                bluetoothAdapter.getBondedDevices();
+
+        if (perangkatTerpasang == null
+                || perangkatTerpasang.isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Belum ada printer Bluetooth yang dipasangkan",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
         }
 
-        return teks.substring(
-                0,
-                panjangMaksimal - 3
-        ) + "...";
+        List<BluetoothDevice> daftarPrinter =
+                new ArrayList<>(
+                        perangkatTerpasang
+                );
+
+        String[] namaPrinter =
+                new String[daftarPrinter.size()];
+
+        for (int i = 0; i < daftarPrinter.size(); i++) {
+            BluetoothDevice perangkat =
+                    daftarPrinter.get(i);
+
+            String nama = perangkat.getName();
+
+            if (nama == null || nama.trim().isEmpty()) {
+                nama = "Perangkat Bluetooth";
+            }
+
+            namaPrinter[i] =
+                    nama
+                            + "\n"
+                            + perangkat.getAddress();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Pilih printer 58 mm")
+                .setItems(
+                        namaPrinter,
+                        (dialog, posisi) -> {
+
+                            BluetoothDevice printer =
+                                    daftarPrinter.get(posisi);
+
+                            cetakMasterBarang(
+                                    printer,
+                                    teksStruk
+                            );
+                        }
+                )
+                .setNegativeButton("Batal", null)
+                .show();
+    }
+
+    private void cetakMasterBarang(
+            BluetoothDevice printer,
+            String teksStruk
+    ) {
+        Toast.makeText(
+                this,
+                "Mencetak master barang...",
+                Toast.LENGTH_SHORT
+        ).show();
+
+        BluetoothPrinter58mm2.printText(
+                printer,
+                teksStruk,
+                new BluetoothPrinter58mm2.PrintCallback() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        MasterBarangActivity.this,
+                                        "Master barang berhasil dicetak",
+                                        Toast.LENGTH_SHORT
+                                ).show()
+                        );
+                    }
+
+                    @Override
+                    public void onError(String pesan) {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        MasterBarangActivity.this,
+                                        "Print gagal: " + pesan,
+                                        Toast.LENGTH_LONG
+                                ).show()
+                        );
+                    }
+                }
+        );
+    }
+
+
+    private void kirimMasterBarangWhatsApp() {
+        SQLiteDatabase database =
+                db.getReadableDatabase();
+
+        try {
+            Uri gambarUri =
+                    ReceiptMasterBarangUtils
+                            .simpanGambarStruk(
+                                    this,
+                                    database
+                            );
+
+            Intent kirimIntent =
+                    new Intent(Intent.ACTION_SEND);
+
+            kirimIntent.setType("image/png");
+
+            kirimIntent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    gambarUri
+            );
+
+            kirimIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    "Daftar master barang "
+                            + Constants.namaToko
+            );
+
+            kirimIntent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+
+            Intent whatsappIntent =
+                    new Intent(kirimIntent);
+
+            whatsappIntent.setPackage(
+                    "com.whatsapp"
+            );
+
+            try {
+                startActivity(whatsappIntent);
+                return;
+
+            } catch (ActivityNotFoundException ignored) {
+            }
+
+            Intent whatsappBusinessIntent =
+                    new Intent(kirimIntent);
+
+            whatsappBusinessIntent.setPackage(
+                    "com.whatsapp.w4b"
+            );
+
+            try {
+                startActivity(
+                        whatsappBusinessIntent
+                );
+
+                return;
+
+            } catch (ActivityNotFoundException ignored) {
+            }
+
+            startActivity(
+                    Intent.createChooser(
+                            kirimIntent,
+                            "Kirim daftar master barang"
+                    )
+            );
+
+        } catch (Exception e) {
+            Log.e(
+                    "MASTER_BARANG_WA",
+                    "Gagal membuat daftar barang",
+                    e
+            );
+
+            Toast.makeText(
+                    this,
+                    "Gagal membuat daftar barang: "
+                            + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
 
     private void fetch_data(String s) {

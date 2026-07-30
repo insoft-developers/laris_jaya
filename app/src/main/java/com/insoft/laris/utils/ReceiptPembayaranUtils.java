@@ -52,6 +52,10 @@ public final class ReceiptPembayaranUtils {
                 .append(aman(data.getNm_pelanggan()))
                 .append("\n");
 
+        struk.append("Kasir    : ")
+                .append(aman(data.getNama()))
+                .append("\n");
+
         struk.append(garis()).append("\n");
 
         struk.append(barisNominal(

@@ -17,23 +17,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public final class ReceiptPenjualanUtils {
 
     private static final int LEBAR_KARAKTER = 32;
 
+
     private ReceiptPenjualanUtils() {
     }
 
     public static String buatTeksStruk(
             SQLiteDatabase database,
-            String nota
+            String nota,
+            Context context
     ) throws Exception {
 
         String queryHeader =
                 "SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, " +
-                        "c.nm_pelanggan, c.telepon, p.subtotal, p.total_dicount " +
+                        "c.nm_pelanggan, c.telepon, p.subtotal, p.total_dicount, p.kd_user " +
                         "FROM penjualan p " +
                         "LEFT JOIN master_pelanggan c " +
                         "ON c.kd_pelanggan = p.kd_pelanggan " +
@@ -43,6 +48,8 @@ public final class ReceiptPenjualanUtils {
                 "SELECT nm_barang, jumlah, harga, total, subtotal, disk " +
                         "FROM penjualan_item " +
                         "WHERE nota = ?";
+
+
 
         try (
                 Cursor cursorHeader = database.rawQuery(
@@ -60,6 +67,10 @@ public final class ReceiptPenjualanUtils {
                         "Data transaksi tidak ditemukan"
                 );
             }
+
+
+            MyDatabaseHelper db = new MyDatabaseHelper(context);
+            String namaPengguna = db.getNamaPengguna(cursorHeader.getString(9));
 
             String noNota = aman(cursorHeader.getString(0));
             String tanggal = aman(cursorHeader.getString(1));
@@ -113,8 +124,14 @@ public final class ReceiptPenjualanUtils {
                     .append(potongNilai(noNota, 21))
                     .append("\n");
 
+            tanggal = formatTanggal(tanggal);
+
             struk.append("Tanggal  : ")
                     .append(potongNilai(tanggal, 21))
+                    .append("\n");
+
+            struk.append("Kasir    : ")
+                    .append(potongNilai(namaPengguna.trim(), 21))
                     .append("\n");
 
             struk.append(garisTebal())
@@ -309,12 +326,14 @@ public final class ReceiptPenjualanUtils {
 
     public static Bitmap buatGambarStruk(
             SQLiteDatabase database,
-            String nota
+            String nota,
+            Context context
     ) throws Exception {
 
         String teks = buatTeksStruk(
                 database,
-                nota
+                nota, context
+
         );
 
         String[] daftarBaris =
@@ -402,7 +421,8 @@ public final class ReceiptPenjualanUtils {
 
         Bitmap bitmap = buatGambarStruk(
                 database,
-                nota
+                nota,
+                context
         );
 
         try (
@@ -603,5 +623,26 @@ public final class ReceiptPenjualanUtils {
         }
 
         return nilai.trim();
+    }
+
+    private static String formatTanggal(String tanggal) {
+        if (tanggal == null || tanggal.trim().isEmpty()) {
+            return "-";
+        }
+
+        try {
+            SimpleDateFormat formatDatabase =
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+            SimpleDateFormat formatTampilan =
+                    new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+            Date date = formatDatabase.parse(tanggal);
+
+            return date != null ? formatTampilan.format(date) : "-";
+
+        } catch (ParseException e) {
+            return tanggal;
+        }
     }
 }

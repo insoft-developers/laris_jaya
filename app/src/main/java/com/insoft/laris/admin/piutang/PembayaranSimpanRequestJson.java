@@ -6,6 +6,11 @@ public class PembayaranSimpanRequestJson {
     private int nilai_nota;
     private int pembayaran;
     private String keterangan;
+    private String kd_user;
+
+    public void setKd_user(String kd_user) {
+        this.kd_user = kd_user;
+    }
 
     public void setNota(String nota) {
         this.nota = nota;

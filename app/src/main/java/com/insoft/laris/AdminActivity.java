@@ -14,12 +14,15 @@ import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.admin.MasterBarangActivity;
 import com.insoft.laris.admin.MasterPelangganActivity;
 import com.insoft.laris.admin.pembayaran.PembayaranActivity;
+import com.insoft.laris.admin.pengguna.PenggunaModel;
 import com.insoft.laris.admin.piutang.PiutangActivity;
 import com.insoft.laris.admin.SalesReportActivity;
 import com.insoft.laris.admin.pengguna.PenggunaActivity;
 import com.insoft.laris.json.BarangResponseJson;
 import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.CustomerResponseJson;
+import com.insoft.laris.json.PenggunaTransferRequestJson;
+import com.insoft.laris.json.PenggunaTransferResponseJson;
 import com.insoft.laris.model.Pelanggan;
 import com.insoft.laris.model.Produk;
 import com.insoft.laris.utils.MyDatabaseHelper;
@@ -40,6 +43,8 @@ public class AdminActivity extends AppCompatActivity {
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
+
+    private List<PenggunaModel>dataPengguna;
     private TextView txtKeluar;
     private SessionManager sessionManager;
 
@@ -223,6 +228,7 @@ public class AdminActivity extends AppCompatActivity {
 
                             db.close();
                             Toast.makeText(AdminActivity.this, "DataPelanggan berhasil di sync: " + dataPelanggan.size(), Toast.LENGTH_LONG).show();
+                            get_pengguna_list();
                         } else {
                             Log.e("SYNC", "DataPelanggan kosong / null");
                         }
@@ -232,6 +238,50 @@ public class AdminActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CustomerResponseJson> call, Throwable t) {
+                loading.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+
+    private void get_pengguna_list() {
+        loading.setVisibility(View.VISIBLE);
+        PenggunaTransferRequestJson param = new PenggunaTransferRequestJson();
+        param.setCari("");
+        registerAPI.pengguna_list(param).enqueue(new Callback<PenggunaTransferResponseJson>() {
+            @Override
+            public void onResponse(Call<PenggunaTransferResponseJson> call, Response<PenggunaTransferResponseJson> response) {
+                loading.setVisibility(View.GONE);
+                if(response.isSuccessful()) {
+                    String resultcode = response.body().getResultcode();
+                    if(resultcode.equalsIgnoreCase("00")) {
+                        dataPengguna = response.body().getData();
+                        if (dataPengguna != null && !dataPengguna.isEmpty()) {
+
+                            db.clear_master_pengguna();
+
+                            for (PenggunaModel p : dataPengguna) {
+                                db.insert_master_pengguna(
+                                        p.getKd_pengguna(),
+                                        p.getNm_pengguna(),
+                                        p.getNama(),
+                                        p.getTelepon(),
+                                        p.getLevel()
+                                );
+                            }
+
+                            db.close();
+                            Toast.makeText(AdminActivity.this, "DataPengguna berhasil di sync: " + dataPengguna.size(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.e("SYNC", "DataPengguna kosong / null");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PenggunaTransferResponseJson> call, Throwable t) {
                 loading.setVisibility(View.GONE);
             }
         });
