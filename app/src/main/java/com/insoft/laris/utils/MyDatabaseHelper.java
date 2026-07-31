@@ -26,6 +26,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String MASTER_BARANG = "master_barang";
     private static final String MASTER_PELANGGAN = "master_pelanggan";
 
+    private static final String TMP_PEMBELIAN = "tmp_pembelian";
+
     private static final String MASTER_PENGGUNA = "master_pengguna";
 
     private static final String COLUMN_ID = "id"; //0
@@ -239,6 +241,21 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(master_pengguna_table);
 
+
+        String tmp_pembelian_table = "CREATE TABLE " + TMP_PEMBELIAN +
+                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                COLUMN_KD_BARANG + " TEXT, " +
+                COLUMN_BARCODE + " TEXT, " +
+                COLUMN_NM_BARANG + " TEXT, " +
+                COLUMN_SATUAN + " TEXT, " +
+                COLUMN_JUMLAH + " INTEGER, " +
+                COLUMN_HARGA + " INTEGER, " +
+                COLUMN_SUBTOTAL + " INTEGER, " +
+                COLUMN_DISKON + " INTEGER, " +
+                COLUMN_TOTAL + " INTEGER);";
+
+        db.execSQL(tmp_pembelian_table);
+
     }
 
     @Override
@@ -251,6 +268,88 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PENJUALAN_ITEM);
         db.execSQL("DROP TABLE IF EXISTS " + MASTER_PELANGGAN);
         db.execSQL("DROP TABLE IF EXISTS " + MASTER_PENGGUNA);
+        db.execSQL("DROP TABLE IF EXISTS " + TMP_PEMBELIAN);
+    }
+
+
+    public void insert_tmp_pembelian(
+            String kdBarang,
+            String barcode,
+            String nmBarang,
+            String satuan,
+            int jumlah,
+            int harga,
+            int subtotal,
+            int diskon,
+            int total
+
+    ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+
+        cv.put(COLUMN_KD_BARANG, kdBarang);
+        cv.put(COLUMN_BARCODE, barcode);
+        cv.put(COLUMN_NM_BARANG, nmBarang);
+        cv.put(COLUMN_SATUAN, satuan);
+        cv.put(COLUMN_JUMLAH, jumlah);
+        cv.put(COLUMN_HARGA, harga);
+        cv.put(COLUMN_SUBTOTAL, subtotal);
+        cv.put(COLUMN_DISKON, diskon);
+        cv.put(COLUMN_TOTAL, total);
+
+        long result =  db.insert(TMP_PEMBELIAN, null, cv);
+        if(result == -1) {
+            Toast.makeText(context, "GAGAL TAMBAH TMP PEMBELIAN", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public void update_tmp_pembelian(
+            String kdBarang,
+            String barcode,
+            String nmBarang,
+            String satuan,
+            int jumlah,
+            int harga,
+            int subtotal,
+            int diskon,
+            int total
+    ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_JUMLAH, jumlah);
+        cv.put(COLUMN_HARGA, harga);
+        cv.put(COLUMN_SUBTOTAL, subtotal);
+        cv.put(COLUMN_DISKON, diskon);
+        cv.put(COLUMN_TOTAL, total);
+
+
+        long result =  db.update(TMP_PEMBELIAN, cv, "kd_barang=?", new String[]{kdBarang});
+        if(result == 0) {
+            Toast.makeText(context, "Gagal Update Tmp Pembelian", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public void hapus_tmp_pembelian(String row_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TMP_PEMBELIAN, "kd_barang=?", new String[]{row_id});
+        if(result == -1) {
+            Toast.makeText(context, "Gagal Hapus Tmp Pembelian", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public Cursor tampilkan_tmp_pembelian() {
+        String query = "SELECT * FROM " + TMP_PEMBELIAN + " ORDER BY "+ COLUMN_ID+" DESC";
+        SQLiteDatabase db  = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
     }
 
     public void insert_master_pengguna(
@@ -555,6 +654,19 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor periksadata(String kdbarang) {
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE "+ COLUMN_KD_BARANG+ "='"+ kdbarang +"'";
+        SQLiteDatabase db  = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null) {
+            cursor = db.rawQuery(query, null);
+
+        }
+        return cursor;
+    }
+
+
+    public Cursor periksa_tmp_pembelian(String kdbarang) {
+        String query = "SELECT * FROM " + TMP_PEMBELIAN + " WHERE "+ COLUMN_KD_BARANG+ "='"+ kdbarang +"'";
         SQLiteDatabase db  = this.getReadableDatabase();
 
         Cursor cursor = null;

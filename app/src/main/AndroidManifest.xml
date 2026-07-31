@@ -152,7 +152,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name="com.insoft.laris.admin.pembelian.tambah.PembelianTambahActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
 
 
         <meta-data

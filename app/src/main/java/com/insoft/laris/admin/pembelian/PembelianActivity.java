@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.insoft.laris.R;
+import com.insoft.laris.admin.pembelian.tambah.PembelianTambahActivity;
 import com.insoft.laris.admin.piutang.Piutang;
 import com.insoft.laris.admin.piutang.PiutangActivity;
 import com.insoft.laris.admin.piutang.PiutangItem;
@@ -108,6 +109,14 @@ public class PembelianActivity extends AppCompatActivity implements PembelianInt
             public boolean onQueryTextChange(String newText) {
                 fetch_data(newText.trim());
                 return true;
+            }
+        });
+
+        btnTambahPembelian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PembelianActivity.this, PembelianTambahActivity.class);
+                startActivity(intent);
             }
         });
 

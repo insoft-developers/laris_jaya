@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    tools:context=".admin.pembelian.tambah.PembelianTambahActivity">
+
+    <!-- KONTEN UTAMA -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- HEADER -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarTambahPembelian"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:elevation="1dp"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="#0F172A"
+            app:title="Tambah Pembelian"
+            app:titleTextColor="#0F172A" />
+
+        <!-- ISI FORM -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <!-- INFORMASI PEMBELIAN -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Informasi Pembelian"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Pilih supplier dan lengkapi informasi transaksi."
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <!-- SELECT SUPPLIER -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutSupplier"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:hint="Pilih supplier"
+                            app:endIconMode="dropdown_menu"
+                            app:helperText="Nama supplier akan ditampilkan pada pilihan">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/dropdownSupplier"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:completionThreshold="0"
+                                android:dropDownHeight="wrap_content"
+                                android:ellipsize="end"
+                                android:inputType="none"
+                                android:maxLines="1"
+                                android:paddingVertical="14dp"
+                                android:singleLine="true"
+                                tools:text="PT Sumber Makmur" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- KODE SUPPLIER TERPILIH -->
+                        <LinearLayout
+                            android:id="@+id/layoutKodeSupplier"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="#EFF6FF"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="10dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Kode Supplier"
+                                android:textColor="#1E40AF"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvKodeSupplier"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:textColor="#1D4ED8"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                tools:text="SUP-0001" />
+
+                        </LinearLayout>
+
+                        <!-- TANGGAL -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutTanggal"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:hint="Tanggal pembelian">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etTanggal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:inputType="none"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                tools:text="31-07-2026" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- KETERANGAN -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layoutKeterangan"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:hint="Keterangan">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etKeterangan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|start"
+                                android:inputType="textCapSentences|textMultiLine"
+                                android:maxLines="5"
+                                android:minLines="3"
+                                tools:text="Pembelian persediaan barang bulan Juli" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- HEADER DAFTAR BARANG -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daftar Barang"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Barang yang masuk dalam transaksi pembelian."
+                            android:textColor="#64748B"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvJumlahBarang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#DBEAFE"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:text="0 Barang"
+                        android:textColor="#1D4ED8"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- DAFTAR BARANG -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvBarangPembelian"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_detail_pembelian" />
+
+                    <ProgressBar
+                        android:id="@+id/loadingBarangPembelian"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                    <!-- BARANG KOSONG -->
+                    <LinearLayout
+                        android:id="@+id/layoutBarangKosong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="28dp"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            android:background="#EFF6FF"
+                            android:gravity="center"
+                            android:text="+"
+                            android:textColor="#2563EB"
+                            android:textSize="27sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="11dp"
+                            android:text="Belum Ada Barang"
+                            android:textColor="#334155"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="Gunakan tombol tambah atau scan untuk memasukkan barang."
+                            android:textColor="#94A3B8"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <!-- RINGKASAN PEMBELIAN -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="100dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ringkasan Pembelian"
+                            android:textColor="#0F172A"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <!-- SUBTOTAL -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Subtotal"
+                                android:textColor="#64748B"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tvSubtotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="#334155"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <!-- TOTAL DISKON -->
+                        <LinearLayout
+                            android:id="@+id/layoutTotalDiskon"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="11dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Total Diskon"
+                                android:textColor="#64748B"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/tvTotalDiskon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-Rp 0"
+                                android:textColor="#DC2626"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="13dp"
+                            android:background="#E2E8F0" />
+
+                        <!-- TOTAL PEMBELIAN -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Total Pembelian"
+                                android:textColor="#0F172A"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTotalPembelian"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="#2563EB"
+                                android:textSize="21sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- TOMBOL SIMPAN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="6dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSimpanPembelian"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Simpan Pembelian"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:backgroundTint="#2563EB"
+                app:cornerRadius="11dp"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- DUA FLOATING BUTTON BULAT DI KANAN -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="82dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!-- SCAN QR / BARCODE -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabScanBarang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Scan QR atau barcode barang"
+            app:backgroundTint="#7C3AED"
+            app:fabCustomSize="54dp"
+            app:maxImageSize="25dp"
+            app:srcCompat="@drawable/ic_qr_code_scanner"
+            app:tint="@color/white" />
+
+        <!-- TAMBAH BARANG -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTambahBarang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:contentDescription="Tambah barang"
+            app:backgroundTint="#F59E0B"
+            app:fabCustomSize="54dp"
+            app:maxImageSize="25dp"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -47,4 +47,9 @@ public class Supplier {
     public void setTelepon(String telepon) {
         this.telepon = telepon;
     }
+
+    @Override
+    public String toString() {
+        return nm_supplier == null ? "" : nm_supplier;
+    }
 }
