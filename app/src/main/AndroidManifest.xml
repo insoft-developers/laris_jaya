@@ -119,6 +119,14 @@
             android:theme="@style/Theme.BestbeautyNoBar"
             />
 
+        <activity android:name="com.insoft.laris.admin.pembelian.PembelianActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
+        <activity android:name="com.insoft.laris.admin.pembelian.PembelianDetailActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
         <activity android:name=".DetailActivity" />
         <activity android:name=".TransaksiActivity" />
         <activity android:name=".SettingActivity" />
@@ -144,6 +152,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
 
         <meta-data

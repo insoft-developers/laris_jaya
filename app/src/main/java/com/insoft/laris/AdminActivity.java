@@ -14,6 +14,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.admin.MasterBarangActivity;
 import com.insoft.laris.admin.MasterPelangganActivity;
 import com.insoft.laris.admin.pembayaran.PembayaranActivity;
+import com.insoft.laris.admin.pembelian.PembelianActivity;
 import com.insoft.laris.admin.pengguna.PenggunaModel;
 import com.insoft.laris.admin.piutang.PiutangActivity;
 import com.insoft.laris.admin.SalesReportActivity;
@@ -40,7 +41,7 @@ import retrofit2.Response;
 public class AdminActivity extends AppCompatActivity {
     private ProgressBar loading;
     private MaterialCardView btnbarang, btnlaporan, btnpelanggan, btn_sync, btnPengguna, btnPiutang;
-    private MaterialCardView btnpembayaran, btnsupplier;
+    private MaterialCardView btnpembayaran, btnsupplier, btnpembelian;
     MyDatabaseHelper db;
     private List<Produk> dataProduk;
     private List<Pelanggan> dataPelanggan;
@@ -67,6 +68,7 @@ public class AdminActivity extends AppCompatActivity {
         txtKeluar = findViewById(R.id.txt_keluar);
         btn_sync = findViewById(R.id.btn_sync);
         btnPiutang = findViewById(R.id.btn_piutang);
+        btnpembelian = findViewById(R.id.btn_pembelian);
         loading = findViewById(R.id.loading);
         sessionManager = new SessionManager(this);
 
@@ -74,6 +76,15 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 get_product_list();
+            }
+        });
+
+
+        btnpembelian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminActivity.this, PembelianActivity.class);
+                startActivity(intent);
             }
         });
 

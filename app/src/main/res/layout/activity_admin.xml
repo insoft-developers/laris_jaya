@@ -468,7 +468,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btn_barang_masuk"
+                android:id="@+id/btn_pembelian"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -514,7 +514,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Barang Masuk"
+                            android:text="Pembelian"
                             android:textColor="#1F2937"
                             android:textSize="16sp"
                             android:textStyle="bold" />
