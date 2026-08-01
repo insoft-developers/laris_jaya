@@ -244,11 +244,38 @@ public class PembelianActivity extends AppCompatActivity implements PembelianInt
             // Tombol hapus
             dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     .setOnClickListener(view -> {
-
+                        pembelianHapus(item.getNota());
                         dialog.dismiss();
                     });
         });
 
         dialog.show();
     }
+
+    private void pembelianHapus(String nota) {
+        loadingPembelian.setVisibility(View.VISIBLE);
+        PembelianHapusRequestJson param = new PembelianHapusRequestJson();
+        param.setNota(nota);
+
+        api.pembelian_hapus(param).enqueue(new Callback<PembelianHapusReponseJson>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<PembelianHapusReponseJson> call, Response<PembelianHapusReponseJson> response) {
+                loadingPembelian.setVisibility(View.GONE);
+                if(response.isSuccessful()) {
+                    String res = response.body().getResultcode();
+                    if(res.equalsIgnoreCase("00")) {
+                        fetch_data("");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PembelianHapusReponseJson> call, Throwable t) {
+                loadingPembelian.setVisibility(View.GONE);
+                Toast.makeText(PembelianActivity.this, "System error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }
