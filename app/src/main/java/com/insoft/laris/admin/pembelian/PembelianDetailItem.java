@@ -73,6 +73,7 @@ public class PembelianDetailItem extends RecyclerView.Adapter<PembelianDetailIte
         holder.tvNomorProduk.setText(String.valueOf(nomor));
 
 
+
     }
 
     @Override

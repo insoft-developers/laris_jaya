@@ -79,6 +79,13 @@ public class PembelianItem extends RecyclerView.Adapter<PembelianItem.ViewHolder
             }
         });
 
+        holder.btnHapus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pembelianInterface.hapus(pembelian.get(position), position);
+            }
+        });
+
 
     }
 

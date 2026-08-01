@@ -305,7 +305,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void update_tmp_pembelian(
+    public boolean update_tmp_pembelian(
             String kdBarang,
             String barcode,
             String nmBarang,
@@ -327,17 +327,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         long result =  db.update(TMP_PEMBELIAN, cv, "kd_barang=?", new String[]{kdBarang});
         if(result == 0) {
+
             Toast.makeText(context, "Gagal Update Tmp Pembelian", Toast.LENGTH_SHORT).show();
+            return false;
         }
+        return true;
     }
 
 
-    public void hapus_tmp_pembelian(String row_id) {
+    public boolean hapus_tmp_pembelian(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TMP_PEMBELIAN, "kd_barang=?", new String[]{row_id});
         if(result == -1) {
             Toast.makeText(context, "Gagal Hapus Tmp Pembelian", Toast.LENGTH_SHORT).show();
+            return false;
         }
+        return true;
     }
 
 
@@ -742,6 +747,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public void clear_master_barang() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MASTER_BARANG, null, null);
+
+    }
+
+    public void clear_tmp_pembelian() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TMP_PEMBELIAN, null, null);
 
     }
 

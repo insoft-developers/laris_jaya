@@ -6,6 +6,8 @@ import com.insoft.laris.admin.pembayaran.PembayaranRequestJson;
 import com.insoft.laris.admin.pembayaran.PembayaranResponseJson;
 import com.insoft.laris.admin.pembelian.PembelianRequestJson;
 import com.insoft.laris.admin.pembelian.PembelianResponseJson;
+import com.insoft.laris.admin.pembelian.tambah.PembelianSImpanRequestJson;
+import com.insoft.laris.admin.pembelian.tambah.PembelianSimpanResponseJson;
 import com.insoft.laris.admin.pengguna.PenggunaRequestJson;
 import com.insoft.laris.admin.pengguna.PenggunaResponseJson;
 import com.insoft.laris.admin.piutang.PembayaranSimpanRequestJson;
@@ -202,6 +204,9 @@ public interface RegisterAPI {
 
     @POST("pembelian_list")
     Call<PembelianResponseJson> pembelian_list(@Body PembelianRequestJson param);
+
+    @POST("pembelian_simpan")
+    Call<PembelianSimpanResponseJson> pembelian_simpan(@Body PembelianSImpanRequestJson param);
 
 
 }

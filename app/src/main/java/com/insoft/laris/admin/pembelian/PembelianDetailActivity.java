@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.insoft.laris.R;
 import com.insoft.laris.utils.Fungsi;
@@ -150,6 +152,17 @@ public class PembelianDetailActivity extends AppCompatActivity {
 
         fetch_data(pembelianIntent.getItems());
 
+        btnHapus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tampilkanDialogHapus(
+                  pembelianIntent.getKd_supplier(),
+                        pembelianIntent.getNm_supplier()
+
+                );
+            }
+        });
+
 
     }
 
@@ -159,5 +172,46 @@ public class PembelianDetailActivity extends AppCompatActivity {
         rvDetailPembelian.setAdapter(adapter);
         tvJumlahProduk.setText(items.size()+" Produk");
 
+    }
+
+    private void tampilkanDialogHapus(
+           String kd_supplier,String nm_supplier
+
+    ) {
+        String namaBarang = nm_supplier;
+
+        if (namaBarang == null || namaBarang.trim().isEmpty()) {
+            namaBarang = "supplier ini";
+        }
+
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(PembelianDetailActivity.this)
+                .setTitle("Hapus Pembelian")
+                .setMessage(
+                        "Apakah Anda yakin ingin menghapus "
+                                + namaBarang
+                                + " dari daftar pembelian?"
+                )
+                .setNegativeButton("Batal", null)
+                .setPositiveButton("Hapus", null)
+                .create();
+
+        String finalId = kd_supplier;
+
+        dialog.setOnShowListener(dialogInterface -> {
+
+            // Tombol batal
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setOnClickListener(view -> dialog.dismiss());
+
+            // Tombol hapus
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setOnClickListener(view -> {
+
+                        dialog.dismiss();
+                    });
+        });
+
+        dialog.show();
     }
 }

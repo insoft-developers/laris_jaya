@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.insoft.laris.R;
 import com.insoft.laris.admin.pembelian.tambah.PembelianTambahActivity;
@@ -18,6 +20,7 @@ import com.insoft.laris.utils.RegisterAPI;
 import com.insoft.laris.utils.UtilsAPI;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -197,7 +200,55 @@ public class PembelianActivity extends AppCompatActivity implements PembelianInt
     }
 
     @Override
-    public void hapus(int position) {
+    public void hapus(Pembelian item, int position) {
+        tampilkanDialogHapus(item, position);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetch_data("");
+    }
+
+
+    private void tampilkanDialogHapus(
+            Pembelian item,
+            int position
+    ) {
+        String namaBarang = item.getNm_supplier();
+
+        if (namaBarang == null || namaBarang.trim().isEmpty()) {
+            namaBarang = "supplier ini";
+        }
+
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(PembelianActivity.this)
+                .setTitle("Hapus Pembelian")
+                .setMessage(
+                        "Apakah Anda yakin ingin menghapus "
+                                + namaBarang
+                                + " dari daftar pembelian?"
+                )
+                .setNegativeButton("Batal", null)
+                .setPositiveButton("Hapus", null)
+                .create();
+
+        String finalId = pembelianList.get(position).getNota();
+
+        dialog.setOnShowListener(dialogInterface -> {
+
+            // Tombol batal
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setOnClickListener(view -> dialog.dismiss());
+
+            // Tombol hapus
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setOnClickListener(view -> {
+
+                        dialog.dismiss();
+                    });
+        });
+
+        dialog.show();
     }
 }

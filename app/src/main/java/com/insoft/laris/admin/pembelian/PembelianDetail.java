@@ -1,18 +1,18 @@
 package com.insoft.laris.admin.pembelian;
 
 public class PembelianDetail {
-    private String nota;
-    private String kd_barang;
-    private String barcode;
-    private String nm_barang;
-    private String satuan;
-    private int jumlah;
-    private int harga;
+    public String nota;
+    public String kd_barang;
+    public String barcode;
+    public String nm_barang;
+    public String satuan;
+    public int jumlah;
+    public int harga;
 
-    private int subtotal;
-    private int diskon;
-    private int total;
-    private int status;
+    public int subtotal;
+    public int diskon;
+    public int total;
+    public int status;
 
     public String getNota() {
         return nota;

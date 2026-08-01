@@ -43,11 +43,13 @@ public class PembelianProductItem extends RecyclerView.Adapter<PembelianProductI
 
     private Context context;
     ArrayList<HashMap<String, String>> details;
+    PembelianProductInterface pembelianProductInterface;
 
 
-    public PembelianProductItem(Context context, ArrayList<HashMap<String, String>> details) {
+    public PembelianProductItem(Context context, ArrayList<HashMap<String, String>> details, PembelianProductInterface pembelianProductInterface) {
         this.context = context;
         this.details = details;
+        this.pembelianProductInterface = pembelianProductInterface;
     }
 
     @Override
@@ -68,22 +70,33 @@ public class PembelianProductItem extends RecyclerView.Adapter<PembelianProductI
         holder.tvNamaProduk.setText(details.get(position).get("nm_barang"));
         holder.tvKodeProduk.setText(details.get(position).get("kd_barang"));
         holder.tvSatuanProduk.setText(details.get(position).get("satuan"));
-        holder.tvJumlahHarga.setText(String.valueOf(details.get(position).get("jumlah")));
-//        holder.tvSubtotalProduk.setText(formatRupiah.format(details.get(position).get("subtotal")));
-//        holder.tvDiskonProduk.setText(formatRupiah.format(details.get(position).get("diskon")));
-//        holder.tvTotalProduk.setText(formatRupiah.format(details.get(position).get("total")));
+        holder.tvJumlahHarga.setText(details.get(position).get("jumlah")+" X "+formatRupiah.format(Integer.parseInt(details.get(position).get("harga"))));
+        holder.tvSubtotalProduk.setText(formatRupiah.format(Integer.parseInt(details.get(position).get("subtotal"))));
+        holder.tvDiskonProduk.setText(formatRupiah.format(Integer.parseInt(details.get(position).get("diskon"))));
+        holder.tvTotalProduk.setText(formatRupiah.format(Integer.parseInt(details.get(position).get("total"))));
+
+        int discountProduct = Integer.parseInt(details.get(position).get("diskon"));
+        if(discountProduct <= 0) {
+            holder.layoutDiskonProduk.setVisibility(GONE);
+            holder.layoutTotalProduk.setVisibility(GONE);
+        } else {
+            holder.layoutDiskonProduk.setVisibility(VISIBLE);
+            holder.layoutTotalProduk.setVisibility(VISIBLE);
+        }
+
+
 
         holder.btnEditProduk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                pembelianProductInterface.EditProduct(details.get(position), position);
             }
         });
 
         holder.btnHapusProduk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                pembelianProductInterface.HapusProduct(details.get(position), position);
             }
         });
 
@@ -103,7 +116,7 @@ public class PembelianProductItem extends RecyclerView.Adapter<PembelianProductI
         private TextView tvSatuanProduk;
         private TextView tvJumlahHarga;
         private TextView tvSubtotalProduk;
-        private LinearLayout layoutDiskonProduk;
+        private LinearLayout layoutDiskonProduk, layoutTotalProduk;
         private TextView tvDiskonProduk;
         private TextView tvTotalProduk;
         private MaterialButton btnEditProduk;
@@ -119,6 +132,7 @@ public class PembelianProductItem extends RecyclerView.Adapter<PembelianProductI
             tvJumlahHarga = itemView.findViewById(R.id.tvJumlahHarga);
             tvSubtotalProduk = itemView.findViewById(R.id.tvSubtotalProduk);
             layoutDiskonProduk = itemView.findViewById(R.id.layoutDiskonProduk);
+            layoutTotalProduk = itemView.findViewById(R.id.layoutTotalProduk);
             tvDiskonProduk = itemView.findViewById(R.id.tvDiskonProduk);
             tvTotalProduk = itemView.findViewById(R.id.tvTotalProduk);
             btnEditProduk = itemView.findViewById(R.id.btnEditProduk);
