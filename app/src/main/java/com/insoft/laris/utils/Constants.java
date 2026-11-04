@@ -1,7 +1,8 @@
 package com.insoft.laris.utils;
 
 public class Constants {
-    public static final String BASE_URL = "https://pos.gen-zi.id/";
+    public static final String BASE_URL = "https://nasa-api.drainstech.com/";
+//    public static final String BASE_URL = "https://pos.gen-zi.id/";
 //    public static final String BASE_URL = "https://larisjaya.gen-zi.id/";
 //    public static final String BASE_URL = "https://kopin.gen-zi.id/";
 //    public static final String BASE_URL = "https://nasa.gen-zi.id/";
@@ -22,7 +23,12 @@ public class Constants {
 //    public static String hpToko = "HP: 0822 7375 7110";
 
 
-    public static String namaToko = "UD SURYO PRABOT";
-    public static String alamatToko = "Jl Bsr Sei.Kalam T.Panji";
-    public static String hpToko = "HP: 0823 6108 1238";
+//    public static String namaToko = "UD SURYO PRABOT";
+//    public static String alamatToko = "Jl Bsr Sei.Kalam T.Panji";
+//    public static String hpToko = "HP: 0823 6108 1238";
+
+
+    public static String namaToko = "TOKO NASA";
+    public static String alamatToko = "Jl Sei Mencirim KM 15 DISKI";
+    public static String hpToko = "HP: 0812 7645 6052";
 }

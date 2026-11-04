@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                     String rc = response.body().getResultcode();
                     if(rc.equalsIgnoreCase("00")) {
                         datauser = response.body().getData();
-                        sessionManager.createSession(datauser.get(0).getKd_pengguna(), datauser.get(0).getNama(), datauser.get(0).getNm_pengguna());
+                        sessionManager.createSession(datauser.get(0).getKd_pengguna(), datauser.get(0).getNama(), datauser.get(0).getNm_pengguna(), datauser.get(0).getLevel());
 //                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);

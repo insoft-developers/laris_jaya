@@ -5,6 +5,7 @@ public class PelangganRequestJson {
     private String nama;
     private String alamat;
     private String phone;
+    private String grup;
 
     public String getPhone() {
         return phone;
@@ -36,5 +37,13 @@ public class PelangganRequestJson {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
+    }
+
+    public String getGrup() {
+        return grup;
+    }
+
+    public void setGrup(String grup) {
+        this.grup = grup;
     }
 }

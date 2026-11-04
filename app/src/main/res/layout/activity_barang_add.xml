@@ -206,7 +206,7 @@
                 android:layout_marginTop="15dp"
                 android:padding="15dp"
                 android:background="@drawable/button_round_4"
-                android:hint="Harga Reseller"
+                android:hint="Harga Freelance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

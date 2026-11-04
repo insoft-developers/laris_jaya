@@ -1,7 +1,6 @@
 package com.insoft.laris;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.insoft.laris.model.Produk;
@@ -21,12 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
-    private SwitchCompat switchHarga;
-    private TextView tvHargaUmum;
-    private TextView tvHargaReseller;
+
     private TextView tvJenisHarga;
 
-    private boolean menggunakanHargaReseller = false;
     private TextView kodebarang, namabarang, satuan, konversi;
     private EditText etjumlah, discount_persen, discount;
     private Button btnhapus, btnupdate;
@@ -34,6 +32,13 @@ public class EditActivity extends AppCompatActivity {
     private List<Produk> dataproduk;
     private RegisterAPI registerAPI;
     private SessionPelanggan sessionPelanggan;
+
+    private RadioGroup radioHarga;
+    private RadioButton radioUmum;
+    private RadioButton radioReseller;
+    private RadioButton radioFreelance;
+
+    private int price_type = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,34 @@ public class EditActivity extends AppCompatActivity {
         btnhapus = findViewById(R.id.btnhapus);
         btnupdate = findViewById(R.id.btnupdate) ;
 
-        switchHarga = findViewById(R.id.switchharga);
-        tvHargaUmum = findViewById(R.id.tvhargaumum);
-        tvHargaReseller = findViewById(R.id.tvhargareseller);
+        radioHarga = findViewById(R.id.radioHarga);
+        radioUmum = findViewById(R.id.radioUmum);
+        radioReseller = findViewById(R.id.radioReseller);
+        radioFreelance = findViewById(R.id.radioFreelance);
+
         tvJenisHarga = findViewById(R.id.tvjenisharga);
+
+
+        tvJenisHarga = findViewById(R.id.tvjenisharga);
+
+        radioHarga.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == R.id.radioUmum) {
+
+                price_type = 1;
+                tvJenisHarga.setText("Menggunakan Harga Umum");
+
+            } else if (checkedId == R.id.radioReseller) {
+
+                price_type = 2;
+                tvJenisHarga.setText("Menggunakan Harga Reseller");
+
+            } else if (checkedId == R.id.radioFreelance) {
+
+                price_type = 3;
+                tvJenisHarga.setText("Menggunakan Harga Freelance");
+            }
+        });
 
 
         String itemcode = getIntent().getStringExtra("item_code");
@@ -100,46 +129,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-        switchHarga.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            menggunakanHargaReseller = isChecked;
 
-            if (isChecked) {
-                tvJenisHarga.setText("Menggunakan Harga Reseller");
-
-                tvHargaUmum.setTypeface(
-                        null,
-                        android.graphics.Typeface.NORMAL
-                );
-
-                tvHargaReseller.setTypeface(
-                        null,
-                        android.graphics.Typeface.BOLD
-                );
-
-                menggunakanHargaReseller = true;
-                // Gunakan harga reseller
-                // hargaDipilih = hargaReseller;
-
-            } else {
-                tvJenisHarga.setText("Menggunakan Harga Umum");
-
-                tvHargaUmum.setTypeface(
-                        null,
-                        android.graphics.Typeface.BOLD
-                );
-
-                tvHargaReseller.setTypeface(
-                        null,
-                        android.graphics.Typeface.NORMAL
-                );
-
-                // Gunakan harga umum
-                // hargaDipilih = hargaUmum;
-                menggunakanHargaReseller = false;
-            }
-
-
-        });
 
     }
 
@@ -154,32 +144,31 @@ public class EditActivity extends AppCompatActivity {
             int jumlahbaru = Integer.parseInt(etjumlah.getText().toString());
 
             int hargaaktif = 0;
-            if(jumlahbaru >= datakonversi) {
-                if(cust_group.equalsIgnoreCase("Reguler")) {
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("hj"));
-                } else if(cust_group.equalsIgnoreCase("Grosir")){
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("diskon_member"));
-                } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("diskon_member"));
-                }
+            if (price_type == 1) {
+
+                // Harga Umum
+                hargaaktif = cursor.getInt(
+                        cursor.getColumnIndexOrThrow("harga_jual")
+                );
+
+            } else if (price_type == 2) {
+
+                // Harga Reseller
+                hargaaktif = cursor.getInt(
+                        cursor.getColumnIndexOrThrow("harga_member")
+                );
+
             } else {
-                if(cust_group.equalsIgnoreCase("Reguler")) {
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("harga_jual"));
-                } else if(cust_group.equalsIgnoreCase("Grosir")){
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("harga_member"));
-                } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-                    hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("harga_member"));
-                }
+
+                // Harga Freelance
+                hargaaktif = cursor.getInt(
+                        cursor.getColumnIndexOrThrow("harga_freelance")
+                );
             }
 
             int totalbaru = hargaaktif * jumlahbaru;
 
-            int price_type = 1;
-            if(menggunakanHargaReseller) {
-                hargaaktif = cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller"));
-                totalbaru = hargaaktif * jumlahbaru;
-                price_type = 2;
-            }
+
 
             String inputDiskon = discount_persen.getText().toString().trim();
             String inputDiskonRupiah = discount.getText().toString().trim();
@@ -212,24 +201,36 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void check_price_type(String itemcode) {
-        Cursor cursor = db.periksadata(itemcode);
-        if (cursor != null && cursor.moveToFirst()) {
-            int price_type = cursor.getInt(cursor.getColumnIndexOrThrow("price_type"));
-            if(price_type == 2) {
-                switchHarga.setChecked(true);
-                menggunakanHargaReseller = true;
-                tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
-                tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
-                tvJenisHarga.setText("Menggunakan Harga Reseller");
-            } else {
-                switchHarga.setChecked(false);
-                menggunakanHargaReseller = false;
 
-                tvHargaUmum.setTypeface(null, android.graphics.Typeface.BOLD);
-                tvHargaReseller.setTypeface(null, android.graphics.Typeface.NORMAL);
+        Cursor cursor = db.periksadata(itemcode);
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            int savedPriceType = cursor.getInt(
+                    cursor.getColumnIndexOrThrow("price_type")
+            );
+
+            if (savedPriceType == 2) {
+
+                radioReseller.setChecked(true);
+                tvJenisHarga.setText("Menggunakan Harga Reseller");
+
+            } else if (savedPriceType == 3) {
+
+                radioFreelance.setChecked(true);
+                tvJenisHarga.setText("Menggunakan Harga Freelance");
+
+            } else {
+
+                radioUmum.setChecked(true);
                 tvJenisHarga.setText("Menggunakan Harga Umum");
             }
+
+            price_type = savedPriceType;
         }
-        cursor.close();
+
+        if (cursor != null) {
+            cursor.close();
+        }
     }
 }

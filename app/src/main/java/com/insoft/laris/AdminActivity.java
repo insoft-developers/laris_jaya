@@ -32,6 +32,7 @@ import com.insoft.laris.utils.RegisterAPI;
 import com.insoft.laris.utils.SessionManager;
 import com.insoft.laris.utils.UtilsAPI;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -72,6 +73,9 @@ public class AdminActivity extends AppCompatActivity {
         loading = findViewById(R.id.loading);
         sessionManager = new SessionManager(this);
 
+        HashMap<String,String> user = sessionManager.getSessionData();
+        String level = user.get(sessionManager.LEVEL);
+
         btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,8 +87,23 @@ public class AdminActivity extends AppCompatActivity {
         btnpembelian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AdminActivity.this, PembelianActivity.class);
-                startActivity(intent);
+
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, PembelianActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
@@ -92,8 +111,24 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(AdminActivity.this, PembayaranActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, PembayaranActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+
 
             }
         });
@@ -101,16 +136,43 @@ public class AdminActivity extends AppCompatActivity {
         btnlaporan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, SalesReportActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, SalesReportActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
         btnPengguna.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AdminActivity.this, PenggunaActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, PenggunaActivity.class);
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
@@ -126,8 +188,21 @@ public class AdminActivity extends AppCompatActivity {
         btnpelanggan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, MasterPelangganActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, MasterPelangganActivity.class);
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
 
             }
         });
@@ -135,24 +210,64 @@ public class AdminActivity extends AppCompatActivity {
         btnbarang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminActivity.this, MasterBarangActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, MasterBarangActivity.class);
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
         btnPiutang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AdminActivity.this, PiutangActivity.class);
-                startActivity(intent);
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, PiutangActivity.class);
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
         btnsupplier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AdminActivity.this, SupplierActivity.class);
-                startActivity(intent);
+
+
+
+                if ("Administrator".equalsIgnoreCase(level)) {
+
+                    Intent intent = new Intent(AdminActivity.this, SupplierActivity.class);
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
+                            AdminActivity.this,
+                            "Anda tidak memiliki akses ke menu Ini",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
 
@@ -198,7 +313,9 @@ public class AdminActivity extends AppCompatActivity {
                                         p.getDiskon_member(),
                                         p.getKd_supplier(),
                                         p.getDiskon(),
-                                        p.getHarga_reseller()
+                                        p.getHarga_reseller(),
+                                        p.getHarga_freelance()
+
                                 );
                             }
 

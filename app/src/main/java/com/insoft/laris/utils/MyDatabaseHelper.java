@@ -81,6 +81,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_BANK_DEPOSIT = "bank_deposit";
     private static final String COLUMN_SUBTOTAL = "subtotal";
     private static final String COLUMN_HARGA_RESELLER = "harga_reseller";
+
+    private static final String COLUMN_HARGA_FREELANCE = "harga_freelance";
     private static final String COLUMN_PRICE_TYPE = "price_type";
 
     private static final String COLUMN_TOTAL_DISCOUNT = "total_dicount";
@@ -214,7 +216,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DISKON_MEMBER + " INTEGER, " +
                 COLUMN_SUPPLIER + " TEXT, " +
                 COLUMN_DISKON + " INTEGER, " +
-                COLUMN_HARGA_RESELLER + " INTEGER);";
+                COLUMN_HARGA_RESELLER + " INTEGER, " +
+                COLUMN_HARGA_FREELANCE + " INTEGER);";
 
         db.execSQL(master_barang_table);
 
@@ -422,7 +425,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             int diskon_member,
             String supplier,
             int diskon,
-            int harga_reseller
+            int harga_reseller,
+            int harga_freelance
     ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -443,6 +447,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_SUPPLIER, supplier);
         cv.put(COLUMN_DISKON, diskon);
         cv.put(COLUMN_HARGA_RESELLER, harga_reseller);
+        cv.put(COLUMN_HARGA_FREELANCE, harga_freelance);
 
 
         long result =  db.insert(MASTER_BARANG, null, cv);
@@ -815,7 +820,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             p.setKonversi(cursor.getInt(cursor.getColumnIndexOrThrow("konversi")));
             p.setKd_supplier(cursor.getString(cursor.getColumnIndexOrThrow("kd_supplier")));
             p.setDiskon(cursor.getInt(cursor.getColumnIndexOrThrow("diskon")));
-            p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller")));
+            p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_member")));
+            p.setHarga_freelance(cursor.getInt(cursor.getColumnIndexOrThrow("harga_freelance")));
+
         }
         cursor.close();
         db.close();

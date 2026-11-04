@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.insoft.laris.R;
@@ -23,6 +25,10 @@ import retrofit2.Response;
 public class PelangganAddActivity extends AppCompatActivity {
 
     private EditText etnama, etalamat, etphone;
+
+    private RadioGroup radioGroupGrup;
+    private RadioButton radioReguler, radioGrosir, radioFreelancer;
+    private String grup = "Reguler";
     private Button btn_simpan;
     private ProgressBar loading;
     private RegisterAPI registerAPI;
@@ -35,6 +41,28 @@ public class PelangganAddActivity extends AppCompatActivity {
         etalamat = findViewById(R.id.et_alamat);
         btn_simpan = findViewById(R.id.btn_simpan);
         etphone = findViewById(R.id.et_phone);
+
+        radioGroupGrup = findViewById(R.id.radio_group_grup);
+        radioReguler = findViewById(R.id.radio_reguler);
+        radioGrosir = findViewById(R.id.radio_grosir);
+        radioFreelancer = findViewById(R.id.radio_freelancer);
+
+
+        radioGroupGrup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == R.id.radio_reguler) {
+                    grup = "Reguler";
+
+                } else if (checkedId == R.id.radio_grosir) {
+                    grup = "Grosir";
+
+                } else if (checkedId == R.id.radio_freelancer) {
+                    grup = "Freelancer";
+                }
+            }
+        });
 
         btn_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,19 +77,20 @@ public class PelangganAddActivity extends AppCompatActivity {
                     etphone.setError("Nomor Telepon Tidak Boleh Kosong...!");
                 }
                 else {
-                    submit(etnama.getText().toString(), etalamat.getText().toString(), etphone.getText().toString());
+                    submit(etnama.getText().toString(), etalamat.getText().toString(), etphone.getText().toString(), grup);
                 }
             }
         });
     }
 
-    private  void submit(String nama, String alamat, String phone) {
+    private  void submit(String nama, String alamat, String phone, String grup) {
         registerAPI = UtilsAPI.getApiService();
         loading.setVisibility(View.VISIBLE);
         PelangganRequestJson param = new PelangganRequestJson();
         param.setNama(nama);
         param.setAlamat(alamat);
         param.setPhone(phone);
+        param.setGrup(grup);
         registerAPI.tambah_pelanggan(param).enqueue(new Callback<PelangganResponseJson>() {
             @Override
             public void onResponse(Call<PelangganResponseJson> call, Response<PelangganResponseJson> response) {

@@ -89,7 +89,9 @@ public class BarangActivity extends AppCompatActivity implements barangInterface
                 p.setDiskon_member(cursor.getInt(cursor.getColumnIndexOrThrow("diskon_member")));
                 p.setKd_supplier(cursor.getString(cursor.getColumnIndexOrThrow("kd_supplier")));
                 p.setDiskon(cursor.getInt(cursor.getColumnIndexOrThrow("diskon")));
-                p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_reseller")));
+                p.setHarga_reseller(cursor.getInt(cursor.getColumnIndexOrThrow("harga_member")));
+                p.setHarga_freelance(cursor.getInt(cursor.getColumnIndexOrThrow("harga_freelance")));
+                p.setHarga_karton_freelance(cursor.getInt(cursor.getColumnIndexOrThrow("harga_freelance")));
                 list.add(p);
             } while (cursor.moveToNext());
         }
@@ -118,7 +120,7 @@ public class BarangActivity extends AppCompatActivity implements barangInterface
         String satuan = produkList.get(position).getSatuan();
         int hargabeli = produkList.get(position).getHarga_beli();
         int diskon = produkList.get(position).getDiskon();
-        int harga_reseller = produkList.get(position).getHarga_reseller();
+        int harga_reseller = produkList.get(position).getHarga_member();
 
         Intent intent = new Intent();
         intent.putExtra("intent_konversi", konversi);

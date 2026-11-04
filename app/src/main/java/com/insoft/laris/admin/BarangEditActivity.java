@@ -90,7 +90,7 @@ public class BarangEditActivity extends AppCompatActivity {
         etHargaFreelance.setText(String.valueOf(hargafreelance_));
         etHargaFreelanceKarton.setText(String.valueOf(hargafreelancekarton_ * konversi_));
         etStok.setText(String.valueOf(stok_));
-        etHargaReseller.setText(String.valueOf(hargareseller_));
+        etHargaReseller.setText(String.valueOf(hargafreelance_));
         etStok.setKeyListener(null);
 
 

@@ -48,7 +48,8 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
         holder.konversi.setText("Konversi ( "+String.valueOf(produks.get(position).getKonversi())+" )");
         holder.stok.setText("Stok ( "+String.valueOf(produks.get(position).getStok())+" )");
         holder.harga_jual.setText(formatRupiah.format(produks.get(position).getHarga_jual()));
-        holder.harga_reseller.setText(formatRupiah.format(produks.get(position).getHarga_reseller()));
+        holder.harga_reseller.setText(formatRupiah.format(produks.get(position).getHarga_member()));
+        holder.harga_freelance.setText(formatRupiah.format(produks.get(position).getHarga_freelance()));
 
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +75,7 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namabarang, satuan, konversi, stok, harga_jual, harga_reseller;
+        private TextView namabarang, satuan, konversi, stok, harga_jual, harga_reseller, harga_freelance;
         private LinearLayout rootlayout;
 
         public ViewHolder(View itemView) {
@@ -86,6 +87,7 @@ public class ItemMasterBarang extends RecyclerView.Adapter<ItemMasterBarang.View
             stok = itemView.findViewById(R.id.stok);
             harga_jual = itemView.findViewById(R.id.harga);
             harga_reseller = itemView.findViewById(R.id.harga_reseller);
+            harga_freelance = itemView.findViewById(R.id.harga_freelance);
         }
     }
 }

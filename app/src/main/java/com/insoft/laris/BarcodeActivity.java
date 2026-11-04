@@ -32,6 +32,8 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
     private SessionManager sessionManager;
     private SessionPelanggan sessionPelanggan;
 
+    private int priceType = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,101 +61,6 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
 
 
 
-//    private void get_product(String barcode) {
-//
-//        HashMap<String,String> user = sessionManager.getSessionData();
-//        String iduser = user.get(sessionManager.ID);
-//
-//        HashMap<String,String> cust = sessionPelanggan.getSessionPelanggan();
-//        String cust_group = cust.get(sessionPelanggan.CGRUP);
-//
-//        BarcodeRequestJson param = new BarcodeRequestJson();
-//        param.setBarcode(barcode);
-//        registerAPI = UtilsAPI.getApiService();
-//        registerAPI.get_produk(param).enqueue(new Callback<BarcodeResponseJson>() {
-//            @Override
-//            public void onResponse(Call<BarcodeResponseJson> call, Response<BarcodeResponseJson> response) {
-//                if(response.isSuccessful()) {
-//                    String res = response.body().getResultcode();
-//                    produk = response.body().getData();
-//                    if(res.equalsIgnoreCase("00")){
-//                        mScannerView.stopCamera();
-//
-//                        int hargaaktif = 0;
-//                        int konversi = produk.get(0).getKonversi();
-//                        String kodebarang = produk.get(0).getKd_barang();
-//                        Cursor cursor = db.periksadata(kodebarang);
-//
-//                        if(cursor.getCount() == 0){
-//                            if(cust_group.equalsIgnoreCase("Reguler")) {
-//                                hargaaktif = produk.get(0).getHarga_jual();
-//                            } else if(cust_group.equalsIgnoreCase("Grosir")){
-//                                hargaaktif = produk.get(0).getHarga_member();
-//                            } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-//                                hargaaktif = produk.get(0).getHarga_freelance();
-//                            }
-//
-//                            db.tambahitem(
-//                                    produk.get(0).getKd_barang(),
-//                                    produk.get(0).getBarcode(),
-//                                    produk.get(0).getNm_barang(),
-//                                    produk.get(0).getSatuan(),
-//                                    1,
-//                                    hargaaktif,
-//                                    produk.get(0).getHarga_beli(),
-//                                    hargaaktif,
-//                                    iduser,
-//                                    0,
-//                                    produk.get(0).getDiskon(),
-//                                    produk.get(0).getKonversi()
-//                            );
-//                        } else {
-//                            cursor.moveToFirst();
-//
-//
-//                            int jumlah = Integer.parseInt(cursor.getString(5));
-//                            int jumlahbaru = jumlah + 1;
-//                            if(jumlahbaru >= konversi) {
-//                                if(cust_group.equalsIgnoreCase("Reguler")) {
-//                                    hargaaktif = produk.get(0).getHj();
-//                                } else if(cust_group.equalsIgnoreCase("Grosir")){
-//                                    hargaaktif = produk.get(0).getDiskon_member();
-//                                } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-//                                    hargaaktif = produk.get(0).getHarga_karton_freelance();
-//                                }
-//                            } else {
-//                                if(cust_group.equalsIgnoreCase("Reguler")) {
-//                                    hargaaktif = produk.get(0).getHarga_jual();
-//                                } else if(cust_group.equalsIgnoreCase("Grosir")){
-//                                    hargaaktif = produk.get(0).getHarga_member();
-//                                } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-//                                    hargaaktif = produk.get(0).getHarga_freelance();
-//                                }
-//                            }
-//
-//                            int totalbaru = jumlahbaru * hargaaktif;
-//                            db.updateitem(produk.get(0).getKd_barang(), jumlahbaru, hargaaktif, totalbaru);
-//                        }
-//
-//                        Intent intent = new Intent(BarcodeActivity.this, MainActivity.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(intent);
-//                    } else {
-//                        mScannerView.stopCamera();
-//                        String pesan = response.body().getPesan();
-//                        Toast.makeText(BarcodeActivity.this,  pesan, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BarcodeResponseJson> call, Throwable t) {
-//                Toast.makeText(BarcodeActivity.this, "System error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
-//    }
-
-
 
     private void get_product(String barcode) {
         HashMap<String,String> user = sessionManager.getSessionData();
@@ -176,10 +83,13 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                 // tentukan harga aktif sesuai grup
                 if(cust_group.equalsIgnoreCase("Reguler")) {
                     hargaaktif = p.getHarga_jual();
+                    priceType = 1;
                 } else if(cust_group.equalsIgnoreCase("Grosir")) {
                     hargaaktif = p.getHarga_member();
+                    priceType = 2;
                 } else if(cust_group.equalsIgnoreCase("Freelancer")) {
                     hargaaktif = p.getHarga_freelance();
+                    priceType = 3;
                 }
 
                 db.tambahitem(
@@ -196,7 +106,7 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                         p.getDiskon(),
                         hargaaktif,
                         p.getKonversi(),
-                        1
+                        priceType
                 );
             } else {
                 cursor.moveToFirst();
@@ -204,33 +114,32 @@ public class BarcodeActivity extends AppCompatActivity implements ZXingScannerVi
                 int jumlahbaru = jumlah + 1;
                 int price_type = cursor.getInt(14);
 
-                if(jumlahbaru >= konversi) {
-                    if(cust_group.equalsIgnoreCase("Reguler")) {
-                        hargaaktif = p.getHj();
-                    } else if(cust_group.equalsIgnoreCase("Grosir")) {
-                        hargaaktif = p.getDiskon_member();
-                    } else if(cust_group.equalsIgnoreCase("Freelancer")) {
-                        hargaaktif = p.getHarga_karton_freelance();
-                    }
-                } else {
+
                     if(cust_group.equalsIgnoreCase("Reguler")) {
                         hargaaktif = p.getHarga_jual();
+                        priceType = 1;
                     } else if(cust_group.equalsIgnoreCase("Grosir")) {
                         hargaaktif = p.getHarga_member();
+                        priceType = 2;
                     } else if(cust_group.equalsIgnoreCase("Freelancer")) {
                         hargaaktif = p.getHarga_freelance();
+                        priceType = 3;
                     }
-                }
+
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                if(price_type == 2) {
-                    hargaaktif = p.getHarga_reseller();
+                if(priceType == 2) {
+                    hargaaktif = p.getHarga_member();
+                    totalbaru = jumlahbaru * hargaaktif;
+                }
+                else if(priceType == 3) {
+                    hargaaktif = p.getHarga_freelance();
                     totalbaru = jumlahbaru * hargaaktif;
                 }
 
 
 
-                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, price_type);
+                db.updateitem(p.getKd_barang(), jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, priceType);
             }
             cursor.close();
 

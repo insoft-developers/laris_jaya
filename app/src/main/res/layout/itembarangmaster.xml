@@ -111,6 +111,7 @@
             android:layout_marginBottom="10dp"
             android:background="#40FFFFFF" />
 
+
         <!-- Informasi harga -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,7 +139,7 @@
                     android:layout_marginTop="3dp"
                     android:text="Rp 0"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -147,7 +148,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="12dp"
+                android:layout_marginHorizontal="8dp"
                 android:background="#40FFFFFF" />
 
             <!-- Harga Reseller -->
@@ -155,7 +156,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="end"
                 android:orientation="vertical">
 
                 <TextView
@@ -171,8 +171,42 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="Rp 0"
-                    android:textColor="#FFEB3B"
-                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Garis vertikal -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:background="#40FFFFFF" />
+
+            <!-- Harga Freelance -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Harga Freelance"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/harga_freelance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Rp 0"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

@@ -29,6 +29,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
     private long totalPembayaran = 0;
     private long totalKembalian = 0;
     private long totalKekurangan = 0;
+
+
+    private int priceType = 0;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                                         p.getDiskon_member(),
                                         p.getKd_supplier(),
                                         p.getDiskon(),
-                                        p.getHarga_reseller()
+                                        p.getHarga_reseller(),
+                                        p.getHarga_freelance()
                                 );
                             }
 
@@ -944,10 +953,13 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
             if(cursor.getCount() == 0){
                 if(cust_group.equalsIgnoreCase("Reguler")) {
                     hargaaktif = data.getIntExtra("intent_harga_jual", 0);
+                    priceType = 1;
                 } else if(cust_group.equalsIgnoreCase("Grosir")){
                     hargaaktif = data.getIntExtra("intent_harga_grosir", 0);
+                    priceType = 2;
                 } else if(cust_group.equalsIgnoreCase("Freelancer")) {
                     hargaaktif = data.getIntExtra("intent_harga_freelance", 0);
+                    priceType = 3;
                 }
 
 
@@ -965,7 +977,7 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                         data.getIntExtra("intent_diskon", 0),
                         hargaaktif,
                         konversi,
-                        0
+                        priceType
                 );
             } else {
                 cursor.moveToFirst();
@@ -975,28 +987,39 @@ public class MainActivity extends AppCompatActivity implements itemInterface {
                 if(jumlahbaru >= konversi) {
                     if(cust_group.equalsIgnoreCase("Reguler")) {
                         hargaaktif = data.getIntExtra("intent_harga_karton", 0);
+                        priceType = 1;
                     } else if(cust_group.equalsIgnoreCase("Grosir")){
                         hargaaktif = data.getIntExtra("intent_grosir_karton", 0);
+                        priceType = 2;
                     } else if(cust_group.equalsIgnoreCase("Freelancer")) {
                         hargaaktif = data.getIntExtra("intent_freelance_karton", 0);
+                        priceType = 3;
                     }
                 } else {
                     if(cust_group.equalsIgnoreCase("Reguler")) {
                         hargaaktif = data.getIntExtra("intent_harga_jual", 0);
+                        priceType = 1;
                     } else if(cust_group.equalsIgnoreCase("Grosir")){
                         hargaaktif = data.getIntExtra("intent_harga_grosir", 0);
+                        priceType = 2;
                     } else if(cust_group.equalsIgnoreCase("Freelancer")) {
                         hargaaktif = data.getIntExtra("intent_harga_freelance", 0);
+                        priceType = 3;
                     }
                 }
 
                 int totalbaru = jumlahbaru * hargaaktif;
-                if(price_type == 2) {
+                if(priceType == 2) {
                     hargaaktif = data.getIntExtra("intent_harga_reseller", 0);
                     totalbaru = jumlahbaru * hargaaktif;
 
                 }
-                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, price_type);
+                else if(priceType == 3) {
+                    hargaaktif = data.getIntExtra("intent_harga_freelance", 0);
+                    totalbaru = jumlahbaru * hargaaktif;
+
+                }
+                db.updateitem(kodebarang, jumlahbaru, hargaaktif, totalbaru, 0, totalbaru, priceType);
             }
 
             displayData();

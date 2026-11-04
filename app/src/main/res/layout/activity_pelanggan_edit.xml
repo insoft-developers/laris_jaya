@@ -75,6 +75,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Grup Pelanggan"
+                android:textColor="#374151"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radio_group_grup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_round_4"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <RadioButton
+                    android:id="@+id/radio_reguler"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Reguler"
+                    android:textSize="13sp" />
+
+                <RadioButton
+                    android:id="@+id/radio_grosir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Grosir"
+                    android:textSize="13sp" />
+
+                <RadioButton
+                    android:id="@+id/radio_freelancer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Freelancer"
+                    android:textSize="13sp" />
+
+            </RadioGroup>
             <Button
                 android:layout_marginBottom="50dp"
                 android:layout_marginTop="40dp"

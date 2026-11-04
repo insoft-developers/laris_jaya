@@ -51,6 +51,7 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
         holder.stok.setText(String.valueOf(produks.get(position).getStok()));
         holder.harga.setText(formatRupiah.format(produks.get(position).getHarga_jual()));
         holder.harga_reseller.setText(formatRupiah.format(produks.get(position).getHarga_reseller()));
+        holder.harga_freelance.setText(formatRupiah.format(produks.get(position).getHarga_freelance()));
 
 
         holder.rootlayout.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +69,7 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView namabarang, satuan, konversi, stok, harga, harga_reseller;
+        private TextView namabarang, satuan, konversi, stok, harga, harga_reseller, harga_freelance;
         private LinearLayout rootlayout;
 
         public ViewHolder(View itemView) {
@@ -80,6 +81,7 @@ public class ItemBarang extends RecyclerView.Adapter<ItemBarang.ViewHolder> {
             stok = itemView.findViewById(R.id.stok);
             harga = itemView.findViewById(R.id.harga);
             harga_reseller = itemView.findViewById(R.id.harga_reseller);
+            harga_freelance = itemView.findViewById(R.id.harga_freelance);
         }
     }
 }

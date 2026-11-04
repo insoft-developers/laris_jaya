@@ -121,6 +121,7 @@ public class MasterPelangganActivity extends AppCompatActivity implements master
         String nm_pelanggan = pelangganList.get(position).getNm_pelanggan();
         String alamat_pelanggan = pelangganList.get(position).getAlamat();
         String phne = pelangganList.get(position).getTelepon();
+        String grup = pelangganList.get(position).getGrup();
 
 
         Intent intent = new Intent(MasterPelangganActivity.this, PelangganEditActivity.class);
@@ -129,6 +130,7 @@ public class MasterPelangganActivity extends AppCompatActivity implements master
         intent.putExtra("customer_name", nm_pelanggan);
         intent.putExtra("customer_address", alamat_pelanggan);
         intent.putExtra("customer_phne", phne);
+        intent.putExtra("customer_grup", grup);
         startActivity(intent);
 
     }
