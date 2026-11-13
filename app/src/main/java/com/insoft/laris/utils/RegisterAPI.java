@@ -31,6 +31,8 @@ import com.insoft.laris.json.CustomerRequestJson;
 import com.insoft.laris.json.CustomerResponseJson;
 import com.insoft.laris.json.DetailRequestJson;
 import com.insoft.laris.json.DetailResponseJson;
+import com.insoft.laris.json.DetailStrukRequestJson;
+import com.insoft.laris.json.DetailStrukResponseJson;
 import com.insoft.laris.json.GeneralResponseJson;
 import com.insoft.laris.json.HapusItemRequestJson;
 import com.insoft.laris.json.HapusItemResponseJson;
@@ -50,6 +52,8 @@ import com.insoft.laris.json.PerInvoiceRequestJson;
 import com.insoft.laris.json.PerInvoiceResponseJson;
 import com.insoft.laris.json.ProdukRequestJson;
 import com.insoft.laris.json.ProdukResponseJson;
+import com.insoft.laris.json.RiwayatStrukResponseJson;
+import com.insoft.laris.json.RiwayatStrukRequestJson;
 import com.insoft.laris.json.SalesMonthResponseJson;
 import com.insoft.laris.json.SalesRequestJson;
 import com.insoft.laris.json.SalesResponseJson;
@@ -212,6 +216,12 @@ public interface RegisterAPI {
 
     @POST("pembelian_hapus")
     Call<PembelianHapusReponseJson> pembelian_hapus(@Body PembelianHapusRequestJson param);
+
+    @POST("riwayat_struk")
+    Call<RiwayatStrukResponseJson> riwayat_struk(@Body RiwayatStrukRequestJson param);
+
+    @POST("detail_struk")
+    Call<DetailStrukResponseJson> detail_struk(@Body DetailStrukRequestJson param);
 
 
 }

@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import android.content.ClipData;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -864,102 +865,95 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-    private void kirimStrukPenjualanWhatsApp(
-            String nota
-    ) {
-        SQLiteDatabase database =
-                db.getReadableDatabase();
+
+    private void kirimStrukPenjualanWhatsApp(String nota) {
+
+        SQLiteDatabase database = db.getReadableDatabase();
 
         try {
-            Uri gambarUri =
-                    ReceiptPenjualanUtils
-                            .simpanGambarStruk(
-                                    this,
-                                    database,
-                                    nota
-                            );
 
-            Intent kirimIntent =
-                    new Intent(Intent.ACTION_SEND);
+            ArrayList<Uri> daftarGambar =
+                    ReceiptPenjualanUtils.simpanGambarStrukPerHalaman(
+                            this,
+                            database,
+                            nota
+                    );
+
+            if (daftarGambar.isEmpty()) {
+                Toast.makeText(
+                        this,
+                        "Gambar struk tidak tersedia",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            Intent kirimIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
             kirimIntent.setType("image/png");
 
-            kirimIntent.putExtra(
+            kirimIntent.putParcelableArrayListExtra(
                     Intent.EXTRA_STREAM,
-                    gambarUri
+                    daftarGambar
             );
 
             kirimIntent.putExtra(
                     Intent.EXTRA_TEXT,
-                    "Struk penjualan nomor nota "
-                            + nota
+                    "Struk penjualan nomor nota " + nota
             );
+
+            ClipData clipData = ClipData.newUri(
+                    getContentResolver(),
+                    "Struk Penjualan",
+                    daftarGambar.get(0)
+            );
+
+            for (int i = 1; i < daftarGambar.size(); i++) {
+                clipData.addItem(
+                        new ClipData.Item(daftarGambar.get(i))
+                );
+            }
+
+            kirimIntent.setClipData(clipData);
 
             kirimIntent.addFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
             );
 
-            /*
-             * Coba WhatsApp biasa.
-             */
-            Intent whatsappIntent =
-                    new Intent(kirimIntent);
-
-            whatsappIntent.setPackage(
-                    "com.whatsapp"
-            );
+            Intent whatsappIntent = new Intent(kirimIntent);
+            whatsappIntent.setPackage("com.whatsapp");
 
             try {
                 startActivity(whatsappIntent);
                 return;
-
             } catch (ActivityNotFoundException ignored) {
             }
 
-            /*
-             * Coba WhatsApp Business.
-             */
-            Intent whatsappBusinessIntent =
-                    new Intent(kirimIntent);
-
-            whatsappBusinessIntent.setPackage(
-                    "com.whatsapp.w4b"
-            );
+            Intent whatsappBusinessIntent = new Intent(kirimIntent);
+            whatsappBusinessIntent.setPackage("com.whatsapp.w4b");
 
             try {
-                startActivity(
-                        whatsappBusinessIntent
-                );
-
+                startActivity(whatsappBusinessIntent);
                 return;
-
             } catch (ActivityNotFoundException ignored) {
             }
 
-            /*
-             * WhatsApp tidak ada, buka menu share.
-             */
-            startActivity(
-                    Intent.createChooser(
-                            kirimIntent,
-                            "Kirim struk penjualan"
-                    )
-            );
+            startActivity(Intent.createChooser(
+                    kirimIntent,
+                    "Kirim struk penjualan"
+            ));
 
         } catch (Exception e) {
-            Log.e(
-                    "STRUK_WHATSAPP",
-                    "Gagal mengirim struk",
-                    e
-            );
+
+            Log.e("STRUK_WHATSAPP", "Gagal mengirim struk", e);
 
             Toast.makeText(
                     this,
-                    "Gagal membuat struk: "
-                            + e.getMessage(),
+                    "Gagal membuat struk: " + e.getMessage(),
                     Toast.LENGTH_LONG
             ).show();
         }
     }
+
 
 }

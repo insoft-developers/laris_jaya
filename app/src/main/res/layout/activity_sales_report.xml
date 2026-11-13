@@ -240,6 +240,90 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+
+            <!-- Cetak Ulang Struk -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cetakulangstruk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
+                app:strokeColor="#E4EAF0"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="92dp"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <!-- Ikon -->
+                    <FrameLayout
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:background="@drawable/bg_icon_report_blue">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="Cetak ulang struk"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/report"
+                            app:tint="#00897B" />
+
+                    </FrameLayout>
+
+                    <!-- Teks -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cetak Ulang Struk"
+                            android:textColor="#1F2937"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:maxLines="2"
+                            android:text="Cari transaksi dan cetak kembali struk penjualan"
+                            android:textColor="#7A8491"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <!-- Panah -->
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/bg_arrow_report"
+                        android:gravity="center"
+                        android:text="›"
+                        android:textColor="#00897B"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

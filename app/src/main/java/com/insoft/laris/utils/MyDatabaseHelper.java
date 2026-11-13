@@ -828,37 +828,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + MASTER_BARANG + " WHERE " + COLUMN_KD_BARANG + " = ?", new String[]{kd_barang});
     }
 
-    public String generateNota(String userId) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        // Ambil 3 digit terakhir user
+    public String generateNota(String userId) {
+
+        if (userId == null || userId.length() < 3) {
+            throw new IllegalArgumentException("User ID minimal 3 karakter");
+        }
+
         String prefix = userId.substring(userId.length() - 3);
 
-        int nextNumber = 1;
+        String timestamp = new java.text.SimpleDateFormat(
+                "yyMMddHHmmss",
+                java.util.Locale.US
+        ).format(new java.util.Date());
 
-        // Counter per user
-        Cursor cursor = db.rawQuery(
-                "SELECT last_nota FROM " + TABLE_COUNTER +
-                        " WHERE user_id = ? ORDER BY id DESC LIMIT 1",
-                new String[]{userId});
-
-        if (cursor != null && cursor.moveToFirst()) {
-            nextNumber = cursor.getInt(0) + 1;
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        ContentValues cv = new ContentValues();
-        cv.put("user_id", userId);
-        cv.put("last_nota", nextNumber);
-
-        db.insert(TABLE_COUNTER, null, cv);
-
-        // 3 digit user + 6 digit running number = 9 digit
-        return String.format("%s%06d", prefix, nextNumber);
+        return prefix + timestamp;
     }
+
 
 
     public void tambah_penjualan(

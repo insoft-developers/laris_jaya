@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ArrayList;
 
 public final class ReceiptPenjualanUtils {
 
@@ -454,6 +455,311 @@ public final class ReceiptPenjualanUtils {
                 file
         );
     }
+
+
+    public static ArrayList<Uri> simpanGambarStrukPerHalaman(
+            Context context,
+            SQLiteDatabase database,
+            String nota
+    ) throws Exception {
+
+        final int ITEM_PER_HALAMAN = 15;
+
+        ArrayList<Uri> hasil = new ArrayList<>();
+        ArrayList<String> detailItems = new ArrayList<>();
+
+        String queryHeader =
+                "SELECT p.nota, p.tanggal, p.belanja, p.bayar, p.kembali, " +
+                        "c.nm_pelanggan, c.telepon, p.subtotal, p.total_dicount, p.kd_user " +
+                        "FROM penjualan p " +
+                        "LEFT JOIN master_pelanggan c ON c.kd_pelanggan = p.kd_pelanggan " +
+                        "WHERE p.nota = ?";
+
+        String queryDetail =
+                "SELECT nm_barang, jumlah, harga, total, subtotal, disk " +
+                        "FROM penjualan_item WHERE nota = ?";
+
+        String header;
+        String footer;
+
+        try (
+                Cursor cursorHeader = database.rawQuery(
+                        queryHeader, new String[]{nota}
+                );
+                Cursor cursorDetail = database.rawQuery(
+                        queryDetail, new String[]{nota}
+                )
+        ) {
+
+            if (!cursorHeader.moveToFirst()) {
+                throw new Exception("Data transaksi tidak ditemukan");
+            }
+
+            String namaPelanggan = cursorHeader.getString(5);
+            String telepon = cursorHeader.getString(6);
+
+            if (namaPelanggan == null || namaPelanggan.trim().isEmpty()) {
+                namaPelanggan = "Pelanggan Umum";
+            }
+
+            MyDatabaseHelper dbHelper = new MyDatabaseHelper(context);
+            String namaKasir = dbHelper.getNamaPengguna(
+                    cursorHeader.getString(9)
+            );
+
+            if (namaKasir == null || namaKasir.trim().isEmpty()) {
+                namaKasir = "-";
+            }
+
+            header =
+                    tengah(Constants.namaToko) + "\n" +
+                            tengah(Constants.alamatToko) + "\n" +
+                            tengah(Constants.hpToko) + "\n" +
+                            tengah("STRUK PENJUALAN") + "\n" +
+                            garisTebal() + "\n" +
+                            "Pelanggan: " + potongNilai(namaPelanggan, 21) + "\n";
+
+            if (telepon != null && !telepon.trim().isEmpty()) {
+                header += "Telepon  : " +
+                        potongNilai(telepon.trim(), 21) + "\n";
+            }
+
+            header +=
+                    "No. Nota : " + potongNilai(nota, 21) + "\n" +
+                            "Tanggal  : " +
+                            potongNilai(formatTanggal(cursorHeader.getString(1)), 21) + "\n" +
+                            "Kasir    : " + potongNilai(namaKasir, 21) + "\n" +
+                            garisTebal() + "\n" +
+                            "DETAIL BELANJA\n" +
+                            garisTipis() + "\n";
+
+            while (cursorDetail.moveToNext()) {
+
+                String namaBarang = aman(cursorDetail.getString(0));
+                long jumlah = cursorDetail.getLong(1);
+                long harga = cursorDetail.getLong(2);
+                long total = cursorDetail.getLong(3);
+                long subtotal = cursorDetail.getLong(4);
+                long diskon = cursorDetail.getLong(5);
+
+                if (subtotal <= 0) {
+                    subtotal = jumlah * harga;
+                }
+
+                if (diskon <= 0) {
+                    diskon = Math.max(0, subtotal - total);
+                }
+
+                if (total <= 0) {
+                    total = Math.max(0, subtotal - diskon);
+                }
+
+                StringBuilder item = new StringBuilder();
+
+                item.append(bungkusTeks(
+                        (detailItems.size() + 1) + ". " + namaBarang,
+                        LEBAR_KARAKTER
+                )).append("\n");
+
+                item.append(kiriKanan(
+                        "  " + jumlah + " x " + formatRupiah(harga),
+                        formatRupiah(subtotal)
+                )).append("\n");
+
+                if (diskon > 0) {
+                    item.append(kiriKanan(
+                            "  Diskon",
+                            "-" + formatRupiah(diskon)
+                    )).append("\n");
+
+                    item.append(kiriKanan(
+                            "  Total",
+                            formatRupiah(total)
+                    )).append("\n");
+                }
+
+                item.append(garisTipis()).append("\n");
+
+                detailItems.add(item.toString());
+            }
+
+            long subtotalTransaksi = cursorHeader.getLong(7);
+            long totalDiskon = cursorHeader.getLong(8);
+            long totalBelanja = cursorHeader.getLong(2);
+            long pembayaran = cursorHeader.getLong(3);
+            long kembalian = cursorHeader.getLong(4);
+
+            StringBuilder ringkasan = new StringBuilder();
+
+            ringkasan.append("RINGKASAN PEMBAYARAN\n");
+            ringkasan.append(garisTipis()).append("\n");
+
+            ringkasan.append(kiriKanan(
+                    "Subtotal",
+                    formatRupiah(subtotalTransaksi)
+            )).append("\n");
+
+            ringkasan.append(kiriKanan(
+                    "Total Diskon",
+                    "-" + formatRupiah(totalDiskon)
+            )).append("\n");
+
+            ringkasan.append(garisTipis()).append("\n");
+
+            ringkasan.append(kiriKanan(
+                    "TOTAL",
+                    formatRupiah(totalBelanja)
+            )).append("\n");
+
+            ringkasan.append(kiriKanan(
+                    "Pembayaran",
+                    formatRupiah(pembayaran)
+            )).append("\n");
+
+            if (totalBelanja > pembayaran) {
+                ringkasan.append(kiriKanan(
+                        "Belum Dibayar",
+                        formatRupiah(kembalian > 0
+                                ? kembalian
+                                : totalBelanja - pembayaran)
+                )).append("\n");
+            } else {
+                ringkasan.append(kiriKanan(
+                        "Kembalian",
+                        formatRupiah(kembalian > 0
+                                ? kembalian
+                                : pembayaran - totalBelanja)
+                )).append("\n");
+            }
+
+            ringkasan.append(garisTebal()).append("\n");
+            ringkasan.append(tengah("TERIMA KASIH")).append("\n");
+            ringkasan.append(tengah("TELAH BERBELANJA DI KAMI")).append("\n");
+            ringkasan.append(garisTebal());
+
+            footer = ringkasan.toString();
+        }
+
+        int totalHalaman = Math.max(
+                1,
+                (int) Math.ceil(
+                        detailItems.size() / (double) ITEM_PER_HALAMAN
+                )
+        );
+
+        File folder = new File(
+                context.getCacheDir(),
+                "struk_penjualan"
+        );
+
+        if (!folder.exists() && !folder.mkdirs()) {
+            throw new IOException("Folder struk gagal dibuat");
+        }
+
+        String namaNota = nota == null
+                ? "struk"
+                : nota.replaceAll("[^a-zA-Z0-9_-]", "_");
+
+        for (int halaman = 0; halaman < totalHalaman; halaman++) {
+
+            int mulai = halaman * ITEM_PER_HALAMAN;
+
+            int sampai = Math.min(
+                    mulai + ITEM_PER_HALAMAN,
+                    detailItems.size()
+            );
+
+            StringBuilder teks = new StringBuilder();
+
+            teks.append(header);
+
+            teks.append(tengah(
+                    "HALAMAN " + (halaman + 1) + "/" + totalHalaman
+            )).append("\n");
+
+            teks.append(garisTipis()).append("\n");
+
+            for (int i = mulai; i < sampai; i++) {
+                teks.append(detailItems.get(i));
+            }
+
+            // Ringkasan hanya di halaman terakhir
+            if (halaman == totalHalaman - 1) {
+                teks.append(footer);
+            }
+
+            Bitmap bitmap = buatGambarHalaman(teks.toString());
+
+            File file = new File(
+                    folder,
+                    "struk_" + namaNota + "_halaman_" +
+                            (halaman + 1) + ".png"
+            );
+
+            try (FileOutputStream output = new FileOutputStream(file)) {
+
+                if (!bitmap.compress(
+                        Bitmap.CompressFormat.PNG,
+                        100,
+                        output
+                )) {
+                    throw new IOException("Gagal menyimpan halaman " + (halaman + 1));
+                }
+
+                output.flush();
+
+            } finally {
+                bitmap.recycle();
+            }
+
+            hasil.add(FileProvider.getUriForFile(
+                    context,
+                    context.getPackageName() + ".fileprovider",
+                    file
+            ));
+        }
+
+        return hasil;
+    }
+
+
+    private static Bitmap buatGambarHalaman(String teks) {
+
+        String[] baris = teks.split("\n", -1);
+
+        int lebar = 640;
+        int padding = 24;
+        int ukuranFont = 28;
+        int jarakBaris = 42;
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(ukuranFont);
+        paint.setTypeface(Typeface.MONOSPACE);
+        paint.setSubpixelText(true);
+        paint.setHinting(Paint.HINTING_ON);
+
+        int tinggi = padding * 2 + baris.length * jarakBaris;
+
+        Bitmap bitmap = Bitmap.createBitmap(
+                lebar,
+                tinggi,
+                Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+
+        float y = padding + ukuranFont;
+
+        for (String teksBaris : baris) {
+            canvas.drawText(teksBaris, padding, y, paint);
+            y += jarakBaris;
+        }
+
+        return bitmap;
+    }
+
 
     public static String formatRupiah(long nilai) {
         NumberFormat formatter =

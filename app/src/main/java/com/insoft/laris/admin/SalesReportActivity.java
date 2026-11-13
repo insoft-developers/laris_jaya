@@ -8,12 +8,14 @@ import android.view.View;
 
 import com.google.android.material.card.MaterialCardView;
 import com.insoft.laris.R;
+import com.insoft.laris.report.CetakUlangStrukActivity;
 import com.insoft.laris.report.SalesByDateActivity;
 import com.insoft.laris.report.SalesTodayActivity;
 
 public class SalesReportActivity extends AppCompatActivity {
     private MaterialCardView sales_tday;
     private  MaterialCardView penjualantanggal;
+    private MaterialCardView cetakulangstruk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,7 @@ public class SalesReportActivity extends AppCompatActivity {
 
         sales_tday = findViewById(R.id.penjualantoday);
         penjualantanggal =findViewById(R.id.penjualantanggal);
+        cetakulangstruk = findViewById(R.id.cetakulangstruk);
 
         sales_tday.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +38,14 @@ public class SalesReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SalesReportActivity.this, SalesByDateActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cetakulangstruk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SalesReportActivity.this, CetakUlangStrukActivity.class);
                 startActivity(intent);
             }
         });

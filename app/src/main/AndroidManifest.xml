@@ -41,6 +41,15 @@
         <activity android:name=".report.SalesTodayActivity"
             android:theme="@style/Theme.BestbeautyNoBar"
             />
+        <activity android:name=".report.CetakUlangStrukActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
+        <activity android:name=".report.DetailStrukActivity"
+            android:theme="@style/Theme.BestbeautyNoBar"
+            />
+
+
         <activity
             android:name=".admin.SalesReportActivity"
             android:label="Laporan Penjualan"

@@ -13,4 +13,8 @@
         name="master_barang"
         path="master_barang/" />
 
+    <cache-path
+        name="struk_whatsapp"
+        path="struk_whatsapp/" />
+
 </paths>
